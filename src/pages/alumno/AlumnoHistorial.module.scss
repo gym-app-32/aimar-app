@@ -1,0 +1,439 @@
+.page { max-width: 1100px; }
+
+// ─── Layout ───────────────────────────────────────────────
+.layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: $spacing-lg;
+  align-items: start;
+
+  @include tablet {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ─── Calendario ───────────────────────────────────────────
+.calCard {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  padding: $spacing-lg;
+}
+
+.calHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.calNav {
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-sm;
+  color: $gray;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color $transition-fast;
+  &:hover { color: $gold; }
+}
+
+.calTitulo {
+  font-family: $font-display;
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  color: $white;
+}
+
+.calendario { }
+
+.calGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calDiaSemana {
+  font-family: $font-condensed;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $gray;
+  text-align: center;
+  padding: $spacing-xs 0;
+}
+
+.celdaVacia { }
+
+.celda {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border-radius: $radius-sm;
+  cursor: default;
+  transition: all $transition-fast;
+  position: relative;
+}
+
+.celdaActiva {
+  cursor: pointer;
+  background: rgba($gold, 0.06);
+  &:hover { background: rgba($gold, 0.12); }
+}
+
+.celdaHoy .celdaNum {
+  color: $gold;
+  font-weight: 700;
+}
+
+.celdaSeleccionada {
+  background: rgba($gold, 0.2) !important;
+  border: 1px solid rgba($gold, 0.4);
+}
+
+.celdaNum {
+  font-family: $font-condensed;
+  font-size: 0.85rem;
+  color: $gray-light;
+  line-height: 1;
+}
+
+.celdaDots {
+  display: flex;
+  gap: 3px;
+}
+
+.dotRutina {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: $gold;
+  display: inline-block;
+}
+
+.dotClase {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: $success;
+  display: inline-block;
+}
+
+.leyenda {
+  display: flex;
+  gap: $spacing-md;
+  justify-content: center;
+}
+
+.leyendaItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  font-family: $font-condensed;
+  font-size: 0.75rem;
+  color: $gray;
+  letter-spacing: 0.04em;
+}
+
+.resumenMes {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-sm;
+  justify-content: center;
+  padding-top: $spacing-sm;
+  border-top: 1px solid rgba($white, 0.06);
+}
+
+.resumenMesNum {
+  font-family: $font-display;
+  font-size: 2rem;
+  color: $gold;
+  line-height: 1;
+}
+
+.resumenMesLabel {
+  font-family: $font-condensed;
+  font-size: 0.8rem;
+  color: $gray;
+  letter-spacing: 0.04em;
+}
+
+// ─── Panel derecho ────────────────────────────────────────
+.panelDerecho {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+// ─── Día seleccionado ─────────────────────────────────────
+.diaDetalle {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.diaDetalleTitle {
+  font-family: $font-condensed;
+  font-size: 1rem;
+  font-weight: 600;
+  color: $white;
+  letter-spacing: 0.04em;
+  text-transform: capitalize;
+}
+
+.sesionesDelDia {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.sesionCard {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  transition: all $transition-base;
+
+  &.sesionRutina { border-color: rgba($gold, 0.2); }
+  &.sesionClase  { border-color: rgba($success, 0.2); }
+
+  &:hover {
+    transform: translateX(2px);
+    border-color: rgba($gold, 0.4);
+  }
+}
+
+.sesionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sesionVerDetalle {
+  font-family: $font-condensed;
+  font-size: 0.75rem;
+  color: $gray;
+  letter-spacing: 0.04em;
+  transition: color $transition-fast;
+
+  .sesionCard:hover & { color: $gold; }
+}
+
+.sesionLabel {
+  font-family: $font-condensed;
+  font-size: 1rem;
+  font-weight: 600;
+  color: $white;
+}
+
+.sesionRutinaName {
+  font-size: 0.8rem;
+  color: $gray;
+  font-family: $font-body;
+}
+
+.sesionEjCount {
+  font-size: 0.78rem;
+  color: $gray;
+  font-family: $font-condensed;
+  letter-spacing: 0.04em;
+}
+
+.sinSeleccion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-xl;
+  background: rgba($white, 0.02);
+  border: 1px dashed rgba($white, 0.08);
+  border-radius: $radius-md;
+  text-align: center;
+
+  p {
+    font-family: $font-body;
+    font-size: 0.9rem;
+    color: $gray;
+  }
+}
+
+.sinSeleccionIcon { font-size: 2rem; }
+
+// ─── Lista cronológica ────────────────────────────────────
+.listaTitle {
+  font-family: $font-display;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  color: $gold;
+}
+
+.listaEntrenamientos {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.listaItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-md $spacing-lg;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover {
+    border-color: rgba($gold, 0.3);
+    transform: translateX(2px);
+  }
+}
+
+.listaItemLeft {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  min-width: 0;
+}
+
+.listaFecha {
+  font-family: $font-condensed;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $gold;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  min-width: 48px;
+}
+
+.listaLabel {
+  display: block;
+  font-family: $font-condensed;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $white;
+}
+
+.listaRutina {
+  display: block;
+  font-size: 0.78rem;
+  color: $gray;
+  font-family: $font-body;
+}
+
+.listaItemRight {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  flex-shrink: 0;
+}
+
+.listaArrow {
+  color: $gray;
+  font-size: 0.9rem;
+  transition: color $transition-fast;
+
+  .listaItem:hover & { color: $gold; }
+}
+
+// ─── Modal detalle ────────────────────────────────────────
+.detalle {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.detalleMeta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.detalleRutina {
+  font-family: $font-condensed;
+  font-size: 0.85rem;
+  color: $gray;
+}
+
+.detalleFecha {
+  font-family: $font-condensed;
+  font-size: 0.82rem;
+  color: $gray;
+  text-transform: capitalize;
+  margin-left: auto;
+}
+
+.detalleEjercicios {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.detalleEjercicio {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid rgba($white, 0.05);
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.detalleEjHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detalleEjNombre {
+  font-family: $font-condensed;
+  font-size: 1rem;
+  font-weight: 600;
+  color: $white;
+}
+
+.detalleEjSeries {
+  font-family: $font-condensed;
+  font-size: 0.78rem;
+  color: $gray;
+  letter-spacing: 0.04em;
+}
+
+.detalleRepsRow {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.detalleRepChip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: rgba($gold, 0.08);
+  border: 1px solid rgba($gold, 0.15);
+  border-radius: $radius-sm;
+  padding: $spacing-xs $spacing-md;
+  min-width: 52px;
+}
+
+.detalleRepLabel {
+  font-family: $font-condensed;
+  font-size: 0.65rem;
+  color: $gray;
+  letter-spacing: 0.08em;
+}
+
+.detalleRepVal {
+  font-family: $font-condensed;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: $white;
+}

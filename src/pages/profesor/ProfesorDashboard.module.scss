@@ -1,76 +1,140 @@
 .page { max-width: 900px; }
 
-// ─── Stats ────────────────────────────────────────────────
-.statsRow {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: $spacing-md;
+// ─── Selector con buscador ────────────────────────────────
+.selectorSection {
   margin-bottom: $spacing-xl;
-
-  @include mobile { grid-template-columns: 1fr; }
+  max-width: 480px;
 }
 
-.statCard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: $spacing-xs;
-  padding: $spacing-lg $spacing-md;
-}
-
-.statValue {
-  font-family: $font-display;
-  font-size: 2.2rem;
-  color: $gold;
-  line-height: 1;
-  &.warning { color: $warning; }
-}
-
-.statLabel {
+.selectorLabel {
+  display: block;
   font-family: $font-condensed;
   font-size: 0.78rem;
-  letter-spacing: 0.08em;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: $gray;
+  margin-bottom: $spacing-xs;
 }
 
-// ─── Lista alumnos ────────────────────────────────────────
-.alumnosList {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-sm;
+.selectorWrapper {
+  position: relative;
 }
 
-.alumnoCard {
+.selectorInput {
+  width: 100%;
+  background: $dark2;
+  border: 1px solid rgba($white, 0.08);
+  border-radius: $radius-md;
+  padding: $spacing-sm $spacing-md;
+  color: $white;
+  font-family: $font-body;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color $transition-fast;
+
+  &::placeholder { color: rgba($gray, 0.5); }
+  &:focus { border-color: rgba($gold, 0.4); }
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: $dark2;
+  border: 1px solid rgba($gold, 0.2);
+  border-radius: $radius-md;
+  overflow: hidden;
+  z-index: 50;
+  box-shadow: 0 8px 24px rgba($black, 0.5);
+}
+
+.dropdownItem {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   gap: $spacing-md;
-  flex-wrap: wrap;
-  transition: border-color $transition-base;
+  padding: $spacing-sm $spacing-md;
+  cursor: pointer;
+  transition: background $transition-fast;
 
-  &:hover { border-color: rgba($gold, 0.3); }
+  &:hover { background: rgba($gold, 0.06); }
+}
 
-  &.inactivo { opacity: 0.4; }
+.dropdownInactivo {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.dropdownAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba($gold, 0.1);
+  border: 1px solid rgba($gold, 0.2);
+  color: $gold;
+  font-family: $font-display;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dropdownNombre {
+  display: block;
+  font-family: $font-condensed;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $white;
+}
+
+.dropdownSub {
+  display: block;
+  font-size: 0.78rem;
+  color: $gray;
+  font-family: $font-body;
+}
+
+.dropdownEmpty {
+  padding: $spacing-md;
+  text-align: center;
+  font-family: $font-body;
+  font-size: 0.85rem;
+  color: $gray;
+  font-style: italic;
+}
+
+// ─── Card alumno seleccionado ─────────────────────────────
+.alumnoCard {
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  margin-bottom: $spacing-xl;
+}
+
+.alumnoCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .alumnoInfo {
   display: flex;
   align-items: center;
   gap: $spacing-md;
-  min-width: 0;
 }
 
 .alumnoAvatar {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: rgba($gold, 0.1);
-  border: 1px solid rgba($gold, 0.2);
+  border: 2px solid rgba($gold, 0.2);
   color: $gold;
   font-family: $font-display;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,32 +144,71 @@
 .alumnoNombre {
   display: block;
   font-family: $font-condensed;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: $white;
+  margin-bottom: $spacing-xs;
+}
+
+// ─── Rutina info ──────────────────────────────────────────
+.rutinaInfo {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 1px solid rgba($white, 0.06);
+}
+
+.rutinaInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-md;
+
+  @include mobile { grid-template-columns: repeat(2, 1fr); }
+}
+
+.rutinaInfoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rutinaInfoLabel {
+  font-family: $font-condensed;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $gray;
+}
+
+.rutinaInfoValue {
+  font-family: $font-condensed;
+  font-size: 0.95rem;
   font-weight: 600;
   color: $white;
 }
 
-.alumnoRutina {
-  display: block;
-  font-size: 0.82rem;
-  color: $gray;
-  font-family: $font-body;
-  margin-top: 2px;
+.rutinaAcciones {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
 }
 
-.alumnoSinRutina {
-  display: block;
-  font-size: 0.82rem;
-  color: $warning;
-  font-family: $font-body;
-  margin-top: 2px;
-}
-
-.alumnoActions {
+.sinRutina {
   display: flex;
   align-items: center;
-  gap: $spacing-sm;
-  flex-shrink: 0;
+  justify-content: space-between;
+  gap: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 1px solid rgba($white, 0.06);
+  flex-wrap: wrap;
+}
+
+.sinRutinaMsg {
+  font-family: $font-body;
+  font-size: 0.9rem;
+  color: $warning;
 }
 
 // ─── Builder ──────────────────────────────────────────────
@@ -120,7 +223,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0;
 }
 
 .stepItem {
@@ -225,11 +327,12 @@
 
     &::placeholder { color: rgba($gray, 0.4); }
     &:focus { border-color: rgba($gold, 0.4); }
-
     option { background: $dark2; }
   }
 
-  input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.5); }
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.5);
+  }
 }
 
 // ─── Días ─────────────────────────────────────────────────
@@ -341,6 +444,7 @@
   display: flex;
   gap: $spacing-md;
   align-items: center;
+  flex-wrap: wrap;
 
   label {
     display: flex;
@@ -368,12 +472,20 @@
   &:focus { border-color: rgba($gold, 0.4); }
 }
 
-// ─── Ejercicio row ────────────────────────────────────────
-.ejercicioRow {
+// ─── Ejercicio block ──────────────────────────────────────
+.ejercicioBlock {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  padding: $spacing-sm;
+  background: rgba($white, 0.02);
+  border-radius: $radius-sm;
+}
+
+.ejercicioRowTop {
   display: flex;
   align-items: center;
   gap: $spacing-xs;
-  flex-wrap: wrap;
 }
 
 .ejercicioNum {
@@ -401,50 +513,6 @@
   option { background: $dark2; }
 }
 
-.medicionSelect {
-  background: $dark3;
-  border: 1px solid rgba($white, 0.08);
-  border-radius: $radius-sm;
-  padding: 4px $spacing-sm;
-  color: $white;
-  font-size: 0.82rem;
-  font-family: $font-body;
-  outline: none;
-
-  &:focus { border-color: rgba($gold, 0.4); }
-  option { background: $dark2; }
-}
-
-.valorInput {
-  width: 60px;
-  background: $dark3;
-  border: 1px solid rgba($white, 0.08);
-  border-radius: $radius-sm;
-  padding: 4px $spacing-xs;
-  color: $white;
-  font-size: 0.82rem;
-  font-family: $font-body;
-  outline: none;
-  text-align: center;
-
-  &:focus { border-color: rgba($gold, 0.4); }
-}
-
-.repsInput {
-  width: 56px;
-  background: $dark3;
-  border: 1px solid rgba($white, 0.08);
-  border-radius: $radius-sm;
-  padding: 4px $spacing-xs;
-  color: $white;
-  font-size: 0.82rem;
-  font-family: $font-body;
-  outline: none;
-  text-align: center;
-
-  &:focus { border-color: rgba($gold, 0.4); }
-}
-
 .removeBtn {
   color: $error;
   font-size: 0.75rem;
@@ -457,6 +525,44 @@
 .addEjercBtn {
   align-self: flex-start;
   margin-top: $spacing-xs;
+}
+
+// ─── Reps dinámicos ───────────────────────────────────────
+.repsRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+  padding-left: 24px;
+}
+
+.repLabel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+
+  span {
+    font-family: $font-condensed;
+    font-size: 0.65rem;
+    color: $gray;
+    letter-spacing: 0.06em;
+  }
+}
+
+.repInput {
+  width: 48px;
+  background: $dark3;
+  border: 1px solid rgba($white, 0.08);
+  border-radius: $radius-sm;
+  padding: 4px $spacing-xs;
+  color: $white;
+  font-size: 0.82rem;
+  font-family: $font-body;
+  outline: none;
+  text-align: center;
+
+  &:focus { border-color: rgba($gold, 0.4); }
 }
 
 // ─── Resumen ──────────────────────────────────────────────
@@ -531,4 +637,32 @@
   padding-top: $spacing-lg;
   border-top: 1px solid rgba($white, 0.06);
   flex-wrap: wrap;
+}
+
+// ─── Confirm modal ────────────────────────────────────────
+.confirmBody {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+
+  p {
+    font-family: $font-body;
+    font-size: 0.95rem;
+    color: $gray-light;
+    strong { color: $white; }
+  }
+}
+
+.confirmWarning {
+  font-size: 0.85rem !important;
+  color: $error !important;
+}
+
+.confirmFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-md;
+  padding-top: $spacing-lg;
+  border-top: 1px solid rgba($white, 0.06);
 }

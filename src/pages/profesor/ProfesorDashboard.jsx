@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Modal from '../../components/UI/Modal/Modal'
 import styles from './ProfesorDashboard.module.scss'
 
@@ -50,22 +50,53 @@ function nuevoDia() {
   }
 }
 
-function nuevoEjercicioEnSerie() {
-  return { id: Date.now() + Math.random(), ejercicioId: '', repeticiones: 10, medicion: 'nada', valor: '' }
+function nuevoEjercicioEnSerie(cantReps) {
+  return {
+    id: Date.now() + Math.random(),
+    ejercicioId: '',
+    // un campo de reps por cada repetición de la serie
+    reps: Array(cantReps).fill(''),
+  }
 }
 
-// ─── Subcomponentes ───────────────────────────────────────
-
+// ─── SerieEditor ─────────────────────────────────────────
 function SerieEditor({ serie, onChange, titulo, accentColor }) {
-  const updateEjerc = (eid, field, val) => {
+
+  const updateCantSeries = (val) => {
+    const n = Math.max(1, Number(val))
+    // Ajusta los campos de reps de cada ejercicio al nuevo número
+    const ejerciciosActualizados = serie.ejercicios.map(ej => {
+      const reps = Array(n).fill('').map((_, i) => ej.reps[i] ?? '')
+      return { ...ej, reps }
+    })
+    onChange({ ...serie, repeticionesSerie: n, ejercicios: ejerciciosActualizados })
+  }
+
+  const updateRep = (eid, idx, val) => {
     onChange({
       ...serie,
-      ejercicios: serie.ejercicios.map(e => e.id === eid ? { ...e, [field]: val } : e)
+      ejercicios: serie.ejercicios.map(e =>
+        e.id === eid
+          ? { ...e, reps: e.reps.map((r, i) => i === idx ? val : r) }
+          : e
+      )
+    })
+  }
+
+  const updateEjercicioId = (eid, ejercicioId) => {
+    onChange({
+      ...serie,
+      ejercicios: serie.ejercicios.map(e =>
+        e.id === eid ? { ...e, ejercicioId } : e
+      )
     })
   }
 
   const addEjerc = () => {
-    onChange({ ...serie, ejercicios: [...serie.ejercicios, nuevoEjercicioEnSerie()] })
+    onChange({
+      ...serie,
+      ejercicios: [...serie.ejercicios, nuevoEjercicioEnSerie(serie.repeticionesSerie)]
+    })
   }
 
   const removeEjerc = (eid) => {
@@ -75,16 +106,18 @@ function SerieEditor({ serie, onChange, titulo, accentColor }) {
   return (
     <div className={styles.serieBox} style={{ borderColor: accentColor || 'rgba(245,197,24,0.2)' }}>
       <div className={styles.serieHeader}>
-        <span className={styles.serieTitulo} style={{ color: accentColor || '#F5C518' }}>{titulo}</span>
+        <span className={styles.serieTitulo} style={{ color: accentColor || '#F5C518' }}>
+          {titulo}
+        </span>
         <div className={styles.serieMeta}>
           <label>
-            <span>Series</span>
+            <span>Cant. series</span>
             <input
               type="number"
               min={1}
               max={20}
               value={serie.repeticionesSerie}
-              onChange={e => onChange({ ...serie, repeticionesSerie: Number(e.target.value) })}
+              onChange={e => updateCantSeries(e.target.value)}
               className={styles.smallInput}
             />
           </label>
@@ -102,60 +135,59 @@ function SerieEditor({ serie, onChange, titulo, accentColor }) {
       </div>
 
       {serie.ejercicios.map((ej, idx) => (
-        <div key={ej.id} className={styles.ejercicioRow}>
-          <span className={styles.ejercicioNum}>{idx + 1}</span>
-          <select
-            value={ej.ejercicioId}
-            onChange={e => updateEjerc(ej.id, 'ejercicioId', e.target.value)}
-            className={styles.ejercicioSelect}
-          >
-            <option value="">Elegir ejercicio</option>
-            {MOCK_EJERCICIOS.map(ex => (
-              <option key={ex.id} value={ex.id}>{ex.nombre}</option>
-            ))}
-          </select>
-          <select
-            value={ej.medicion}
-            onChange={e => updateEjerc(ej.id, 'medicion', e.target.value)}
-            className={styles.medicionSelect}
-          >
-            <option value="nada">Sin medición</option>
-            <option value="kg">Peso (kg)</option>
-            <option value="seg">Duración (seg)</option>
-          </select>
-          {ej.medicion !== 'nada' && (
-            <input
-              type="number"
-              min={0}
-              value={ej.valor}
-              onChange={e => updateEjerc(ej.id, 'valor', e.target.value)}
-              placeholder={ej.medicion === 'kg' ? 'kg' : 'seg'}
-              className={styles.valorInput}
-            />
+        <div key={ej.id} className={styles.ejercicioBlock}>
+          <div className={styles.ejercicioRowTop}>
+            <span className={styles.ejercicioNum}>{idx + 1}</span>
+            <select
+              value={ej.ejercicioId}
+              onChange={e => updateEjercicioId(ej.id, e.target.value)}
+              className={styles.ejercicioSelect}
+            >
+              <option value="">Elegir ejercicio</option>
+              {MOCK_EJERCICIOS.map(ex => (
+                <option key={ex.id} value={ex.id}>{ex.nombre}</option>
+              ))}
+            </select>
+            <button
+              type="button"
+              className={styles.removeBtn}
+              onClick={() => removeEjerc(ej.id)}
+            >✕</button>
+          </div>
+
+          {/* Campos de reps dinámicos — uno por cada serie */}
+          {ej.reps.length > 0 && (
+            <div className={styles.repsRow}>
+              {ej.reps.map((rep, i) => (
+                <label key={i} className={styles.repLabel}>
+                  <span>S{i + 1}</span>
+                  <input
+                    type="number"
+                    min={0}
+                    value={rep}
+                    onChange={e => updateRep(ej.id, i, e.target.value)}
+                    placeholder="reps"
+                    className={styles.repInput}
+                  />
+                </label>
+              ))}
+            </div>
           )}
-          <input
-            type="number"
-            min={1}
-            value={ej.repeticiones}
-            onChange={e => updateEjerc(ej.id, 'repeticiones', Number(e.target.value))}
-            placeholder="Reps"
-            className={styles.repsInput}
-          />
-          <button
-            type="button"
-            className={styles.removeBtn}
-            onClick={() => removeEjerc(ej.id)}
-          >✕</button>
         </div>
       ))}
 
-      <button type="button" className={`btn btn--ghost btn--sm ${styles.addEjercBtn}`} onClick={addEjerc}>
+      <button
+        type="button"
+        className={`btn btn--ghost btn--sm ${styles.addEjercBtn}`}
+        onClick={addEjerc}
+      >
         + Agregar ejercicio
       </button>
     </div>
   )
 }
 
+// ─── DiaEditor ────────────────────────────────────────────
 function DiaEditor({ dia, index, onChange, onRemove }) {
   const updateSerie = (sid, updated) => {
     onChange({ ...dia, series: dia.series.map(s => s.id === sid ? updated : s) })
@@ -173,7 +205,9 @@ function DiaEditor({ dia, index, onChange, onRemove }) {
     <div className={styles.diaBox}>
       <div className={styles.diaHeader}>
         <span className={styles.diaTitulo}>DÍA {index + 1}</span>
-        <button type="button" className={styles.removeDiaBtn} onClick={onRemove}>✕ Quitar día</button>
+        <button type="button" className={styles.removeDiaBtn} onClick={onRemove}>
+          ✕ Quitar día
+        </button>
       </div>
 
       <div className={styles.diaFields}>
@@ -215,7 +249,11 @@ function DiaEditor({ dia, index, onChange, onRemove }) {
               accentColor="#F5C518"
             />
             {dia.series.length > 1 && (
-              <button type="button" className={styles.removeSerieBtn} onClick={() => removeSerie(s.id)}>
+              <button
+                type="button"
+                className={styles.removeSerieBtn}
+                onClick={() => removeSerie(s.id)}
+              >
                 ✕ Quitar serie
               </button>
             )}
@@ -236,7 +274,7 @@ function DiaEditor({ dia, index, onChange, onRemove }) {
   )
 }
 
-// ─── Pasos del builder ────────────────────────────────────
+// ─── StepIndicator ────────────────────────────────────────
 const PASOS = ['Datos generales', 'Días', 'Resumen']
 
 function StepIndicator({ pasoActual }) {
@@ -262,50 +300,71 @@ function StepIndicator({ pasoActual }) {
 // ─── Componente principal ─────────────────────────────────
 export default function ProfesorDashboard() {
   const [alumnos, setAlumnos] = useState(MOCK_ALUMNOS)
-  const [alumnoSeleccionado, setAlumnoSeleccionado] = useState(null)
-  const [builderOpen, setBuilderOpen] = useState(false)
-  const [paso, setPaso] = useState(0)
 
+  // Selector con buscador
+  const [busqueda, setBusqueda] = useState('')
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [alumnoSeleccionado, setAlumnoSeleccionado] = useState(null)
+
+  // Builder
+  const [builderOpen, setBuilderOpen] = useState(false)
+  const [confirmEliminar, setConfirmEliminar] = useState(false)
+  const [paso, setPaso] = useState(0)
   const [rutina, setRutina] = useState({
-    nombre: '',
-    inicio: '',
-    semanas: 4,
-    dias: [],
-    usarPlantilla: false,
-    plantillaId: '',
+    nombre: '', inicio: '', semanas: 4, dias: [], plantillaId: '',
   })
 
-  const abrirBuilder = (alumno, editar = false) => {
+  // Alumnos filtrados para el dropdown
+  const alumnosFiltrados = useMemo(() =>
+    alumnos.filter(a =>
+      a.nombre.toLowerCase().includes(busqueda.toLowerCase())
+    ), [alumnos, busqueda])
+
+  const seleccionarAlumno = (alumno) => {
     setAlumnoSeleccionado(alumno)
+    setBusqueda(alumno.nombre)
+    setDropdownOpen(false)
+  }
+
+  // Builder
+  const abrirBuilder = (editar = false) => {
     setPaso(0)
-    if (editar && alumno.rutina) {
+    if (editar && alumnoSeleccionado?.rutina) {
+      const r = alumnoSeleccionado.rutina
       setRutina({
-        nombre:        alumno.rutina.nombre,
-        inicio:        alumno.rutina.inicio,
-        semanas:       alumno.rutina.semanas,
-        dias:          alumno.rutina.dias.length ? alumno.rutina.dias : [nuevoDia()],
-        usarPlantilla: false,
-        plantillaId:   '',
+        nombre:      r.nombre,
+        inicio:      r.inicio,
+        semanas:     r.semanas,
+        dias:        r.dias.length ? r.dias : [nuevoDia()],
+        plantillaId: '',
       })
     } else {
-      setRutina({ nombre: '', inicio: '', semanas: 4, dias: [nuevoDia()], usarPlantilla: false, plantillaId: '' })
+      setRutina({ nombre: '', inicio: '', semanas: 4, dias: [nuevoDia()], plantillaId: '' })
     }
     setBuilderOpen(true)
   }
 
   const cerrarBuilder = () => {
     setBuilderOpen(false)
-    setAlumnoSeleccionado(null)
     setPaso(0)
   }
 
-  const handleGuardar = async () => {
+  const handleGuardar = () => {
     setAlumnos(prev => prev.map(a =>
       a.id === alumnoSeleccionado.id
-        ? { ...a, rutina: { id: Date.now(), ...rutina } }
+        ? { ...a, rutina: { id: a.rutina?.id || Date.now(), ...rutina } }
         : a
     ))
+    setAlumnoSeleccionado(prev => ({ ...prev, rutina: { id: prev.rutina?.id || Date.now(), ...rutina } }))
     cerrarBuilder()
+  }
+
+  const handleEliminarRutina = () => {
+    setAlumnos(prev => prev.map(a =>
+      a.id === alumnoSeleccionado.id ? { ...a, rutina: null } : a
+    ))
+    setAlumnoSeleccionado(prev => ({ ...prev, rutina: null }))
+    setConfirmEliminar(false)
   }
 
   const updateDia = (did, updated) => {
@@ -316,17 +375,13 @@ export default function ProfesorDashboard() {
     setRutina(p => ({ ...p, dias: p.dias.filter(d => d.id !== did) }))
   }
 
-  const addDia = () => {
-    setRutina(p => ({ ...p, dias: [...p.dias, nuevoDia()] }))
-  }
-
   const aplicarPlantilla = (plantillaId) => {
     const plantilla = PLANTILLAS.find(p => p.id === Number(plantillaId))
     if (plantilla) {
       setRutina(p => ({
         ...p,
         nombre:      plantilla.nombre,
-        plantillaId: plantillaId,
+        plantillaId,
         dias:        plantilla.dias.length ? plantilla.dias : [nuevoDia()],
       }))
     }
@@ -338,78 +393,122 @@ export default function ProfesorDashboard() {
     return true
   }
 
-  const sinRutina = alumnos.filter(a => !a.rutina && a.activo).length
-
   return (
     <div className={styles.page}>
       <div className="page-header">
         <h1>PANEL <span>PROFESOR</span></h1>
-        <p>Seleccioná un alumno para ver o crear su rutina.</p>
+        <p>Buscá un alumno para ver o gestionar su rutina.</p>
       </div>
 
-      {/* Stats rápidas */}
-      <div className={styles.statsRow}>
-        <div className={`card ${styles.statCard}`}>
-          <span className={styles.statValue}>{alumnos.filter(a => a.activo).length}</span>
-          <span className={styles.statLabel}>Alumnos activos</span>
-        </div>
-        <div className={`card ${styles.statCard}`}>
-          <span className={`${styles.statValue} ${sinRutina > 0 ? styles.warning : ''}`}>{sinRutina}</span>
-          <span className={styles.statLabel}>Sin rutina</span>
-        </div>
-        <div className={`card ${styles.statCard}`}>
-          <span className={styles.statValue}>{alumnos.filter(a => a.rutina).length}</span>
-          <span className={styles.statLabel}>Con rutina asignada</span>
-        </div>
-      </div>
-
-      {/* Lista de alumnos */}
-      <div className={styles.alumnosList}>
-        {alumnos.map(alumno => (
-          <div
-            key={alumno.id}
-            className={`card ${styles.alumnoCard} ${!alumno.activo ? styles.inactivo : ''}`}
-          >
-            <div className={styles.alumnoInfo}>
-              <div className={styles.alumnoAvatar}>{alumno.nombre[0].toUpperCase()}</div>
-              <div>
-                <span className={styles.alumnoNombre}>{alumno.nombre}</span>
-                {alumno.rutina ? (
-                  <span className={styles.alumnoRutina}>📋 {alumno.rutina.nombre} · {alumno.rutina.semanas} semanas</span>
-                ) : (
-                  <span className={styles.alumnoSinRutina}>⚠️ Sin rutina asignada</span>
-                )}
-              </div>
-            </div>
-
-            <div className={styles.alumnoActions}>
-              {alumno.rutina ? (
-                <>
-                  <span className="badge badge--success">Con rutina</span>
-                  <button
-                    className="btn btn--outline btn--sm"
-                    onClick={() => abrirBuilder(alumno, true)}
-                    disabled={!alumno.activo}
-                  >
-                    ✏️ Editar rutina
-                  </button>
-                </>
+      {/* ── Selector con buscador ── */}
+      <div className={styles.selectorSection}>
+        <label className={styles.selectorLabel}>Seleccionar alumno</label>
+        <div className={styles.selectorWrapper}>
+          <input
+            type="text"
+            className={styles.selectorInput}
+            placeholder="Buscar alumno por nombre..."
+            value={busqueda}
+            onChange={e => {
+              setBusqueda(e.target.value)
+              setDropdownOpen(true)
+              if (!e.target.value) setAlumnoSeleccionado(null)
+            }}
+            onFocus={() => setDropdownOpen(true)}
+          />
+          {dropdownOpen && busqueda && (
+            <div className={styles.dropdown}>
+              {alumnosFiltrados.length === 0 ? (
+                <div className={styles.dropdownEmpty}>No se encontraron alumnos</div>
               ) : (
-                <>
-                  <span className="badge badge--gray">Sin rutina</span>
-                  <button
-                    className="btn btn--primary btn--sm"
-                    onClick={() => abrirBuilder(alumno, false)}
-                    disabled={!alumno.activo}
+                alumnosFiltrados.map(a => (
+                  <div
+                    key={a.id}
+                    className={`${styles.dropdownItem} ${!a.activo ? styles.dropdownInactivo : ''}`}
+                    onClick={() => seleccionarAlumno(a)}
                   >
-                    + Crear rutina
-                  </button>
-                </>
+                    <div className={styles.dropdownAvatar}>{a.nombre[0].toUpperCase()}</div>
+                    <div>
+                      <span className={styles.dropdownNombre}>{a.nombre}</span>
+                      <span className={styles.dropdownSub}>
+                        {a.activo ? (a.rutina ? `📋 ${a.rutina.nombre}` : '⚠️ Sin rutina') : '🔒 Inactivo'}
+                      </span>
+                    </div>
+                  </div>
+                ))
               )}
             </div>
-          </div>
-        ))}
+          )}
+        </div>
       </div>
+
+      {/* ── Card del alumno seleccionado ── */}
+      {alumnoSeleccionado && (
+        <div className={`card ${styles.alumnoCard}`}>
+          <div className={styles.alumnoCardHeader}>
+            <div className={styles.alumnoInfo}>
+              <div className={styles.alumnoAvatar}>
+                {alumnoSeleccionado.nombre[0].toUpperCase()}
+              </div>
+              <div>
+                <span className={styles.alumnoNombre}>{alumnoSeleccionado.nombre}</span>
+                <span className={`badge ${alumnoSeleccionado.activo ? 'badge--success' : 'badge--error'}`}>
+                  {alumnoSeleccionado.activo ? 'Activo' : 'Inactivo'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {alumnoSeleccionado.rutina ? (
+            <div className={styles.rutinaInfo}>
+              <div className={styles.rutinaInfoGrid}>
+                <div className={styles.rutinaInfoItem}>
+                  <span className={styles.rutinaInfoLabel}>Rutina actual</span>
+                  <span className={styles.rutinaInfoValue}>{alumnoSeleccionado.rutina.nombre}</span>
+                </div>
+                <div className={styles.rutinaInfoItem}>
+                  <span className={styles.rutinaInfoLabel}>Inicio</span>
+                  <span className={styles.rutinaInfoValue}>{formatFecha(alumnoSeleccionado.rutina.inicio)}</span>
+                </div>
+                <div className={styles.rutinaInfoItem}>
+                  <span className={styles.rutinaInfoLabel}>Duración</span>
+                  <span className={styles.rutinaInfoValue}>{alumnoSeleccionado.rutina.semanas} semanas</span>
+                </div>
+                <div className={styles.rutinaInfoItem}>
+                  <span className={styles.rutinaInfoLabel}>Días</span>
+                  <span className={styles.rutinaInfoValue}>{alumnoSeleccionado.rutina.dias.length || '—'}</span>
+                </div>
+              </div>
+              <div className={styles.rutinaAcciones}>
+                <button
+                  className="btn btn--outline"
+                  onClick={() => abrirBuilder(true)}
+                  disabled={!alumnoSeleccionado.activo}
+                >
+                  ✏️ Editar rutina
+                </button>
+                <button
+                  className="btn btn--ghost"
+                  onClick={() => setConfirmEliminar(true)}
+                >
+                  🗑️ Eliminar rutina
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className={styles.sinRutina}>
+              <span className={styles.sinRutinaMsg}>⚠️ Este alumno no tiene rutina asignada.</span>
+              <button
+                className="btn btn--primary"
+                onClick={() => abrirBuilder(false)}
+                disabled={!alumnoSeleccionado.activo}
+              >
+                + Crear rutina
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* ── BUILDER MODAL ── */}
       <Modal
@@ -425,13 +524,12 @@ export default function ProfesorDashboard() {
           {paso === 0 && (
             <div className={styles.paso}>
               <h3 className={styles.pasoTitulo}>Datos generales</h3>
-
               <div className={styles.pasoFields}>
                 <div className={styles.field}>
                   <label>¿Usar plantilla?</label>
                   <select
                     value={rutina.plantillaId}
-                    onChange={e => { aplicarPlantilla(e.target.value); setRutina(p => ({ ...p, usarPlantilla: !!e.target.value, plantillaId: e.target.value })) }}
+                    onChange={e => aplicarPlantilla(e.target.value)}
                   >
                     <option value="">Crear desde cero</option>
                     {PLANTILLAS.map(p => (
@@ -439,7 +537,6 @@ export default function ProfesorDashboard() {
                     ))}
                   </select>
                 </div>
-
                 <div className={styles.field}>
                   <label>Nombre de la rutina</label>
                   <input
@@ -450,7 +547,6 @@ export default function ProfesorDashboard() {
                     required
                   />
                 </div>
-
                 <div className={styles.field}>
                   <label>Fecha de inicio</label>
                   <input
@@ -460,7 +556,6 @@ export default function ProfesorDashboard() {
                     required
                   />
                 </div>
-
                 <div className={styles.field}>
                   <label>Duración (semanas)</label>
                   <input
@@ -490,7 +585,7 @@ export default function ProfesorDashboard() {
                   />
                 ))}
               </div>
-              <button type="button" className="btn btn--outline" onClick={addDia}>
+              <button type="button" className="btn btn--outline" onClick={() => setRutina(p => ({ ...p, dias: [...p.dias, nuevoDia()] }))}>
                 + Agregar día
               </button>
             </div>
@@ -519,7 +614,7 @@ export default function ProfesorDashboard() {
                 </div>
                 <div className={styles.resumenItem}>
                   <span className={styles.resumenLabel}>Días</span>
-                  <span className={styles.resumenValue}>{rutina.dias.length} días</span>
+                  <span className={styles.resumenValue}>{rutina.dias.length}</span>
                 </div>
                 <div className={styles.resumenDias}>
                   {rutina.dias.map((dia, i) => (
@@ -538,25 +633,34 @@ export default function ProfesorDashboard() {
           {/* Navegación */}
           <div className={styles.builderNav}>
             {paso > 0 && (
-              <button className="btn btn--ghost" onClick={() => setPaso(p => p - 1)}>
-                ← Anterior
-              </button>
+              <button className="btn btn--ghost" onClick={() => setPaso(p => p - 1)}>← Anterior</button>
             )}
             <button className="btn btn--ghost" onClick={cerrarBuilder}>Cancelar</button>
             {paso < PASOS.length - 1 ? (
-              <button
-                className="btn btn--primary"
-                onClick={() => setPaso(p => p + 1)}
-                disabled={!puedeAvanzar()}
-              >
+              <button className="btn btn--primary" onClick={() => setPaso(p => p + 1)} disabled={!puedeAvanzar()}>
                 Siguiente →
               </button>
             ) : (
-              <button className="btn btn--primary" onClick={handleGuardar}>
-                ✓ Guardar rutina
-              </button>
+              <button className="btn btn--primary" onClick={handleGuardar}>✓ Guardar rutina</button>
             )}
           </div>
+        </div>
+      </Modal>
+
+      {/* ── CONFIRMAR ELIMINAR RUTINA ── */}
+      <Modal
+        isOpen={confirmEliminar}
+        onClose={() => setConfirmEliminar(false)}
+        title="ELIMINAR RUTINA"
+        maxWidth="420px"
+      >
+        <div className={styles.confirmBody}>
+          <p>¿Estás seguro que querés eliminar la rutina de <strong>{alumnoSeleccionado?.nombre}</strong>?</p>
+          <p className={styles.confirmWarning}>Esta acción no se puede deshacer.</p>
+        </div>
+        <div className={styles.confirmFooter}>
+          <button className="btn btn--ghost" onClick={() => setConfirmEliminar(false)}>Cancelar</button>
+          <button className="btn btn--danger" onClick={handleEliminarRutina}>Sí, eliminar</button>
         </div>
       </Modal>
     </div>
