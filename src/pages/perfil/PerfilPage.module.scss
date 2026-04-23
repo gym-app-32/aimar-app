@@ -1,0 +1,150 @@
+.page {
+  max-width: 860px;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: $spacing-lg;
+  align-items: start;
+
+  @include tablet {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fotoCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-md;
+  text-align: center;
+}
+
+.avatar {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba($gold, 0.1);
+  border: 2px solid rgba($gold, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: border-color $transition-base;
+
+  &:hover .avatarOverlay {
+    opacity: 1;
+  }
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatarInitials {
+  font-family: $font-display;
+  font-size: 2rem;
+  color: $gold;
+}
+
+.avatarOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba($black, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  opacity: 0;
+  transition: opacity $transition-base;
+}
+
+.nombreDisplay {
+  font-family: $font-condensed;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: $white;
+}
+
+.roleBadge {
+  text-transform: capitalize;
+}
+
+.formCard {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.formTitle {
+  font-family: $font-display;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  color: $gold;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-md;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  label {
+    font-family: $font-condensed;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $gray;
+  }
+
+  input {
+    background: $dark3;
+    border: 1px solid rgba($white, 0.08);
+    border-radius: $radius-md;
+    padding: $spacing-sm $spacing-md;
+    color: $white;
+    font-size: 0.95rem;
+    transition: border-color $transition-fast;
+    outline: none;
+
+    &::placeholder { color: rgba($gray, 0.4); }
+    &:focus { border-color: rgba($gold, 0.5); }
+    &:disabled {
+      opacity: 0.6;
+      cursor: default;
+      border-color: transparent;
+      background: rgba($white, 0.03);
+    }
+
+    &[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(0.5);
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-md;
+}
+
+.successMsg {
+  font-family: $font-condensed;
+  font-size: 0.9rem;
+  color: $success;
+  text-align: right;
+}

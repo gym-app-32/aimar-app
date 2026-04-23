@@ -1,0 +1,93 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+@use 'reset';
+@use 'sass:color';
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500;600&display=swap');
+
+.card {
+  @include card;
+}
+
+.page-header {
+  margin-bottom: $spacing-xl;
+
+  h1 {
+    font-family: $font-display;
+    font-size: 2.5rem;
+    color: $white;
+    letter-spacing: 0.05em;
+    span { color: $gold; }
+  }
+
+  p {
+    font-family: $font-body;
+    color: $gray;
+    margin-top: $spacing-sm;
+  }
+}
+
+.badge {
+  display: inline-block;
+  font-family: $font-condensed;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px $spacing-sm;
+  border-radius: $radius-full;
+
+  &--gold    { background: rgba($gold, 0.15);    color: $gold; }
+  &--success { background: rgba($success, 0.15); color: $success; }
+  &--error   { background: rgba($error, 0.15);   color: $error; }
+  &--warning { background: rgba($warning, 0.15); color: $warning; }
+  &--gray    { background: rgba($gray, 0.15);    color: $gray; }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  font-family: $font-condensed;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: $spacing-sm $spacing-lg;
+  border-radius: $radius-md;
+  transition: all $transition-base;
+  cursor: pointer;
+  border: none;
+
+  &--primary {
+    background: $gold;
+    color: $black;
+    &:hover { background: $gold-light; }
+  }
+
+  &--outline {
+    background: transparent;
+    border: 1px solid $gold;
+    color: $gold;
+    &:hover { background: rgba($gold, 0.1); }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: $gray-light;
+    &:hover { color: $white; background: rgba($white, 0.05); }
+  }
+  
+  &--danger {
+  background: $error;
+  color: $white;
+  &:hover { background: color.adjust($error, $lightness: -10%); }
+}
+
+  &--lg { font-size: 1.1rem; padding: $spacing-md $spacing-xl; }
+  &--sm { font-size: 0.85rem; padding: $spacing-xs $spacing-md; }
+  &--full { width: 100%; }
+
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+}

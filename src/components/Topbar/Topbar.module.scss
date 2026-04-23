@@ -1,0 +1,53 @@
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
+  padding: 0 $spacing-xl;
+  background: $dark;
+  border-bottom: 1px solid rgba($gold, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: $z-navbar;
+
+  @include mobile {
+    padding: 0 $spacing-md;
+  }
+}
+
+.roleLabel {
+  font-family: $font-condensed;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $gray;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.greeting {
+  font-size: 0.9rem;
+  color: $gray;
+  strong { color: $white; font-weight: 600; }
+
+  @include mobile { display: none; }
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba($gold, 0.15);
+  border: 1px solid rgba($gold, 0.3);
+  color: $gold;
+  font-family: $font-display;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

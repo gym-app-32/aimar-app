@@ -1,0 +1,106 @@
+.page {
+  min-height: 100vh;
+  background: $black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-md;
+
+  &::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba($gold, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+}
+
+.card {
+  width: 100%;
+  max-width: 400px;
+  background: $dark;
+  border: 1px solid rgba($gold, 0.15);
+  border-radius: $radius-lg;
+  padding: $spacing-2xl $spacing-xl;
+}
+
+.brand {
+  text-align: center;
+  margin-bottom: $spacing-xl;
+}
+
+.logo {
+  font-family: $font-display;
+  font-size: 2.5rem;
+  color: $gold;
+  letter-spacing: 0.15em;
+  display: block;
+}
+
+.tagline {
+  font-family: $font-condensed;
+  font-size: 0.8rem;
+  color: $gray;
+  letter-spacing: 0.08em;
+  margin-top: $spacing-xs;
+}
+
+.title {
+  font-family: $font-display;
+  font-size: 1.8rem;
+  color: $white;
+  letter-spacing: 0.1em;
+  margin-bottom: $spacing-lg;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  label {
+    font-family: $font-condensed;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $gray;
+  }
+
+  input {
+    background: $dark2;
+    border: 1px solid rgba($white, 0.1);
+    border-radius: $radius-md;
+    padding: $spacing-sm $spacing-md;
+    color: $white;
+    font-size: 1rem;
+    transition: border-color $transition-fast;
+    outline: none;
+
+    &::placeholder { color: rgba($gray, 0.5); }
+    &:focus { border-color: $gold; }
+  }
+}
+
+.error {
+  font-size: 0.85rem;
+  color: $error;
+}
+
+.hint {
+  margin-top: $spacing-lg;
+  padding-top: $spacing-lg;
+  border-top: 1px solid rgba($white, 0.06);
+  font-family: $font-body;
+  font-size: 0.75rem;
+  color: rgba($gray, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}

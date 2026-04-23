@@ -1,0 +1,155 @@
+.page {
+  max-width: 1000px;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-md;
+  margin-bottom: $spacing-xl;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: $spacing-sm;
+  padding: $spacing-xl $spacing-md;
+}
+
+.statIcon {
+  font-size: 1.8rem;
+}
+
+.statValue {
+  font-family: $font-display;
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.statLabel {
+  font-family: $font-condensed;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $gray;
+}
+
+.alertsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-md;
+
+  @include tablet {
+    grid-template-columns: 1fr;
+  }
+}
+
+.alertCard {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.alertHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.alertTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.alertIcon {
+  font-size: 1.1rem;
+}
+
+.alertTitle {
+  font-family: $font-condensed;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: $white;
+}
+
+.alertList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  flex: 1;
+}
+
+.alertItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-sm;
+  border-radius: $radius-md;
+  background: rgba($white, 0.03);
+  transition: background $transition-fast;
+
+  &:hover {
+    background: rgba($white, 0.06);
+  }
+}
+
+.alertAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba($gold, 0.1);
+  border: 1px solid rgba($gold, 0.2);
+  color: $gold;
+  font-family: $font-display;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.alertInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.alertName {
+  font-family: $font-condensed;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $white;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.alertSub {
+  font-size: 0.78rem;
+  color: $gray;
+  font-family: $font-body;
+}
+
+.emptyAlert {
+  font-family: $font-body;
+  font-size: 0.9rem;
+  color: $gray;
+  text-align: center;
+  padding: $spacing-lg 0;
+  flex: 1;
+}
+
+.alertLink {
+  align-self: flex-start;
+  margin-top: auto;
+}
