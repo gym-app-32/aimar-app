@@ -1,9 +1,43 @@
-.page { max-width: 1100px; }
+.page { max-width: 1000px; }
+
+// ─── Stats ────────────────────────────────────────────────
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-md;
+  margin-bottom: $spacing-xl;
+
+  @include mobile { grid-template-columns: 1fr; }
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: $spacing-xs;
+  padding: $spacing-lg $spacing-md;
+}
+
+.statValue {
+  font-family: $font-display;
+  font-size: 2.2rem;
+  color: $gold;
+  line-height: 1;
+}
+
+.statLabel {
+  font-family: $font-condensed;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $gray;
+}
 
 // ─── Layout ───────────────────────────────────────────────
 .layout {
   display: grid;
-  grid-template-columns: 340px 1fr;
+  grid-template-columns: 320px 1fr;
   gap: $spacing-lg;
   align-items: start;
 
@@ -13,11 +47,13 @@
 }
 
 // ─── Calendario ───────────────────────────────────────────
-.calCard {
+.calendario {
+  @include card;
   display: flex;
   flex-direction: column;
   gap: $spacing-md;
-  padding: $spacing-lg;
+  position: sticky;
+  top: 80px;
 }
 
 .calHeader {
@@ -26,27 +62,31 @@
   align-items: center;
 }
 
-.calNav {
+.calNavBtn {
   width: 32px;
   height: 32px;
   border-radius: $radius-sm;
   color: $gray;
-  font-size: 1rem;
+  font-size: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color $transition-fast;
-  &:hover { color: $gold; }
+  transition: all $transition-fast;
+
+  &:hover {
+    color: $gold;
+    background: rgba($gold, 0.1);
+  }
 }
 
-.calTitulo {
-  font-family: $font-display;
-  font-size: 1.2rem;
-  letter-spacing: 0.08em;
+.calMes {
+  font-family: $font-condensed;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   color: $white;
+  text-transform: capitalize;
 }
-
-.calendario { }
 
 .calGrid {
   display: grid;
@@ -54,9 +94,9 @@
   gap: 4px;
 }
 
-.calDiaSemana {
+.calDiaNombre {
   font-family: $font-condensed;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -65,193 +105,98 @@
   padding: $spacing-xs 0;
 }
 
-.celdaVacia { }
-
-.celda {
+.calDia {
   aspect-ratio: 1;
+  border-radius: $radius-sm;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  border-radius: $radius-sm;
-  cursor: default;
+  gap: 2px;
+  font-family: $font-body;
+  font-size: 0.82rem;
+  color: $gray;
   transition: all $transition-fast;
+  cursor: default;
   position: relative;
+
+  &.calDiaCon {
+    color: $white;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba($gold, 0.1);
+      color: $gold;
+    }
+  }
+
+  &.calDiaSeleccionado {
+    background: $gold !important;
+    color: $black !important;
+
+    .calDot { background: $black; }
+  }
+
+  &.calDiaHoy {
+    border: 1px solid rgba($gold, 0.4);
+    color: $gold;
+  }
 }
 
-.celdaActiva {
-  cursor: pointer;
-  background: rgba($gold, 0.06);
-  &:hover { background: rgba($gold, 0.12); }
-}
-
-.celdaHoy .celdaNum {
-  color: $gold;
-  font-weight: 700;
-}
-
-.celdaSeleccionada {
-  background: rgba($gold, 0.2) !important;
-  border: 1px solid rgba($gold, 0.4);
-}
-
-.celdaNum {
-  font-family: $font-condensed;
-  font-size: 0.85rem;
-  color: $gray-light;
-  line-height: 1;
-}
-
-.celdaDots {
-  display: flex;
-  gap: 3px;
-}
-
-.dotRutina {
-  width: 5px;
-  height: 5px;
+.calDot {
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   background: $gold;
-  display: inline-block;
+  flex-shrink: 0;
 }
 
-.dotClase {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: $success;
-  display: inline-block;
-}
-
-.leyenda {
+.calLeyenda {
   display: flex;
-  gap: $spacing-md;
-  justify-content: center;
-}
-
-.leyendaItem {
-  display: flex;
-  align-items: center;
-  gap: $spacing-xs;
-  font-family: $font-condensed;
-  font-size: 0.75rem;
-  color: $gray;
-  letter-spacing: 0.04em;
-}
-
-.resumenMes {
-  display: flex;
-  align-items: baseline;
-  gap: $spacing-sm;
-  justify-content: center;
+  gap: $spacing-lg;
   padding-top: $spacing-sm;
   border-top: 1px solid rgba($white, 0.06);
 }
 
-.resumenMesNum {
-  font-family: $font-display;
-  font-size: 2rem;
-  color: $gold;
-  line-height: 1;
-}
-
-.resumenMesLabel {
-  font-family: $font-condensed;
-  font-size: 0.8rem;
-  color: $gray;
-  letter-spacing: 0.04em;
-}
-
-// ─── Panel derecho ────────────────────────────────────────
-.panelDerecho {
+.calLeyendaItem {
   display: flex;
-  flex-direction: column;
-  gap: $spacing-lg;
+  align-items: center;
+  gap: $spacing-xs;
+  font-family: $font-body;
+  font-size: 0.75rem;
+  color: $gray;
 }
 
-// ─── Día seleccionado ─────────────────────────────────────
-.diaDetalle {
+.calDiaHoyDot {
+  width: 12px;
+  height: 12px;
+  border-radius: $radius-sm;
+  border: 1px solid rgba($gold, 0.4);
+}
+
+// ─── Detalle ──────────────────────────────────────────────
+.detalle {
   display: flex;
   flex-direction: column;
   gap: $spacing-md;
 }
 
-.diaDetalleTitle {
+.detalleFecha {
   font-family: $font-condensed;
   font-size: 1rem;
   font-weight: 600;
-  color: $white;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-transform: capitalize;
+  color: $gold;
 }
 
-.sesionesDelDia {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-sm;
-}
-
-.sesionCard {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-xs;
-  transition: all $transition-base;
-
-  &.sesionRutina { border-color: rgba($gold, 0.2); }
-  &.sesionClase  { border-color: rgba($success, 0.2); }
-
-  &:hover {
-    transform: translateX(2px);
-    border-color: rgba($gold, 0.4);
-  }
-}
-
-.sesionHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.sesionVerDetalle {
-  font-family: $font-condensed;
-  font-size: 0.75rem;
-  color: $gray;
-  letter-spacing: 0.04em;
-  transition: color $transition-fast;
-
-  .sesionCard:hover & { color: $gold; }
-}
-
-.sesionLabel {
-  font-family: $font-condensed;
-  font-size: 1rem;
-  font-weight: 600;
-  color: $white;
-}
-
-.sesionRutinaName {
-  font-size: 0.8rem;
-  color: $gray;
-  font-family: $font-body;
-}
-
-.sesionEjCount {
-  font-size: 0.78rem;
-  color: $gray;
-  font-family: $font-condensed;
-  letter-spacing: 0.04em;
-}
-
-.sinSeleccion {
+.detalleVacio {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $spacing-sm;
-  padding: $spacing-xl;
-  background: rgba($white, 0.02);
-  border: 1px dashed rgba($white, 0.08);
-  border-radius: $radius-md;
+  justify-content: center;
+  gap: $spacing-md;
+  padding: $spacing-2xl;
   text-align: center;
 
   p {
@@ -261,179 +206,168 @@
   }
 }
 
-.sinSeleccionIcon { font-size: 2rem; }
-
-// ─── Lista cronológica ────────────────────────────────────
-.listaTitle {
-  font-family: $font-display;
-  font-size: 1rem;
-  letter-spacing: 0.1em;
-  color: $gold;
+.detalleVacioIcon {
+  font-size: 2.5rem;
+  opacity: 0.4;
 }
 
-.listaEntrenamientos {
+// ─── Card entrenamiento ───────────────────────────────────
+.entrenamientoCard {
   display: flex;
   flex-direction: column;
-  gap: $spacing-sm;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
-.listaItem {
+.entrenamientoHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: $spacing-md;
   padding: $spacing-md $spacing-lg;
   cursor: pointer;
-  transition: all $transition-fast;
+  transition: background $transition-fast;
+  flex-wrap: wrap;
 
-  &:hover {
-    border-color: rgba($gold, 0.3);
-    transform: translateX(2px);
-  }
+  &:hover { background: rgba($white, 0.02); }
 }
 
-.listaItemLeft {
+.entrenamientoLeft {
   display: flex;
   align-items: center;
   gap: $spacing-md;
   min-width: 0;
 }
 
-.listaFecha {
-  font-family: $font-condensed;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: $gold;
-  letter-spacing: 0.06em;
-  white-space: nowrap;
-  min-width: 48px;
-}
-
-.listaLabel {
+.entrenamientoNombre {
   display: block;
-  font-family: $font-condensed;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: $white;
-}
-
-.listaRutina {
-  display: block;
-  font-size: 0.78rem;
-  color: $gray;
-  font-family: $font-body;
-}
-
-.listaItemRight {
-  display: flex;
-  align-items: center;
-  gap: $spacing-sm;
-  flex-shrink: 0;
-}
-
-.listaArrow {
-  color: $gray;
-  font-size: 0.9rem;
-  transition: color $transition-fast;
-
-  .listaItem:hover & { color: $gold; }
-}
-
-// ─── Modal detalle ────────────────────────────────────────
-.detalle {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-lg;
-}
-
-.detalleMeta {
-  display: flex;
-  align-items: center;
-  gap: $spacing-sm;
-  flex-wrap: wrap;
-}
-
-.detalleRutina {
-  font-family: $font-condensed;
-  font-size: 0.85rem;
-  color: $gray;
-}
-
-.detalleFecha {
-  font-family: $font-condensed;
-  font-size: 0.82rem;
-  color: $gray;
-  text-transform: capitalize;
-  margin-left: auto;
-}
-
-.detalleEjercicios {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-md;
-}
-
-.detalleEjercicio {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-sm;
-  padding-bottom: $spacing-md;
-  border-bottom: 1px solid rgba($white, 0.05);
-
-  &:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-  }
-}
-
-.detalleEjHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.detalleEjNombre {
   font-family: $font-condensed;
   font-size: 1rem;
   font-weight: 600;
   color: $white;
 }
 
-.detalleEjSeries {
-  font-family: $font-condensed;
+.entrenamientoRutina {
+  display: block;
   font-size: 0.78rem;
   color: $gray;
-  letter-spacing: 0.04em;
+  font-family: $font-body;
 }
 
-.detalleRepsRow {
+.entrenamientoRight {
   display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  flex-shrink: 0;
+}
+
+.entrenamientoMeta {
+  font-family: $font-condensed;
+  font-size: 0.82rem;
+  color: $gray;
+  white-space: nowrap;
+}
+
+.expandBtn {
+  font-size: 0.7rem;
+  color: $gray;
+  transition: color $transition-fast;
+}
+
+// ─── Detalle expandido ────────────────────────────────────
+.entrenamientoDetalle {
+  padding: $spacing-md $spacing-lg $spacing-lg;
+  border-top: 1px solid rgba($white, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.detalleSeccion {
+  display: block;
+  font-family: $font-condensed;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $gold;
+  margin-bottom: $spacing-sm;
+}
+
+// ─── Ejercicios ───────────────────────────────────────────
+.ejerciciosList {
+  display: flex;
+  flex-direction: column;
   gap: $spacing-sm;
+}
+
+.ejercicioItem {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  padding: $spacing-sm;
+  background: rgba($white, 0.02);
+  border-radius: $radius-sm;
+  border-left: 2px solid rgba($gold, 0.2);
+}
+
+.ejercicioNombre {
+  font-family: $font-condensed;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: $white;
+}
+
+.ejercicioSeries {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.serieReps {
+  display: flex;
+  gap: 4px;
   flex-wrap: wrap;
 }
 
-.detalleRepChip {
+.repBubble {
+  width: 28px;
+  height: 28px;
+  border-radius: $radius-sm;
+  background: rgba($gold, 0.1);
+  border: 1px solid rgba($gold, 0.2);
+  color: $gold;
+  font-family: $font-condensed;
+  font-size: 0.78rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// ─── Fatiga ───────────────────────────────────────────────
+.fatigaSection {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  background: rgba($gold, 0.08);
-  border: 1px solid rgba($gold, 0.15);
-  border-radius: $radius-sm;
-  padding: $spacing-xs $spacing-md;
-  min-width: 52px;
 }
 
-.detalleRepLabel {
+.fatigaGrid {
+  display: flex;
+  gap: $spacing-lg;
+  flex-wrap: wrap;
+}
+
+.fatigaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fatigaLabel {
   font-family: $font-condensed;
-  font-size: 0.65rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: $gray;
-  letter-spacing: 0.08em;
-}
-
-.detalleRepVal {
-  font-family: $font-condensed;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: $white;
 }
