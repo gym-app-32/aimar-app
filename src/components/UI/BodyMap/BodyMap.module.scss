@@ -1,0 +1,121 @@
+.bodyMap {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  align-items: center;
+}
+
+.figuras {
+  display: flex;
+  justify-content: center;
+  gap: $spacing-2xl;
+
+  @include mobile {
+    gap: $spacing-lg;
+  }
+}
+
+.figuraWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.figuraLabel {
+  font-family: $font-condensed;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $gray;
+}
+
+.figura {
+  width: 130px;
+  height: auto;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.4));
+
+  @include mobile {
+    width: 110px;
+  }
+}
+
+// ─── Silueta base ─────────────────────────────────────────
+.silueta {
+  * {
+    fill: #2a2a2a;
+    stroke: #3a3a3a;
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+}
+
+// ─── Zonas musculares ─────────────────────────────────────
+.zona {
+  fill: rgba($white, 0.0);
+  stroke: rgba($white, 0.0);
+  stroke-width: 1;
+  cursor: pointer;
+  transition: fill 0.15s ease, stroke 0.15s ease;
+
+  &:hover {
+    fill: rgba($gold, 0.3);
+    stroke: rgba($gold, 0.6);
+    stroke-width: 1.5;
+  }
+
+  &.active {
+    fill: rgba($gold, 0.5);
+    stroke: $gold;
+    stroke-width: 2;
+  }
+}
+
+// ─── Labels ───────────────────────────────────────────────
+.lbl {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 7.5px;
+  font-weight: 600;
+  fill: rgba(136, 136, 136, 0.0);
+  pointer-events: none;
+  letter-spacing: 0.04em;
+  transition: fill 0.15s ease;
+}
+
+.lblActive {
+  fill: $gold;
+}
+
+// ─── Tags seleccionados ───────────────────────────────────
+.seleccionados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+  justify-content: center;
+  max-width: 400px;
+}
+
+.musculoTag {
+  font-family: $font-condensed;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: $black;
+  background: $gold;
+  border: none;
+  border-radius: $radius-full;
+  padding: 3px $spacing-sm;
+  cursor: pointer;
+  transition: opacity $transition-fast;
+
+  &:hover { opacity: 0.75; }
+}
+
+.hint {
+  font-family: $font-body;
+  font-size: 0.82rem;
+  color: rgba($gray, 0.5);
+  text-align: center;
+  font-style: italic;
+}

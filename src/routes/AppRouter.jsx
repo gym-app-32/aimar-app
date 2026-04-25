@@ -9,7 +9,6 @@ import NotFoundPage from '../pages/NotFoundPage'
 import AppLayout from '../components/AppLayout'
 
 import AlumnoDashboard from '../pages/alumno/AlumnoDashboard'
-import AlumnoRutina from '../pages/alumno/AlumnoRutina'
 import AlumnoHistorial from '../pages/alumno/AlumnoHistorial'
 import AlumnoEncuesta from '../pages/alumno/AlumnoEncuesta'
 
@@ -37,6 +36,7 @@ export default function AppRouter() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/aimar-app" element={<LoginPage />} />
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
         <Route path="/" element={<RootRedirect />} />
 
@@ -44,7 +44,6 @@ export default function AppRouter() {
         <Route element={<RoleRoute roles={['alumno']} />}>
           <Route element={<AppLayout />}>
             <Route path="/alumno" element={<AlumnoDashboard />} />
-            <Route path="/alumno/rutina" element={<AlumnoRutina />} />
             <Route path="/alumno/historial" element={<AlumnoHistorial />} />
             <Route path="/alumno/encuesta" element={<AlumnoEncuesta />} />
             <Route path="/alumno/perfil" element={<PerfilPage />} />

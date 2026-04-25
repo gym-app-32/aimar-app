@@ -1,0 +1,583 @@
+.page {
+  max-width: 800px;
+}
+
+// ─── Tabs ─────────────────────────────────────────────────
+.tabs {
+  display: flex;
+  gap: $spacing-xs;
+  margin-bottom: $spacing-xl;
+  border-bottom: 1px solid rgba($white, 0.08);
+  overflow-x: auto;
+  padding-bottom: 0;
+
+  @include scrollbar;
+}
+
+.tab {
+  font-family: $font-condensed;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $gray;
+  padding: $spacing-sm $spacing-lg;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all $transition-fast;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  margin-bottom: -1px;
+
+  &:hover { color: $white; }
+
+  &.tabActive {
+    color: $gold;
+    border-bottom-color: $gold;
+  }
+
+  &.tabDisabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
+
+.tabLock {
+  font-size: 0.7rem;
+  opacity: 0.6;
+}
+
+// ─── Contenido ────────────────────────────────────────────
+.contenido {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+// ─── Rutina header ────────────────────────────────────────
+.rutinaHeader {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.rutinaHeaderTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: $spacing-md;
+}
+
+.rutinaNombre {
+  font-family: $font-display;
+  font-size: 1.6rem;
+  letter-spacing: 0.06em;
+  color: $white;
+  margin-bottom: $spacing-xs;
+}
+
+.rutinaMeta {
+  display: flex;
+  gap: $spacing-lg;
+  flex-wrap: wrap;
+
+  span {
+    font-family: $font-body;
+    font-size: 0.82rem;
+    color: $gray;
+  }
+}
+
+// ─── Semana indicador ─────────────────────────────────────
+.semanaIndicador {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.semanaBarras {
+  display: flex;
+  gap: $spacing-sm;
+  align-items: flex-end;
+}
+
+.semanaBarraWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+
+  &.enProceso {
+    flex: 2;
+  }
+}
+
+.semanaNum {
+  font-family: $font-condensed;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: $gray;
+}
+
+.semanaBarra {
+  width: 100%;
+  height: 8px;
+  background: rgba($white, 0.06);
+  border-radius: $radius-full;
+  overflow: hidden;
+}
+
+.semanaBarraFill {
+  height: 100%;
+  border-radius: $radius-full;
+  transition: width $transition-slow;
+
+  &.completada {
+    width: 100%;
+    background: rgba($gold, 0.6);
+  }
+
+  &.enProcesoFill {
+    background: $gold;
+    box-shadow: 0 0 8px rgba($gold, 0.4);
+  }
+
+  &.pendiente {
+    width: 0%;
+    background: transparent;
+  }
+}
+
+.semanaLabel {
+  font-family: $font-condensed;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: $gray;
+  text-align: right;
+}
+
+// ─── Días semana ──────────────────────────────────────────
+.diasSemana {
+  display: flex;
+  gap: $spacing-xs;
+
+  @include mobile { gap: 2px; }
+}
+
+.diaSemana {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: $spacing-sm $spacing-xs;
+  border-radius: $radius-md;
+  background: rgba($white, 0.03);
+  border: 1px solid rgba($white, 0.05);
+
+  &.diaHoy {
+    background: rgba($gold, 0.08);
+    border-color: rgba($gold, 0.3);
+  }
+}
+
+.diaSemanaLabel {
+  font-family: $font-condensed;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $gray;
+
+  .diaHoy & { color: $gold; }
+}
+
+.diaHoyDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: $gold;
+}
+
+// ─── Selector días rutina ─────────────────────────────────
+.selectorDias {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.selectorLabel {
+  font-family: $font-condensed;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $gray;
+}
+
+.selectorBtns {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.selectorBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: $spacing-sm $spacing-lg;
+  border-radius: $radius-md;
+  background: rgba($white, 0.04);
+  border: 1px solid rgba($white, 0.08);
+  transition: all $transition-fast;
+  cursor: pointer;
+
+  &:hover {
+    border-color: rgba($gold, 0.3);
+    background: rgba($gold, 0.06);
+  }
+
+  &.selectorBtnActive {
+    border-color: $gold;
+    background: rgba($gold, 0.1);
+  }
+}
+
+.selectorBtnNum {
+  font-family: $font-condensed;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $gray;
+
+  .selectorBtnActive & { color: $gold; }
+}
+
+.selectorBtnNombre {
+  font-family: $font-condensed;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: $white;
+}
+
+// ─── Iniciar card ─────────────────────────────────────────
+.iniciarCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-lg;
+  flex-wrap: wrap;
+}
+
+.iniciarInfo {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.iniciarNombre {
+  font-family: $font-condensed;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: $white;
+}
+
+.iniciarMusculos {
+  font-family: $font-body;
+  font-size: 0.85rem;
+  color: $gray;
+}
+
+.iniciarMeta {
+  display: flex;
+  gap: $spacing-lg;
+  flex-wrap: wrap;
+
+  span {
+    font-family: $font-condensed;
+    font-size: 0.82rem;
+    color: $gray;
+  }
+}
+
+// ─── Carrusel ─────────────────────────────────────────────
+.carrusel {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.carruselProgress {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.carruselDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba($white, 0.1);
+  transition: all $transition-base;
+
+  &.carruselDotActive {
+    background: $gold;
+    width: 24px;
+    border-radius: $radius-full;
+  }
+
+  &.carruselDotDone {
+    background: rgba($gold, 0.4);
+  }
+}
+
+// ─── Tarjeta serie ────────────────────────────────────────
+.serieCard {
+  @include card;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  border-color: rgba($gold, 0.2);
+}
+
+.serieCardHeader {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid rgba($white, 0.06);
+  flex-wrap: wrap;
+}
+
+.serieTitulo {
+  font-family: $font-condensed;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  flex: 1;
+}
+
+.serieDescanso {
+  font-family: $font-condensed;
+  font-size: 0.78rem;
+  color: $gray;
+  letter-spacing: 0.04em;
+}
+
+.serieCantidad {
+  font-family: $font-condensed;
+  font-size: 0.78rem;
+  color: $gray;
+  letter-spacing: 0.04em;
+}
+
+// ─── Ejercicios en serie ──────────────────────────────────
+.ejerciciosList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.ejercicioItem {
+  display: flex;
+  gap: $spacing-md;
+  align-items: flex-start;
+}
+
+.ejercicioNum {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba($gold, 0.1);
+  border: 1px solid rgba($gold, 0.2);
+  color: $gold;
+  font-family: $font-condensed;
+  font-size: 0.78rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.ejercicioInfo {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  flex: 1;
+}
+
+.ejercicioNombre {
+  font-family: $font-condensed;
+  font-size: 1rem;
+  font-weight: 600;
+  color: $white;
+}
+
+.repsRow {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.repItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.repSerie {
+  font-family: $font-condensed;
+  font-size: 0.62rem;
+  color: $gray;
+  letter-spacing: 0.06em;
+}
+
+.repValor {
+  width: 36px;
+  height: 36px;
+  border-radius: $radius-sm;
+  background: rgba($white, 0.06);
+  border: 1px solid rgba($white, 0.1);
+  color: $white;
+  font-family: $font-display;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// ─── Botón completar ──────────────────────────────────────
+.completarBtn {
+  width: 100%;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  font-family: $font-condensed;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $black;
+  transition: all $transition-base;
+  cursor: pointer;
+  border: none;
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    color: $gray;
+    cursor: default;
+    transform: none;
+  }
+}
+
+// ─── Miniaturas ───────────────────────────────────────────
+.miniaturas {
+  display: flex;
+  gap: $spacing-xs;
+  overflow-x: auto;
+  @include scrollbar;
+}
+
+.miniatura {
+  flex-shrink: 0;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+  background: rgba($white, 0.04);
+  border: 1px solid rgba($white, 0.06);
+  font-family: $font-condensed;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: $gray;
+  transition: all $transition-fast;
+  cursor: pointer;
+
+  &:hover { color: $white; border-color: rgba($white, 0.15); }
+
+  &.miniaturaActive {
+    border-color: $gold;
+    color: $gold;
+    background: rgba($gold, 0.08);
+  }
+
+  &.miniaturaDone {
+    border-color: rgba($gold, 0.3);
+    color: rgba($gold, 0.5);
+    background: rgba($gold, 0.04);
+  }
+}
+
+// ─── Entrenamiento guardado ───────────────────────────────
+.entrenamientoGuardado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-lg;
+  padding: $spacing-2xl;
+  text-align: center;
+
+  h3 {
+    font-family: $font-display;
+    font-size: 1.8rem;
+    letter-spacing: 0.06em;
+    color: $white;
+  }
+
+  p {
+    font-family: $font-body;
+    font-size: 0.9rem;
+    color: $gray;
+  }
+}
+
+.guardadoIcon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba($success, 0.15);
+  border: 2px solid $success;
+  color: $success;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// ─── Clase card ───────────────────────────────────────────
+.claseCard {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  max-width: 480px;
+}
+
+.claseNombre {
+  font-family: $font-display;
+  font-size: 1.4rem;
+  letter-spacing: 0.06em;
+  color: $white;
+}
+
+.claseHorario {
+  font-family: $font-condensed;
+  font-size: 0.9rem;
+  color: $gold;
+}
+
+.claseInfo {
+  font-family: $font-body;
+  font-size: 0.88rem;
+  color: $gray;
+}

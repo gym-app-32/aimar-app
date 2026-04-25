@@ -34,7 +34,7 @@ $radius-full: 9999px;
 
 // Sidebar
 $sidebar-width:           240px;
-$sidebar-width-collapsed: 64px;
+$sidebar-width-collapsed: 100px;
 
 // Transiciones
 $transition-fast: 0.15s ease;
@@ -46,3 +46,6 @@ $z-sidebar: 100;
 $z-navbar:  200;
 $z-modal:   300;
 $z-toast:   400;
+
+// Fuente de las flechas
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');

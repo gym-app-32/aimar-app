@@ -5,9 +5,8 @@ import styles from './BottomBar.module.scss'
 const NAV_ITEMS = {
   alumno: [
     { to: '/alumno',           label: 'Inicio',   icon: '⊞' },
-    { to: '/alumno/rutina',    label: 'Rutina',   icon: '📋' },
     { to: '/alumno/historial', label: 'Historial', icon: '📈' },
-    { to: '/alumno/encuesta',  label: 'Encuesta',  icon: '💬' },
+    { to: '/alumno/encuesta',  label: 'Encuestaaaa',  icon: '📋' },
     { to: '/alumno/perfil',           label: 'Perfil',    icon: '👤' },
   ],
   profesor: [

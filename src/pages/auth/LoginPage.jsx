@@ -1,13 +1,16 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+
+import Logo from '../../components/Logos/Logo'
 import styles from './LoginPage.module.scss'
+import { ThreeArrows } from '../../components/Icons/Icons'
 
 // Mock temporal hasta tener el backend
 const MOCK_USERS = [
-  { id: 1, name: 'Carlos Pérez',   email: 'alumno@aimar.com',   password: '123456', role: 'alumno' },
-  { id: 2, name: 'Martín Gómez',   email: 'profesor@aimar.com', password: '123456', role: 'profesor' },
-  { id: 3, name: 'Admin Aimar',    email: 'admin@aimar.com',    password: '123456', role: 'admin' },
+  { id: 1, name: 'Carlos Pérez', email: 'alumno@aimar.com', password: '123456', role: 'alumno' },
+  { id: 2, name: 'Martín Gómez', email: 'profesor@aimar.com', password: '123456', role: 'profesor' },
+  { id: 3, name: 'Admin Aimar', email: 'admin@aimar.com', password: '123456', role: 'admin' },
 ]
 
 export default function LoginPage() {
@@ -41,16 +44,18 @@ export default function LoginPage() {
     const { password, ...safeUser } = user
     login('mock-token-123', safeUser)
 
-    if (safeUser.role === 'alumno')   navigate('/alumno')
+    if (safeUser.role === 'alumno') navigate('/alumno')
     if (safeUser.role === 'profesor') navigate('/profesor')
-    if (safeUser.role === 'admin')    navigate('/admin')
+    if (safeUser.role === 'admin') navigate('/admin')
   }
 
   return (
     <div className={styles.page}>
       <div className={styles.card}>
         <div className={styles.brand}>
-          <span className={styles.logo}>AIMAR</span>
+          <span className={styles.logo}>
+            <Logo />
+          </span>
           <p className={styles.tagline}>Si hay determinación, no hay límites.</p>
         </div>
 
@@ -64,7 +69,7 @@ export default function LoginPage() {
               name="email"
               value={form.email}
               onChange={handleChange}
-              placeholder="tu@email.com"
+              placeholder="tu-usuario@aimar.com"
               required
             />
           </div>
@@ -82,14 +87,18 @@ export default function LoginPage() {
           </div>
 
           {error && <p className={styles.error}>{error}</p>}
+          <div className={styles.containerButtonArrows}>
+            <ThreeArrows  />
+            <button
+              type="submit"
+              className="btn btn--primary btn--full btn--lg"
+              disabled={loading}
+            >
+              {loading ? 'Ingresando...' : 'Ingresar'}
+            </button>
+            <ThreeArrows  className={styles.right}/>
+          </div>
 
-          <button
-            type="submit"
-            className="btn btn--primary btn--full btn--lg"
-            disabled={loading}
-          >
-            {loading ? 'Ingresando...' : 'Ingresar'}
-          </button>
         </form>
 
         <div className={styles.hint}>

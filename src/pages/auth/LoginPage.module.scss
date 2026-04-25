@@ -6,6 +6,13 @@
   justify-content: center;
   padding: $spacing-md;
 
+  background-image: url("/images/bg-hero.png");
+  background-size: cover;/* Hace que cubra todo el div */
+  background-position: center;/* Centra la imagen */
+  background-repeat: no-repeat;/* Evita que se repita */
+  
+  overflow: hidden;
+
   &::before {
     content: '';
     position: fixed;
@@ -18,7 +25,8 @@
 .card {
   width: 100%;
   max-width: 400px;
-  background: $dark;
+  background: rgba($dark, 0.65);
+  backdrop-filter: blur(5px);
   border: 1px solid rgba($gold, 0.15);
   border-radius: $radius-lg;
   padding: $spacing-2xl $spacing-xl;
@@ -27,6 +35,9 @@
 .brand {
   text-align: center;
   margin-bottom: $spacing-xl;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .logo {
@@ -35,6 +46,12 @@
   color: $gold;
   letter-spacing: 0.15em;
   display: block;
+
+  svg {
+    width: 250px;
+        filter: drop-shadow(2px 2px 5px rgba($black, 0.8));
+
+  }
 }
 
 .tagline {
@@ -43,6 +60,7 @@
   color: $gray;
   letter-spacing: 0.08em;
   margin-top: $spacing-xs;
+  text-transform: uppercase;
 }
 
 .title {
@@ -103,4 +121,23 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+
+// Boton con flechas al costado
+.containerButtonArrows {
+  padding-top: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  align-items: center;
+  .right {
+    transform: rotate(180deg);
+  }
+
+  svg {
+    width: 100px;
+    fill: #F5C518;
+    filter: drop-shadow(1px 0px 4px rgb(255, 200, 0));
+
+  }
 }

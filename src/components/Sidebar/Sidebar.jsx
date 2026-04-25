@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react'
 import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import styles from './Sidebar.module.scss'
+import LogoSinRotulo from '../Logos/LogoSinRotulo'
+import LogoMini from '../Logos/LogoMini'
+
 
 const NAV_ITEMS = {
   alumno: [
     { to: '/alumno',           label: 'Dashboard', icon: '⊞' },
-    { to: '/alumno/rutina',    label: 'Mi Rutina',  icon: '📋' },
     { to: '/alumno/historial', label: 'Historial',  icon: '📈' },
-    { to: '/alumno/encuesta',  label: 'Encuesta',   icon: '💬' },
+    { to: '/alumno/encuesta',  label: 'Encuesta',   icon: '📋' },
     { to: '/alumno/perfil',           label: 'Mi Perfil',  icon: '👤' },
   ],
   profesor: [
@@ -54,9 +56,9 @@ export default function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose
         ${mobileOpen ? styles.mobileOpen : ''}
       `}>
         <div className={styles.header}>
-          <span className={styles.logo}>{collapsed ? 'A' : 'AIMAR'}</span>
+          <span className={styles.logo}>{collapsed ? <LogoMini className='logo-mini'/> : <LogoSinRotulo />}</span>
           <button className={styles.toggle} onClick={onToggle}>
-            {collapsed ? '→' : '←'}
+            {collapsed ? '>' : '<'}
           </button>
         </div>
 

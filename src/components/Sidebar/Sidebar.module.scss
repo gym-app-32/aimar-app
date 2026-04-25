@@ -53,10 +53,18 @@
   color: $gold;
   letter-spacing: 0.1em;
   white-space: nowrap;
+  min-width: 30px;
+  svg {
+    height: 50px;
+  }
+  .logo-mini {
+    height: 0px;
+  }
 }
 
 .toggle {
-  color: $gray;
+  color: rgba($gray, 0.6);
+  font-family: 'Nanum Gothic', sans-serif;
   font-size: 1rem;
   padding: $spacing-xs;
   border-radius: $radius-sm;

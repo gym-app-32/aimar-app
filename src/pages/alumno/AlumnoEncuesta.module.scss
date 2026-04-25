@@ -1,0 +1,316 @@
+.page { max-width: 680px; }
+
+// ─── Vacio ────────────────────────────────────────────────
+.vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-md;
+  padding: $spacing-2xl;
+  text-align: center;
+
+  p {
+    font-family: $font-body;
+    font-size: 0.9rem;
+    color: $gray;
+  }
+}
+
+.vacioIcon {
+  font-size: 2.5rem;
+  opacity: 0.4;
+}
+
+// ─── Secciones ────────────────────────────────────────────
+.seccion {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  margin-bottom: $spacing-xl;
+}
+
+.seccionTitulo {
+  font-family: $font-condensed;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $gray;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+// ─── Card entrenamiento ───────────────────────────────────
+.entrenamientoCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-md;
+  flex-wrap: wrap;
+  transition: border-color $transition-base;
+
+  &:hover { border-color: rgba($gold, 0.3); }
+
+  &.completada {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+.entrenamientoInfo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  min-width: 0;
+}
+
+.entrenamientoNombre {
+  display: block;
+  font-family: $font-condensed;
+  font-size: 1rem;
+  font-weight: 600;
+  color: $white;
+}
+
+.entrenamientoHora {
+  display: block;
+  font-size: 0.78rem;
+  color: $gray;
+  font-family: $font-body;
+  margin-top: 2px;
+}
+
+.checkIcon {
+  font-family: $font-condensed;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: $success;
+}
+
+// ─── Success card ─────────────────────────────────────────
+.successCard {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+  background: rgba($success, 0.05);
+  border-color: rgba($success, 0.2);
+
+  h3 {
+    font-family: $font-condensed;
+    font-size: 1rem;
+    font-weight: 600;
+    color: $white;
+    margin-bottom: 2px;
+  }
+
+  p {
+    font-family: $font-body;
+    font-size: 0.85rem;
+    color: $gray;
+    line-height: 1.5;
+  }
+}
+
+.successIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba($success, 0.15);
+  border: 2px solid $success;
+  color: $success;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+// ─── Formulario ───────────────────────────────────────────
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.formHeader {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-md $spacing-lg;
+  background: $dark2;
+  border: 1px solid rgba($gold, 0.15);
+  border-radius: $radius-md;
+  flex-wrap: wrap;
+}
+
+.formEntrenamientoNombre {
+  font-family: $font-condensed;
+  font-size: 1rem;
+  font-weight: 600;
+  color: $white;
+  flex: 1;
+}
+
+.formHora {
+  font-family: $font-body;
+  font-size: 0.82rem;
+  color: $gray;
+}
+
+// ─── Pregunta ─────────────────────────────────────────────
+.preguntaCard {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.preguntaHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: $spacing-md;
+}
+
+.preguntaLabel {
+  font-family: $font-condensed;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: $white;
+  margin-bottom: 2px;
+}
+
+.preguntaDesc {
+  font-family: $font-body;
+  font-size: 0.85rem;
+  color: $gray;
+}
+
+.valorActual {
+  font-family: $font-display;
+  font-size: 1.8rem;
+  color: $gold;
+  line-height: 1;
+  flex-shrink: 0;
+
+  span {
+    font-family: $font-condensed;
+    font-size: 0.9rem;
+    color: $gray;
+    font-weight: 400;
+  }
+}
+
+// ─── Escala ───────────────────────────────────────────────
+.scale {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.scaleBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: $radius-md;
+  border: 1px solid rgba($white, 0.1);
+  background: rgba($white, 0.04);
+  color: $gray;
+  font-family: $font-condensed;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all $transition-fast;
+  cursor: pointer;
+
+  &:hover {
+    border-color: rgba($gold, 0.5);
+    color: $white;
+  }
+
+  &.filled {
+    background: rgba($gold, 0.1);
+    border-color: rgba($gold, 0.3);
+    color: $gold;
+  }
+
+  &.selected {
+    background: $gold;
+    border-color: $gold;
+    color: $black;
+    transform: scale(1.1);
+  }
+
+  @include mobile {
+    width: 34px;
+    height: 34px;
+    font-size: 0.85rem;
+  }
+}
+
+.scaleLegend {
+  display: flex;
+  justify-content: space-between;
+  font-family: $font-body;
+  font-size: 0.78rem;
+  color: $gray;
+}
+
+// ─── Notas ────────────────────────────────────────────────
+.notasCard {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.notasLabel {
+  font-family: $font-condensed;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $gray;
+
+  span {
+    text-transform: none;
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+}
+
+.notasInput {
+  background: $dark3;
+  border: 1px solid rgba($white, 0.08);
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  color: $white;
+  font-family: $font-body;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  resize: vertical;
+  transition: border-color $transition-fast;
+  outline: none;
+  width: 100%;
+
+  &::placeholder { color: rgba($gray, 0.5); }
+  &:focus { border-color: rgba($gold, 0.4); }
+}
+
+.error {
+  font-size: 0.85rem;
+  color: $error;
+  font-family: $font-body;
+}
+
+.formFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-md;
+  padding-bottom: $spacing-xl;
+}
