@@ -3,9 +3,9 @@ import { useAuth } from '../../context/AuthContext'
 import styles from './Topbar.module.scss'
 
 const ROLE_LABELS = {
-  alumno:   'Panel Alumno',
-  profesor: 'Panel Profesor',
-  admin:    'Panel Admin',
+  alumno: 'Alumno',
+  profesor: 'Profesor',
+  admin: 'Admin',
 }
 
 export default function Topbar() {
@@ -21,16 +21,16 @@ export default function Topbar() {
     <header className={styles.topbar}>
       <span className={styles.roleLabel}>{ROLE_LABELS[role]}</span>
       <div className={styles.right}>
-        <span className={styles.greeting}>
-          Hola, <strong>{user?.name?.split(' ')[0]}</strong>
-        </span>
         <div className={styles.avatar}>
           {user?.name?.[0]?.toUpperCase() || 'U'}
         </div>
-        <button className={styles.logoutBtn} onClick={handleLogout} title="Cerrar sesión">
-          ⏻
-        </button>
+        <span className={styles.greeting}>
+          Hola, <br /><strong>{user?.name?.split(' ')[0]}</strong>
+        </span>
       </div>
+      <button className={styles.logoutBtn} onClick={handleLogout} title="Cerrar sesión">
+        ⏻ Cerrar sesión
+      </button>
     </header>
   )
 }

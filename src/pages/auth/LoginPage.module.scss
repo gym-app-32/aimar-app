@@ -1,17 +1,12 @@
 .page {
   min-height: 100vh;
-  background: $black;
+  background: rgba($black, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: $spacing-md;
 
-  background-image: url("/images/bg-hero.png");
-  background-size: cover;/* Hace que cubra todo el div */
-  background-position: center;/* Centra la imagen */
-  background-repeat: no-repeat;/* Evita que se repita */
-  
-  overflow: hidden;
+
 
   &::before {
     content: '';
@@ -49,7 +44,7 @@
 
   svg {
     width: 250px;
-        filter: drop-shadow(2px 2px 5px rgba($black, 0.8));
+    filter: drop-shadow(2px 2px 5px rgba($black, 0.8));
 
   }
 }
@@ -101,8 +96,13 @@
     transition: border-color $transition-fast;
     outline: none;
 
-    &::placeholder { color: rgba($gray, 0.5); }
-    &:focus { border-color: $gold; }
+    &::placeholder {
+      color: rgba($gray, 0.5);
+    }
+
+    &:focus {
+      border-color: $gold;
+    }
   }
 }
 
@@ -130,6 +130,7 @@
   flex-direction: row;
   gap: 15px;
   align-items: center;
+
   .right {
     transform: rotate(180deg);
   }

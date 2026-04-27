@@ -4,11 +4,14 @@
   align-items: center;
   height: 64px;
   padding: 0 $spacing-xl;
-  background: $dark;
+  background: rgba($dark, 0.8);
+  background: linear-gradient(to bottom, rgba($gold, 0.3), rgba($dark, 0.3));
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba($gold, 0.08);
   position: sticky;
   top: 0;
   z-index: $z-navbar;
+
 
   @include mobile {
     padding: 0 $spacing-md;
@@ -17,25 +20,41 @@
 
 .roleLabel {
   font-family: $font-condensed;
-  font-size: 0.8rem;
+  font-size: 3rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: $gray;
+  color: rgba($gray, 0.2);
+
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+
 }
 
 .right {
   display: flex;
   align-items: center;
   gap: $spacing-md;
+
 }
 
 .greeting {
   font-size: 0.9rem;
   color: $gray;
-  strong { color: $white; font-weight: 600; }
+  filter: drop-shadow(2px 2px 1px rgba($black, 1));
 
-  @include mobile { display: none; }
+
+  strong {
+    color: $white;
+    font-weight: 600;
+
+  }
+
+  @include mobile {
+    //display: none;
+  }
 }
 
 .avatar {

@@ -13,10 +13,17 @@ html {
 
 body {
   font-family: $font-body;
-  background-color: $black;
+  //background-color: $black;
   color: $white;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+
+  background-image: url("/images/bg-hero.png");
+  background-size: cover;/* Hace que cubra todo el div */
+  background-position: center;/* Centra la imagen */
+  background-repeat: no-repeat;/* Evita que se repita */
+  //overflow: hidden;
+ // height: 100%;
 }
 
 a { color: inherit; text-decoration: none; }

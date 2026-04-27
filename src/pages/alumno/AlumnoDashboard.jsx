@@ -1,4 +1,5 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import Modal from '../../components/UI/Modal/Modal'
 import styles from './AlumnoDashboard.module.scss'
 
 // ─── Mock data ────────────────────────────────────────────
@@ -9,179 +10,345 @@ const MOCK_RUTINA = {
   semanaActual: 3,
   dias: [
     {
-      id: 1,
-      nombre: 'Piernas',
-      gruposMusculares: 'Cuádriceps, Glúteos, Isquiotibiales',
+      id: 1, nombre: 'Piernas', gruposMusculares: 'Cuádriceps, Glúteos, Isquiotibiales',
       precalentamiento: {
-        repeticionesSerie: 1,
-        descanso: 0,
+        repeticionesSerie: 1, descanso: 0,
         ejercicios: [
-          { nombre: 'Bicicleta estática', reps: ['10 min'] },
-          { nombre: 'Salto a la soga',    reps: ['5 min'] },
+          { nombre: 'Bicicleta estática', reps: ['10 min'], descripcion: 'Calentamiento cardiovascular suave.', video: '', utilitarios: [{ nombre: 'Bicicleta', foto: null }] },
+          { nombre: 'Salto a la soga',    reps: ['5 min'],  descripcion: 'Activación cardiovascular.',         video: '', utilitarios: [{ nombre: 'Soga',     foto: null }] },
         ]
       },
       series: [
-        {
-          id: 1,
-          repeticionesSerie: 4,
-          descanso: 90,
-          ejercicios: [
-            { nombre: 'Sentadilla con barra', reps: [8, 8, 7, 6] },
-            { nombre: 'Prensa de piernas',    reps: [12, 12, 10, 10] },
-          ]
-        },
-        {
-          id: 2,
-          repeticionesSerie: 3,
-          descanso: 60,
-          ejercicios: [
-            { nombre: 'Curl femoral',     reps: [12, 12, 12] },
-            { nombre: 'Extensión de pierna', reps: [15, 15, 12] },
-          ]
-        },
+        { id: 1, repeticionesSerie: 4, descanso: 90, ejercicios: [
+          { nombre: 'Sentadilla con barra', reps: [8,8,7,6],      descripcion: 'Ejercicio compuesto para piernas y glúteos.', video: 'https://youtube.com', utilitarios: [{ nombre: 'Barra olímpica', foto: null }, { nombre: 'Rack', foto: null }] },
+          { nombre: 'Prensa de piernas',    reps: [12,12,10,10],  descripcion: 'Máquina para cuádriceps.',                   video: '',                    utilitarios: [{ nombre: 'Prensa', foto: null }] },
+        ]},
+        { id: 2, repeticionesSerie: 3, descanso: 60, ejercicios: [
+          { nombre: 'Curl femoral',        reps: [12,12,12], descripcion: 'Isquiotibiales en máquina.', video: '', utilitarios: [{ nombre: 'Máquina curl', foto: null }] },
+          { nombre: 'Extensión de pierna', reps: [15,15,12], descripcion: 'Cuádriceps en máquina.',    video: '', utilitarios: [{ nombre: 'Máquina extensión', foto: null }] },
+        ]},
       ],
       postentrenamiento: {
-        repeticionesSerie: 1,
-        descanso: 0,
+        repeticionesSerie: 1, descanso: 0,
         ejercicios: [
-          { nombre: 'Estiramiento cuádriceps', reps: ['2 min'] },
-          { nombre: 'Estiramiento isquios',    reps: ['2 min'] },
+          { nombre: 'Estiramiento cuádriceps', reps: ['2 min'], descripcion: 'Estiramiento estático.', video: '', utilitarios: [] },
+          { nombre: 'Estiramiento isquios',    reps: ['2 min'], descripcion: 'Estiramiento isquios.',  video: '', utilitarios: [] },
         ]
       },
     },
     {
-      id: 2,
-      nombre: 'Empuje',
-      gruposMusculares: 'Pecho, Hombros, Tríceps',
+      id: 2, nombre: 'Empuje', gruposMusculares: 'Pecho, Hombros, Tríceps',
       precalentamiento: {
-        repeticionesSerie: 1,
-        descanso: 0,
-        ejercicios: [
-          { nombre: 'Soga de saltar', reps: ['5 min'] },
-        ]
+        repeticionesSerie: 1, descanso: 0,
+        ejercicios: [{ nombre: 'Soga de saltar', reps: ['5 min'], descripcion: 'Activación cardiovascular.', video: '', utilitarios: [{ nombre: 'Soga', foto: null }] }]
       },
       series: [
-        {
-          id: 1,
-          repeticionesSerie: 4,
-          descanso: 90,
-          ejercicios: [
-            { nombre: 'Press de banca',  reps: [8, 8, 7, 6] },
-            { nombre: 'Press militar',   reps: [10, 10, 8, 8] },
-          ]
-        },
-        {
-          id: 2,
-          repeticionesSerie: 3,
-          descanso: 60,
-          ejercicios: [
-            { nombre: 'Extensión tríceps', reps: [12, 12, 12] },
-          ]
-        },
+        { id: 1, repeticionesSerie: 4, descanso: 90, ejercicios: [
+          { nombre: 'Press de banca', reps: [8,8,7,6],   descripcion: 'Pecho y tríceps.', video: 'https://youtube.com', utilitarios: [{ nombre: 'Barra olímpica', foto: null }, { nombre: 'Banco plano', foto: null }] },
+          { nombre: 'Press militar',  reps: [10,10,8,8], descripcion: 'Hombros.',         video: '',                    utilitarios: [{ nombre: 'Barra olímpica', foto: null }] },
+        ]},
+        { id: 2, repeticionesSerie: 3, descanso: 60, ejercicios: [
+          { nombre: 'Extensión tríceps', reps: [12,12,12], descripcion: 'Aislamiento tríceps.', video: '', utilitarios: [{ nombre: 'Polea alta', foto: null }] },
+        ]},
       ],
       postentrenamiento: {
-        repeticionesSerie: 1,
-        descanso: 0,
-        ejercicios: [
-          { nombre: 'Estiramiento pecho', reps: ['2 min'] },
-        ]
+        repeticionesSerie: 1, descanso: 0,
+        ejercicios: [{ nombre: 'Estiramiento pecho', reps: ['2 min'], descripcion: 'Estiramiento pecho.', video: '', utilitarios: [] }]
       },
     },
     {
-      id: 3,
-      nombre: 'Tirón',
-      gruposMusculares: 'Espalda, Bíceps, Trapecios',
+      id: 3, nombre: 'Tirón', gruposMusculares: 'Espalda, Bíceps, Trapecios',
       precalentamiento: {
-        repeticionesSerie: 1,
-        descanso: 0,
-        ejercicios: [
-          { nombre: 'Bicicleta estática', reps: ['8 min'] },
-        ]
+        repeticionesSerie: 1, descanso: 0,
+        ejercicios: [{ nombre: 'Bicicleta estática', reps: ['8 min'], descripcion: 'Calentamiento.', video: '', utilitarios: [{ nombre: 'Bicicleta', foto: null }] }]
       },
       series: [
-        {
-          id: 1,
-          repeticionesSerie: 4,
-          descanso: 90,
-          ejercicios: [
-            { nombre: 'Remo con barra', reps: [8, 8, 8, 6] },
-            { nombre: 'Jalón al pecho', reps: [10, 10, 10, 8] },
-          ]
-        },
-        {
-          id: 2,
-          repeticionesSerie: 3,
-          descanso: 60,
-          ejercicios: [
-            { nombre: 'Curl de bíceps', reps: [12, 12, 10] },
-          ]
-        },
+        { id: 1, repeticionesSerie: 4, descanso: 90, ejercicios: [
+          { nombre: 'Remo con barra', reps: [8,8,8,6],    descripcion: 'Espalda y bíceps.', video: 'https://youtube.com', utilitarios: [{ nombre: 'Barra olímpica', foto: null }] },
+          { nombre: 'Jalón al pecho', reps: [10,10,10,8], descripcion: 'Dorsal con polea.', video: '',                    utilitarios: [{ nombre: 'Polea alta', foto: null }] },
+        ]},
+        { id: 2, repeticionesSerie: 3, descanso: 60, ejercicios: [
+          { nombre: 'Curl de bíceps', reps: [12,12,10], descripcion: 'Aislamiento bíceps.', video: '', utilitarios: [{ nombre: 'Mancuernas', foto: null }] },
+        ]},
       ],
       postentrenamiento: {
-        repeticionesSerie: 1,
-        descanso: 0,
-        ejercicios: [
-          { nombre: 'Estiramiento espalda', reps: ['2 min'] },
-        ]
+        repeticionesSerie: 1, descanso: 0,
+        ejercicios: [{ nombre: 'Estiramiento espalda', reps: ['2 min'], descripcion: 'Estiramiento espalda.', video: '', utilitarios: [] }]
       },
     },
   ]
 }
 
 const MOCK_CLASES = [
-  { id: 'kickboxing', nombre: 'Kickboxing Recreativo', horario: 'Lun/Jue 21:00hs', habilitada: true },
+  { id: 'kickboxing', nombre: 'Kickboxing Recreativo', horario: 'Lun/Jue 21:00hs',     habilitada: true },
   { id: 'funcional',  nombre: 'Funcional',             horario: 'Lun/Mié/Vie 19:00hs', habilitada: false },
-  { id: 'gap',        nombre: 'GAP',                   horario: 'Mar/Jue 15:00hs', habilitada: false },
+  { id: 'gap',        nombre: 'GAP',                   horario: 'Mar/Jue 15:00hs',      habilitada: false },
 ]
 
+const MOCK_HISTORIAL_DIAS = {
+  '2026-04-20': { nombre: 'Día 1 — Piernas',  tipo: 'rutina' },
+  '2026-04-18': { nombre: 'Día 2 — Empuje',   tipo: 'rutina' },
+  '2026-04-16': { nombre: 'Día 3 — Tirón',    tipo: 'rutina' },
+  '2026-04-14': { nombre: 'Kickboxing',        tipo: 'clase'  },
+  '2026-04-10': { nombre: 'Día 1 — Piernas',  tipo: 'rutina' },
+}
+
 const DIAS_SEMANA = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
+const MESES       = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
 
 function getDiaSemanaActual() {
   const d = new Date().getDay()
   return d === 0 ? 6 : d - 1
 }
 
-function formatFecha(str) {
-  const d = new Date(str + 'T00:00:00')
-  return d.toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' })
+function getLunesDeSemana() {
+  const hoy  = new Date()
+  const dia  = hoy.getDay()
+  const diff = dia === 0 ? -6 : 1 - dia
+  const lunes = new Date(hoy)
+  lunes.setDate(hoy.getDate() + diff)
+  return lunes
 }
 
-// ─── Indicador de semanas ─────────────────────────────────
-function SemanaIndicador({ semanaActual, totalSemanas }) {
-  const progresoPct = ((semanaActual - 1) / totalSemanas) * 100
+function fechaToStr(date) {
+  return date.toISOString().split('T')[0]
+}
+
+function formatFecha(str) {
+  return new Date(str + 'T00:00:00').toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' })
+}
+
+function playBeep() {
+  try {
+    const ctx  = new (window.AudioContext || window.webkitAudioContext)()
+    const osc  = ctx.createOscillator()
+    const gain = ctx.createGain()
+    osc.connect(gain)
+    gain.connect(ctx.destination)
+    osc.frequency.value = 880
+    gain.gain.setValueAtTime(0.3, ctx.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5)
+    osc.start(ctx.currentTime)
+    osc.stop(ctx.currentTime + 0.5)
+  } catch {}
+}
+
+// ─── Mini Calendario ──────────────────────────────────────
+function MiniCalendario({ fechaSeleccionada, onSelect, onClose, mostrarHistorial = false }) {
+  const hoy  = new Date()
+  const [mes,  setMes]  = useState(hoy.getMonth())
+  const [anio, setAnio] = useState(hoy.getFullYear())
+
+  const primerDia    = new Date(anio, mes, 1).getDay()
+  const diasEnMes    = new Date(anio, mes + 1, 0).getDate()
+  const offsetInicio = primerDia === 0 ? 6 : primerDia - 1
+  const celdas       = Array(offsetInicio).fill(null)
+  for (let d = 1; d <= diasEnMes; d++) celdas.push(d)
+
+  const cambiarMes = (dir) => {
+    const nueva = new Date(anio, mes + dir, 1)
+    setMes(nueva.getMonth())
+    setAnio(nueva.getFullYear())
+  }
+
+  const seleccionar = (dia) => {
+    if (!dia) return
+    const str = `${anio}-${String(mes + 1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`
+    onSelect(str)
+    onClose()
+  }
 
   return (
-    <div className={styles.semanaIndicador}>
-      <div className={styles.semanaBarras}>
-        {Array.from({ length: totalSemanas }, (_, i) => {
-          const num = i + 1
-          const completada = num < semanaActual
-          const enProceso = num === semanaActual
-          const pendiente = num > semanaActual
-
+    <div className={styles.miniCal}>
+      <div className={styles.miniCalHeader}>
+        <button className={styles.miniCalNav} onClick={() => cambiarMes(-1)}>‹</button>
+        <span className={styles.miniCalMes}>{MESES[mes]} {anio}</span>
+        <button className={styles.miniCalNav} onClick={() => cambiarMes(1)}>›</button>
+      </div>
+      <div className={styles.miniCalGrid}>
+        {DIAS_SEMANA.map(d => (
+          <div key={d} className={styles.miniCalDiaNombre}>{d}</div>
+        ))}
+        {celdas.map((dia, i) => {
+          if (!dia) return <div key={`e-${i}`} />
+          const str   = `${anio}-${String(mes + 1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`
+          const esHoy = str === fechaToStr(hoy)
+          const esSel = str === fechaSeleccionada
+          const esFut = new Date(str + 'T00:00:00') > hoy
+          const hist  = mostrarHistorial && MOCK_HISTORIAL_DIAS[str]
           return (
             <div
-              key={num}
-              className={`${styles.semanaBarraWrapper} ${enProceso ? styles.enProceso : ''}`}
+              key={dia}
+              className={`${styles.miniCalDia} ${esHoy ? styles.miniCalHoy : ''} ${esSel ? styles.miniCalSel : ''} ${esFut ? styles.miniCalFut : ''}`}
+              onClick={() => !esFut && seleccionar(dia)}
             >
+              <span>{dia}</span>
+              {hist && (
+                <div className={`${styles.miniCalDot} ${hist.tipo === 'clase' ? styles.miniCalDotClase : ''}`} />
+              )}
+            </div>
+          )
+        })}
+      </div>
+      {mostrarHistorial && (
+        <div className={styles.miniCalLeyenda}>
+          <div className={styles.miniCalLeyendaItem}><div className={styles.miniCalDot} /><span>Rutina</span></div>
+          <div className={styles.miniCalLeyendaItem}><div className={`${styles.miniCalDot} ${styles.miniCalDotClase}`} /><span>Clase</span></div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── Modal Ver Ejercicio ──────────────────────────────────
+function EjercicioModal({ ejercicio }) {
+  if (!ejercicio) return null
+  return (
+    <div className={styles.ejercicioModal}>
+      <h3 className={styles.ejercicioModalNombre}>{ejercicio.nombre}</h3>
+      {ejercicio.descripcion && <p className={styles.ejercicioModalDesc}>{ejercicio.descripcion}</p>}
+      {ejercicio.video && (
+        <a href={ejercicio.video} target="_blank" rel="noopener noreferrer" className={styles.ejercicioModalVideo}>
+          ▶ Ver video de muestra
+        </a>
+      )}
+      {ejercicio.utilitarios?.length > 0 && (
+        <div className={styles.ejercicioModalUtils}>
+          <span className={styles.ejercicioModalUtilsTitle}>Utilitarios necesarios</span>
+          <div className={styles.ejercicioModalUtilsList}>
+            {ejercicio.utilitarios.map((u, i) => (
+              <div key={i} className={styles.utilItem}>
+                <div className={styles.utilFoto}>
+                  {u.foto ? <img src={u.foto} alt={u.nombre} /> : <span>🏋️</span>}
+                </div>
+                <span className={styles.utilNombre}>{u.nombre}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── Modal Ver Rutina ─────────────────────────────────────
+function VerRutinaModal({ dia }) {
+  const bloques = [
+    { data: dia.precalentamiento, titulo: '🔥 Precalentamiento',  color: '#f0a500' },
+    ...dia.series.map((s, i) => ({ data: s, titulo: `💪 Serie ${i + 1} · ${s.repeticionesSerie} series · ${s.descanso}s descanso`, color: '#F5C518' })),
+    { data: dia.postentrenamiento, titulo: '🧘 Post-entrenamiento', color: '#52c07a' },
+  ]
+  return (
+    <div className={styles.verRutina}>
+      <div className={styles.verRutinaDayHeader}>
+        <span className={styles.verRutinaDayNum}>Día {dia.id}</span>
+        <span className={styles.verRutinaDayNombre}>{dia.nombre}</span>
+        <span className={styles.verRutinaDayMusculos}>{dia.gruposMusculares}</span>
+      </div>
+      {bloques.map((bloque, bi) => (
+        <div key={bi} className={styles.verRutinaBloque}>
+          <span className={styles.verRutinaBloqueTitle} style={{ color: bloque.color }}>{bloque.titulo}</span>
+          <div className={styles.verRutinaTabla}>
+            {bloque.data.repeticionesSerie > 1 && (
+              <div className={styles.verRutinaTablaHeader}>
+                <span className={styles.verRutinaTablaEj}>Ejercicio</span>
+                {Array.from({ length: bloque.data.repeticionesSerie }, (_, i) => (
+                  <span key={i} className={styles.verRutinaTablaRep}>S{i + 1}</span>
+                ))}
+              </div>
+            )}
+            {bloque.data.ejercicios.map((ej, ei) => (
+              <div key={ei} className={styles.verRutinaTablaRow}>
+                <span className={styles.verRutinaTablaEj}>{ej.nombre}</span>
+                {ej.reps.map((r, ri) => (
+                  <span key={ri} className={styles.verRutinaTablaRep}>{r}</span>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+// ─── Indicador semanas ────────────────────────────────────
+function SemanaIndicador({ semanaActual, totalSemanas }) {
+  return (
+    <div className={styles.semanaIndicador}>
+      <span className={styles.semanaLabel}>Semana {semanaActual} de {totalSemanas}</span>
+      <div className={styles.semanaBarras}>
+        {Array.from({ length: totalSemanas }, (_, i) => {
+          const num        = i + 1
+          const completada = num < semanaActual
+          const enProceso  = num === semanaActual
+          const progreso   = completada ? '100%' : enProceso
+            ? `${Math.round(((getDiaSemanaActual() + 1) / 7) * 100)}%` : '0%'
+          return (
+            <div key={num} className={`${styles.semanaBarraWrapper} ${enProceso ? styles.enProceso : ''}`}>
               <div className={styles.semanaNum}>S{num}</div>
               <div className={styles.semanaBarra}>
                 <div
-                  className={`${styles.semanaBarraFill}
-                    ${completada ? styles.completada : ''}
-                    ${enProceso ? styles.enProcesoFill : ''}
-                    ${pendiente ? styles.pendiente : ''}
-                  `}
-                  style={enProceso ? { width: `${((getDiaSemanaActual() + 1) / 7) * 100}%` } : {}}
+                  className={`${styles.semanaBarraFill} ${completada ? styles.completada : ''} ${enProceso ? styles.enProcesoFill : ''}`}
+                  style={{ width: progreso }}
                 />
               </div>
             </div>
           )
         })}
       </div>
-      <span className={styles.semanaLabel}>
-        Semana {semanaActual} de {totalSemanas}
+    </div>
+  )
+}
+
+// ─── Temporizador barra ───────────────────────────────────
+function TemporizadorBarra({ segundos, onFin, serieIdx }) {
+  const [restantes, setRestantes] = useState(segundos)
+  const [activo,    setActivo]    = useState(false)
+  const intervalRef               = useRef(null)
+
+  // Resetear cuando cambia la serie
+  useEffect(() => {
+    clearInterval(intervalRef.current)
+    setRestantes(segundos)
+    setActivo(false)
+  }, [serieIdx, segundos])
+
+  useEffect(() => () => clearInterval(intervalRef.current), [])
+
+  const iniciar = () => {
+    if (activo || restantes === 0) return
+    setActivo(true)
+    intervalRef.current = setInterval(() => {
+      setRestantes(p => {
+        if (p <= 1) {
+          clearInterval(intervalRef.current)
+          setActivo(false)
+          playBeep()
+          setTimeout(() => onFin(), 300)
+          return 0
+        }
+        return p - 1
+      })
+    }, 1000)
+  }
+
+  const progreso = ((segundos - restantes) / segundos) * 100
+
+  return (
+    <div className={styles.temporizadorBarra}>
+      <div className={styles.temporizadorFill} style={{ width: `${progreso}%` }} />
+      <span className={styles.temporizadorTexto}>
+        {restantes === 0 ? '✓ Listo' : activo ? `Descanso ${restantes}s` : `Descanso ${segundos}s`}
       </span>
+      <button
+        className={`${styles.temporizadorPlayBtn} ${activo ? styles.activo : ''} ${restantes === 0 ? styles.terminado : ''}`}
+        onClick={iniciar}
+        disabled={activo || restantes === 0}
+        title="Iniciar descanso"
+      >
+        {restantes === 0 ? '✓' : activo ? '⏳' : '▶'}
+      </button>
     </div>
   )
 }
@@ -194,111 +361,168 @@ function CarruselSeries({ dia, onCompletado }) {
     { tipo: 'post',  data: dia.postentrenamiento, titulo: '🧘 Post-entrenamiento', color: '#52c07a' },
   ]
 
-  const [indiceActual, setIndiceActual] = useState(0)
-  const [completados, setCompletados] = useState([])
-  const [guardado, setGuardado] = useState(false)
+  const [indiceActual,   setIndiceActual]   = useState(0)
+  const [serieActiva,    setSerieActiva]    = useState(0)
+  const [completados,    setCompletados]    = useState([])
+  const [guardado,       setGuardado]       = useState(false)
+  const [pesos,          setPesos]          = useState({})
+  const [ejercicioModal, setEjercicioModal] = useState(null)
   const carruselRef = useRef(null)
 
-  const bloque = bloques[indiceActual]
-  const esUltimo = indiceActual === bloques.length - 1
-  const esteCompletado = completados.includes(indiceActual)
+  const bloque     = bloques[indiceActual]
+  const esUltimo   = indiceActual === bloques.length - 1
+  const esteComp   = completados.includes(indiceActual)
+  const cantSeries = bloque.data.repeticionesSerie
+
+  const getPeso = (ejIdx, sIdx) => pesos[`${indiceActual}-${ejIdx}-${sIdx}`] || ''
+  const setPeso = (ejIdx, sIdx, val) =>
+    setPesos(p => ({ ...p, [`${indiceActual}-${ejIdx}-${sIdx}`]: val }))
+
+  const avanzarSerie = () => {
+    if (serieActiva < cantSeries - 1) setSerieActiva(s => s + 1)
+  }
 
   const marcarCompletado = async () => {
-    const nuevosCompletados = [...completados, indiceActual]
-    setCompletados(nuevosCompletados)
-
+    const nuevos = [...completados, indiceActual]
+    setCompletados(nuevos)
+    setSerieActiva(0)
     if (esUltimo) {
-      // Guardado automático
-      await new Promise(r => setTimeout(r, 800))
+      await new Promise(r => setTimeout(r, 600))
       setGuardado(true)
       onCompletado()
     } else {
       setTimeout(() => {
         setIndiceActual(p => p + 1)
-        carruselRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }, 400)
+        carruselRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 300)
     }
   }
 
+  const utilitariosBloque = []
+  bloque.data.ejercicios.forEach(ej => {
+    ej.utilitarios?.forEach(u => {
+      if (!utilitariosBloque.find(x => x.nombre === u.nombre)) utilitariosBloque.push(u)
+    })
+  })
+
   if (guardado) {
     return (
-      <div className={styles.entrenamientoGuardado}>
-        <span className={styles.guardadoIcon}>✓</span>
+      <div className={`card ${styles.completadoCard}`}>
+        <div className={styles.completadoIcono}>✓</div>
         <h3>¡Entrenamiento completado!</h3>
         <p>Tu progreso fue registrado. ¡Excelente trabajo!</p>
+        <div className={styles.completadoEncuesta}>
+          <span>💬</span>
+          <span>Ya tenés habilitada tu <strong>encuesta de fatiga</strong>. ¡No te olvides de completarla!</span>
+        </div>
       </div>
     )
   }
 
   return (
     <div className={styles.carrusel} ref={carruselRef}>
-      {/* Indicador de progreso */}
       <div className={styles.carruselProgress}>
         {bloques.map((b, i) => (
-          <div
-            key={i}
-            className={`${styles.carruselDot}
-              ${i === indiceActual ? styles.carruselDotActive : ''}
-              ${completados.includes(i) ? styles.carruselDotDone : ''}
-            `}
-          />
+          <div key={i} className={`${styles.carruselDot} ${i === indiceActual ? styles.carruselDotActive : ''} ${completados.includes(i) ? styles.carruselDotDone : ''}`} />
         ))}
       </div>
 
-      {/* Tarjeta actual */}
-      <div
-        className={styles.serieCard}
-        style={{ borderColor: bloque.color + '44' }}
-      >
+      <div className={styles.serieCard} style={{ borderColor: bloque.color + '44' }}>
         <div className={styles.serieCardHeader} style={{ borderColor: bloque.color + '22' }}>
-          <span className={styles.serieTitulo} style={{ color: bloque.color }}>
-            {bloque.titulo}
-          </span>
-          {bloque.data.descanso > 0 && (
-            <span className={styles.serieDescanso}>
-              ⏱ {bloque.data.descanso}s descanso
-            </span>
-          )}
-          {bloque.data.repeticionesSerie > 1 && (
-            <span className={styles.serieCantidad}>
-              × {bloque.data.repeticionesSerie} series
-            </span>
-          )}
+          <span className={styles.serieTitulo} style={{ color: bloque.color }}>{bloque.titulo}</span>
+          {cantSeries > 1 && <span className={styles.serieCantidad}>× {cantSeries} series</span>}
         </div>
 
-        <div className={styles.ejerciciosList}>
-          {bloque.data.ejercicios.map((ej, i) => (
-            <div key={i} className={styles.ejercicioItem}>
-              <span className={styles.ejercicioNum}>{i + 1}</span>
-              <div className={styles.ejercicioInfo}>
-                <span className={styles.ejercicioNombre}>{ej.nombre}</span>
-                <div className={styles.repsRow}>
-                  {ej.reps.map((r, ri) => (
-                    <div key={ri} className={styles.repItem}>
-                      {bloque.data.repeticionesSerie > 1 && (
-                        <span className={styles.repSerie}>S{ri + 1}</span>
-                      )}
-                      <span className={styles.repValor}>{r}</span>
-                    </div>
-                  ))}
-                </div>
+        {/* Tabla ejercicios */}
+        <div className={styles.tablaWrapper}>
+          <div className={styles.tablaEjercicios}>
+
+            {/* Header columnas */}
+            {cantSeries > 1 && (
+              <div className={styles.tablaHeader}>
+                <span className={styles.tablaColEj}>Ejercicio</span>
+                {Array.from({ length: cantSeries }, (_, i) => (
+                  <span key={i} className={`${styles.tablaColRep} ${i === serieActiva ? styles.colActiva : ''} ${i < serieActiva ? styles.colCompletada : ''}`}>
+                    S{i + 1}
+                  </span>
+                ))}
               </div>
-            </div>
-          ))}
+            )}
+
+            {/* Filas ejercicios */}
+            {bloque.data.ejercicios.map((ej, ei) => (
+              <div key={ei} className={styles.tablaFila}>
+                <span className={styles.tablaColEj}>
+                  <span className={styles.tablaEjNum}>{ei + 1}</span>
+                  <button className={styles.ejNombreBtn} onClick={() => setEjercicioModal(ej)}>
+                    {ej.nombre}
+                  </button>
+                </span>
+                {ej.reps.map((r, ri) => (
+                  <div key={ri} className={`${styles.tablaColRep} ${ri === serieActiva ? styles.colActiva : ''} ${ri < serieActiva ? styles.colCompletada : ''}`}>
+                    <span className={styles.repBubble}>{r}</span>
+                    {cantSeries > 1 && (
+                      <input
+                        type="number" min={0} placeholder="kg"
+                        value={getPeso(ei, ri)}
+                        onChange={e => setPeso(ei, ri, e.target.value)}
+                        className={`${styles.pesoInput} ${ri === serieActiva ? styles.pesoInputActivo : ''}`}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            ))}
+
+            {/* Fila indicador descanso por serie — solo texto, sin timer */}
+            {bloque.data.descanso > 0 && cantSeries > 1 && (
+              <div className={styles.tablaDescanso}>
+                <span className={styles.tablaColEj}>⏱ Descanso</span>
+                {Array.from({ length: cantSeries }, (_, i) => (
+                  <div key={i} className={`${styles.tablaColRep} ${i === serieActiva ? styles.colActiva : ''} ${i < serieActiva ? styles.colCompletada : ''}`}>
+                    <span className={styles.descansoBubble}>{bloque.data.descanso}s</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
+        {/* Temporizador abajo — solo si hay descanso y más de 1 serie */}
+        {bloque.data.descanso > 0 && cantSeries > 1 && !esteComp && (
+          <TemporizadorBarra
+            key={`${indiceActual}-${serieActiva}`}
+            segundos={bloque.data.descanso}
+            onFin={avanzarSerie}
+            serieIdx={serieActiva}
+          />
+        )}
+
+        {/* Utilitarios */}
+        {utilitariosBloque.length > 0 && (
+          <div className={styles.utilitariosSection}>
+            <span className={styles.utilitariosSectionTitle}>Utilitarios</span>
+            <div className={styles.utilitariosList}>
+              {utilitariosBloque.map((u, i) => (
+                <div key={i} className={styles.utilChip}>
+                  <div className={styles.utilChipFoto}>
+                    {u.foto ? <img src={u.foto} alt={u.nombre} /> : <span>🏋️</span>}
+                  </div>
+                  <span>{u.nombre}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Botón completar */}
         <button
           className={styles.completarBtn}
-          style={{ background: esteCompletado ? '#333' : bloque.color }}
+          style={{ background: esteComp ? '#2a2a2a' : bloque.color }}
           onClick={marcarCompletado}
-          disabled={esteCompletado}
+          disabled={esteComp}
         >
-          {esteCompletado
-            ? '✓ Completado'
-            : esUltimo
-              ? '✓ Finalizar entrenamiento'
-              : 'Completado → Siguiente'
-          }
+          {esteComp ? '✓ Completado' : esUltimo ? '✓ Finalizar entrenamiento' : 'Completado → Siguiente'}
         </button>
       </div>
 
@@ -307,38 +531,57 @@ function CarruselSeries({ dia, onCompletado }) {
         {bloques.map((b, i) => (
           <button
             key={i}
-            className={`${styles.miniatura}
-              ${i === indiceActual ? styles.miniaturaActive : ''}
-              ${completados.includes(i) ? styles.miniaturaDone : ''}
-            `}
-            onClick={() => setIndiceActual(i)}
+            className={`${styles.miniatura} ${i === indiceActual ? styles.miniaturaActive : ''} ${completados.includes(i) ? styles.miniaturaDone : ''}`}
+            onClick={() => { setIndiceActual(i); setSerieActiva(0) }}
           >
-            <span>{b.titulo.split(' ').slice(0, 2).join(' ')}</span>
+            {b.titulo.split(' ').slice(0, 2).join(' ')}
           </button>
         ))}
       </div>
+
+      {/* Modal ejercicio */}
+      <Modal isOpen={!!ejercicioModal} onClose={() => setEjercicioModal(null)} title={ejercicioModal?.nombre?.toUpperCase() || ''} maxWidth="480px">
+        <EjercicioModal ejercicio={ejercicioModal} />
+      </Modal>
     </div>
   )
 }
 
 // ─── Página principal ─────────────────────────────────────
 export default function AlumnoDashboard() {
-  const [tabActiva, setTabActiva] = useState('musculacion')
-  const [diaSeleccionado, setDiaSeleccionado] = useState(null)
+  const hoy = new Date()
+
+  const [tabActiva,             setTabActiva]             = useState('musculacion')
+  const [diaSeleccionado,       setDiaSeleccionado]       = useState(null)
   const [entrenamientoIniciado, setEntrenamientoIniciado] = useState(false)
-  const [entrenamientoCompletado, setEntrenamientoCompletado] = useState(false)
+  const [calModalOpen,          setCalModalOpen]          = useState(false)
+  const [verRutinaOpen,         setVerRutinaOpen]         = useState(false)
+  const [fechaEntrenamiento,    setFechaEntrenamiento]    = useState(fechaToStr(hoy))
+  const [diaHistorialModal,     setDiaHistorialModal]     = useState(null)
+  // Clase
+  const [fechaClase,            setFechaClase]            = useState(fechaToStr(hoy))
+  const [calClaseOpen,          setCalClaseOpen]          = useState(false)
+  const [claseRegistrada,       setClaseRegistrada]       = useState(false)
+  const [claseNombreRegistrada, setClaseNombreRegistrada] = useState('')
 
   const diaActual = getDiaSemanaActual()
-  const rutina = MOCK_RUTINA
+  const lunes     = getLunesDeSemana()
+  const rutina    = MOCK_RUTINA
 
-  const handleSeleccionarDia = (dia) => {
-    setDiaSeleccionado(dia)
-    setEntrenamientoIniciado(false)
-    setEntrenamientoCompletado(false)
-  }
+  const diasConNumero = DIAS_SEMANA.map((label, i) => {
+    const fecha = new Date(lunes)
+    fecha.setDate(lunes.getDate() + i)
+    const str   = fechaToStr(fecha)
+    return { label, numero: fecha.getDate(), fecha: str, historial: MOCK_HISTORIAL_DIAS[str] }
+  })
 
-  const handleCompletado = () => {
-    setEntrenamientoCompletado(true)
+  const fechaLabel = new Date(fechaEntrenamiento + 'T00:00:00').toLocaleDateString('es-AR', {
+    weekday: 'long', day: 'numeric', month: 'long'
+  })
+
+  const handleRegistrarClase = (nombreClase) => {
+    setClaseNombreRegistrada(nombreClase)
+    setClaseRegistrada(true)
   }
 
   return (
@@ -355,7 +598,7 @@ export default function AlumnoDashboard() {
           <button
             key={clase.id}
             className={`${styles.tab} ${tabActiva === clase.id ? styles.tabActive : ''} ${!clase.habilitada ? styles.tabDisabled : ''}`}
-            onClick={() => clase.habilitada && setTabActiva(clase.id)}
+            onClick={() => { if (clase.habilitada) { setTabActiva(clase.id); setClaseRegistrada(false) } }}
             title={!clase.habilitada ? 'No estás inscripto en esta clase' : clase.horario}
           >
             🥊 {clase.nombre}
@@ -374,80 +617,91 @@ export default function AlumnoDashboard() {
               <div>
                 <h2 className={styles.rutinaNombre}>{rutina.nombre}</h2>
                 <div className={styles.rutinaMeta}>
-                  <span>📅 Inicio: {formatFecha(rutina.inicio)}</span>
+                  <span>📅 {formatFecha(rutina.inicio)}</span>
                   <span>⏳ {rutina.semanas} semanas</span>
                   <span>📋 {rutina.dias.length} días</span>
                 </div>
               </div>
               <span className="badge badge--gold">Activa</span>
             </div>
-            <SemanaIndicador
-              semanaActual={rutina.semanaActual}
-              totalSemanas={rutina.semanas}
-            />
+            <SemanaIndicador semanaActual={rutina.semanaActual} totalSemanas={rutina.semanas} />
           </div>
 
-          {/* Días de la semana */}
-          <div className={styles.diasSemana}>
-            {DIAS_SEMANA.map((dia, i) => (
-              <div
-                key={dia}
-                className={`${styles.diaSemana} ${i === diaActual ? styles.diaHoy : ''}`}
-              >
-                <span className={styles.diaSemanaLabel}>{dia}</span>
-                {i === diaActual && (
-                  <div className={styles.diaHoyDot} />
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Selector de día de la rutina */}
-          <div className={styles.selectorDias}>
-            <span className={styles.selectorLabel}>Elegí el día a entrenar:</span>
-            <div className={styles.selectorBtns}>
-              {rutina.dias.map((dia) => (
-                <button
-                  key={dia.id}
-                  className={`${styles.selectorBtn} ${diaSeleccionado?.id === dia.id ? styles.selectorBtnActive : ''}`}
-                  onClick={() => handleSeleccionarDia(dia)}
+          {/* Días semana */}
+          <div className={styles.diasSemanaRow}>
+            <div className={styles.diasSemana}>
+              {diasConNumero.map((dia, i) => (
+                <div
+                  key={dia.label}
+                  className={`${styles.diaSemana} ${i === diaActual ? styles.diaHoy : ''} ${dia.historial ? styles.diaCon : ''}`}
+                  onClick={() => dia.historial && setDiaHistorialModal(dia)}
                 >
-                  <span className={styles.selectorBtnNum}>Día {dia.id}</span>
-                  <span className={styles.selectorBtnNombre}>{dia.nombre}</span>
-                </button>
+                  <span className={styles.diaSemanaLabel}>{dia.label}</span>
+                  <span className={styles.diaSemanaNum}>{dia.numero}</span>
+                  {dia.historial
+                    ? <div className={`${styles.diaDot} ${dia.historial.tipo === 'clase' ? styles.diaDotClase : ''}`} />
+                    : i === diaActual ? <div className={styles.diaHoyDot} /> : null
+                  }
+                </div>
               ))}
             </div>
+            <button className={styles.calBtn} onClick={() => setCalModalOpen(true)} title="Seleccionar fecha">📅</button>
           </div>
 
-          {/* Carrusel */}
+          {/* Fecha seleccionada */}
+          {fechaEntrenamiento !== fechaToStr(hoy) && (
+            <div className={styles.fechaSeleccionada}>
+              <span>📌 Cargando para: <strong>{fechaLabel}</strong></span>
+              <button className="btn btn--ghost btn--sm" onClick={() => setFechaEntrenamiento(fechaToStr(hoy))}>Volver a hoy</button>
+            </div>
+          )}
+
+          {/* Selector días */}
+          <div className={styles.selectorDias}>
+            <span className={styles.selectorLabel}>
+              {entrenamientoIniciado ? `Entrenando: Día ${diaSeleccionado.id} — ${diaSeleccionado.nombre}` : 'Elegí el día a entrenar:'}
+            </span>
+            {!entrenamientoIniciado ? (
+              <div className={styles.selectorBtns}>
+                {rutina.dias.map((dia) => (
+                  <button
+                    key={dia.id}
+                    className={`${styles.selectorBtn} ${diaSeleccionado?.id === dia.id ? styles.selectorBtnActive : ''}`}
+                    onClick={() => setDiaSeleccionado(dia)}
+                  >
+                    <span className={styles.selectorBtnNum}>Día {dia.id}</span>
+                    <span className={styles.selectorBtnNombre}>{dia.nombre}</span>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className={styles.diaEnCurso}>
+                <span className="badge badge--gold">Día {diaSeleccionado.id} — {diaSeleccionado.nombre}</span>
+                <span className={styles.diaEnCursoMusculos}>{diaSeleccionado.gruposMusculares}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Card iniciar */}
           {diaSeleccionado && !entrenamientoIniciado && (
             <div className={`card ${styles.iniciarCard}`}>
               <div className={styles.iniciarInfo}>
-                <h3 className={styles.iniciarNombre}>
-                  Día {diaSeleccionado.id} — {diaSeleccionado.nombre}
-                </h3>
-                <p className={styles.iniciarMusculos}>
-                  {diaSeleccionado.gruposMusculares}
-                </p>
+                <h3 className={styles.iniciarNombre}>Día {diaSeleccionado.id} — {diaSeleccionado.nombre}</h3>
+                <p className={styles.iniciarMusculos}>{diaSeleccionado.gruposMusculares}</p>
                 <div className={styles.iniciarMeta}>
-                  <span>💪 {diaSeleccionado.series.length} series de trabajo</span>
-                  <span>⏱ ~{diaSeleccionado.series.reduce((a, s) => a + s.repeticionesSerie * 3, 10)} min estimado</span>
+                  <span>💪 {diaSeleccionado.series.length} series</span>
+                  <span>⏱ ~{diaSeleccionado.series.reduce((a, s) => a + s.repeticionesSerie * 3, 10)} min</span>
                 </div>
               </div>
-              <button
-                className="btn btn--primary btn--lg"
-                onClick={() => setEntrenamientoIniciado(true)}
-              >
-                Iniciar entrenamiento →
-              </button>
+              <div className={styles.iniciarBtns}>
+                <button className="btn btn--ghost" onClick={() => setVerRutinaOpen(true)}>👁 Ver rutina</button>
+                <button className="btn btn--primary btn--lg" onClick={() => setEntrenamientoIniciado(true)}>Iniciar →</button>
+              </div>
             </div>
           )}
 
           {diaSeleccionado && entrenamientoIniciado && (
-            <CarruselSeries
-              dia={diaSeleccionado}
-              onCompletado={handleCompletado}
-            />
+            <CarruselSeries dia={diaSeleccionado} onCompletado={() => {}} />
           )}
         </div>
       )}
@@ -456,19 +710,81 @@ export default function AlumnoDashboard() {
       {tabActiva !== 'musculacion' && (
         <div className={styles.contenido}>
           {MOCK_CLASES.filter(c => c.id === tabActiva).map(clase => (
-            <div key={clase.id} className={`card ${styles.claseCard}`}>
-              <h2 className={styles.claseNombre}>{clase.nombre}</h2>
-              <p className={styles.claseHorario}>📅 {clase.horario}</p>
-              <p className={styles.claseInfo}>
-                Registrá tu asistencia a la clase de hoy.
-              </p>
-              <button className="btn btn--primary">
-                ✓ Registrar asistencia
-              </button>
+            <div key={clase.id}>
+              {claseRegistrada ? (
+                <div className={`card ${styles.completadoCard}`}>
+                  <div className={styles.completadoIcono}>✓</div>
+                  <h3>¡Asistencia registrada!</h3>
+                  <p>Tu asistencia a <strong>{claseNombreRegistrada}</strong> fue registrada correctamente.</p>
+                  <div className={styles.completadoEncuesta}>
+                    <span>💬</span>
+                    <span>Ya tenés habilitada tu <strong>encuesta de fatiga</strong>. ¡No te olvides de completarla!</span>
+                  </div>
+                  <button className="btn btn--outline btn--sm" onClick={() => setClaseRegistrada(false)}>
+                    Registrar otra asistencia
+                  </button>
+                </div>
+              ) : (
+                <div className={`card ${styles.claseCard}`}>
+                  <h2 className={styles.claseNombre}>{clase.nombre}</h2>
+                  <p className={styles.claseHorario}>📅 {clase.horario}</p>
+
+                  <div className={styles.claseField}>
+                    <label className={styles.claseFieldLabel}>Fecha de la clase</label>
+                    <div className={styles.claseFechaRow}>
+                      <span className={styles.claseFechaStr}>
+                        {new Date(fechaClase + 'T00:00:00').toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' })}
+                      </span>
+                      <button className={styles.calBtn} onClick={() => setCalClaseOpen(true)} title="Cambiar fecha">📅</button>
+                    </div>
+                  </div>
+
+                  <button className="btn btn--primary" onClick={() => handleRegistrarClase(clase.nombre)}>
+                    ✓ Registrar asistencia
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>
       )}
+
+      {/* ── Modales ── */}
+      <Modal isOpen={calModalOpen} onClose={() => setCalModalOpen(false)} title="SELECCIONAR FECHA" maxWidth="360px">
+        <MiniCalendario
+          fechaSeleccionada={fechaEntrenamiento}
+          onSelect={setFechaEntrenamiento}
+          onClose={() => setCalModalOpen(false)}
+          mostrarHistorial
+        />
+      </Modal>
+
+      <Modal isOpen={calClaseOpen} onClose={() => setCalClaseOpen(false)} title="FECHA DE LA CLASE" maxWidth="360px">
+        <MiniCalendario
+          fechaSeleccionada={fechaClase}
+          onSelect={setFechaClase}
+          onClose={() => setCalClaseOpen(false)}
+          mostrarHistorial
+        />
+      </Modal>
+
+      <Modal isOpen={verRutinaOpen} onClose={() => setVerRutinaOpen(false)} title={diaSeleccionado ? `DÍA ${diaSeleccionado.id} — ${diaSeleccionado.nombre.toUpperCase()}` : ''} maxWidth="620px">
+        {diaSeleccionado && <VerRutinaModal dia={diaSeleccionado} />}
+      </Modal>
+
+      <Modal isOpen={!!diaHistorialModal} onClose={() => setDiaHistorialModal(null)} title="ENTRENAMIENTO" maxWidth="380px">
+        {diaHistorialModal && (
+          <div className={styles.historialDialogo}>
+            <span className={`badge ${diaHistorialModal.historial?.tipo === 'rutina' ? 'badge--gold' : 'badge--success'}`}>
+              {diaHistorialModal.historial?.tipo === 'rutina' ? '💪 Rutina' : '🥊 Clase'}
+            </span>
+            <p className={styles.historialDialogoNombre}>{diaHistorialModal.historial?.nombre}</p>
+            <p className={styles.historialDialogoFecha}>
+              {new Date(diaHistorialModal.fecha + 'T00:00:00').toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' })}
+            </p>
+          </div>
+        )}
+      </Modal>
     </div>
   )
 }
