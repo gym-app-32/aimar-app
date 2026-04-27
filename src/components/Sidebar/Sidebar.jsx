@@ -4,26 +4,27 @@ import { useAuth } from '../../context/AuthContext'
 import styles from './Sidebar.module.scss'
 import LogoSinRotulo from '../Logos/LogoSinRotulo'
 import LogoMini from '../Logos/LogoMini'
+import { IconAlumnanos, IconEjercicios, IconEncuesta, IconHistorialGym, IconIncioGym, IconLogOut, IconsProfesores, IconUser } from '../Icons/Icons'
 
 
 const NAV_ITEMS = {
   alumno: [
-    { to: '/alumno',           label: 'Dashboard', icon: '⊞' },
-    { to: '/alumno/historial', label: 'Historial',  icon: '📈' },
-    { to: '/alumno/encuesta',  label: 'Encuesta',   icon: '📋' },
-    { to: '/alumno/perfil',           label: 'Mi Perfil',  icon: '👤' },
+    { to: '/alumno',           label: 'Rutina', icon: <IconIncioGym /> },
+    { to: '/alumno/historial', label: 'Historial',  icon: <IconHistorialGym/> },
+    { to: '/alumno/encuesta',  label: 'Encuesta',   icon: <IconEncuesta /> },
+    { to: '/alumno/perfil',           label: 'Mi Perfil',  icon: <IconUser /> },
   ],
   profesor: [
-    { to: '/profesor',         label: 'Dashboard', icon: '⊞' },
-    { to: '/profesor/alumnos', label: 'Alumnos',   icon: '👥' },
-    { to: '/profesor/ejercicios', label: 'Ejercicios',   icon: '📋' },
-    { to: '/profesor/perfil',           label: 'Mi Perfil', icon: '👤' },
+    { to: '/profesor',         label: 'Rutinas', icon: <IconIncioGym />  },
+    { to: '/profesor/alumnos', label: 'Alumnos',   icon: <IconAlumnanos /> },
+    { to: '/profesor/ejercicios', label: 'Ejercicios',   icon: <IconEjercicios /> },
+    { to: '/profesor/perfil',           label: 'Mi Perfil', icon: <IconUser /> },
   ],
   admin: [
-  { to: '/admin',          label: 'Dashboard', icon: '⊞' },
-  { to: '/admin/usuarios', label: 'Profesores', icon: '👨‍🏫' },
-  { to: '/admin/alumnos',  label: 'Alumnos',   icon: '👥' },
-  { to: '/admin/perfil',         label: 'Mi Perfil', icon: '👤' },
+  { to: '/admin',          label: 'Dashboard', icon: <IconIncioGym /> },
+  { to: '/admin/usuarios', label: 'Profesores', icon: <IconsProfesores /> },
+  { to: '/admin/alumnos',  label: 'Alumnos',   icon: <IconAlumnanos /> },
+  { to: '/admin/perfil',         label: 'Mi Perfil', icon: <IconUser /> },
 ],
 }
 
@@ -86,7 +87,7 @@ export default function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose
         </nav>
 
         <button className={styles.logout} onClick={handleLogout}>
-          <span className={styles.icon}>⏻</span>
+          <span className={styles.icon}><IconLogOut /></span>
           {!collapsed && <span>Cerrar sesión</span>}
         </button>
       </aside>

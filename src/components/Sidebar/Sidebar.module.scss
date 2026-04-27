@@ -131,20 +131,33 @@
   &:hover {
     color: $white;
     background: rgba($white, 0.05);
+
+    svg {
+      fill: rgba($gold, 1);
+    }
   }
 
   &.active {
     color: $gold;
     background: rgba($gold, 0.1);
     border-left: 2px solid $gold;
+
+    svg {
+      fill: rgba($gold, 0.7);
+    }
   }
 }
 
 .icon {
   font-size: 1.1rem;
   flex-shrink: 0;
-  width: 20px;
+  //width: 20px;
   text-align: center;
+
+  svg {
+    fill: rgba($gold, 0.4);
+    height: 30px;
+  }
 }
 
 .logout {
@@ -155,10 +168,20 @@
   margin: $spacing-sm;
   color: $gray;
   font-family: $font-condensed;
-  font-size: 0.9rem;
+  font-size: 1rem;
   border-top: 1px solid rgba($white, 0.05);
   transition: color $transition-fast;
   white-space: nowrap;
 
-  &:hover { color: $error; }
+  svg {
+    fill: $gray;
+    width: 1rem;
+  }
+
+  &:hover { 
+    color: $error;
+    svg {
+    fill: $error;
+    }
+  }
 }

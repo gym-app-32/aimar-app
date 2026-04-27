@@ -36,11 +36,38 @@
   &.active {
     color: $gold;
   }
+
+    &:hover {
+    color: $white;
+    background: rgba($white, 0.05);
+
+    svg {
+      fill: rgba($gold, 1);
+    }
+  }
+
+  &.active {
+    color: $gold;
+    background: rgba($gold, 0.1);
+    border-top: 2px solid rgba($gold, 0.5);
+
+    svg {
+      fill: rgba($gold, 0.7);
+    }
+  }
+
+
+
 }
 
 .icon {
   font-size: 1.2rem;
   line-height: 1;
+
+  svg {
+    fill: rgba($gold, 0.4);
+    height: 30px;
+  }
 }
 
 .label {
