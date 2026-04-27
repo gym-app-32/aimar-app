@@ -29,7 +29,8 @@ export default function Topbar() {
         </span>
       </div>
       <button className={styles.logoutBtn} onClick={handleLogout} title="Cerrar sesión">
-        ⏻ Cerrar sesión
+        <span className={styles.icon}>⏻</span>
+        <span className={styles.textBtn}>Cerrar sesión</span>
       </button>
     </header>
   )

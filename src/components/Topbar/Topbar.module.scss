@@ -70,3 +70,23 @@
   align-items: center;
   justify-content: center;
 }
+
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-md;
+  margin: $spacing-sm;
+  color: $gray;
+  //font-family: $font-condensed;
+  font-size: 0.9rem;
+ // border-top: 1px solid rgba($white, 0.05);
+  transition: color $transition-fast;
+  white-space: nowrap;
+
+  &:hover { color: $error; }
+
+   @media (max-width: 500px) { 
+    .textBtn {display: none;}
+   }
+}

@@ -1,0 +1,1234 @@
+.page { max-width: 800px; }
+
+// ─── Tabs ─────────────────────────────────────────────────
+.tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: $spacing-xl;
+  border-bottom: 1px solid rgba($white, 0.08);
+  overflow-x: auto;
+  @include scrollbar;
+}
+
+.tab {
+  font-family: $font-condensed;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $gray;
+  padding: $spacing-sm $spacing-md;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all $transition-fast;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  margin-bottom: -1px;
+
+  &:hover:not(.tabDisabled) { color: $white; }
+  &.tabActive { color: $gold; border-bottom-color: $gold; }
+  &.tabDisabled { opacity: 0.35; cursor: not-allowed; }
+
+  @include mobile { font-size: 0.75rem; padding: $spacing-sm; }
+}
+
+.tabLock { font-size: 0.7rem; opacity: 0.6; }
+
+// ─── Contenido ────────────────────────────────────────────
+.contenido {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+// ─── Rutina header ────────────────────────────────────────
+.rutinaHeader {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.rutinaHeaderTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: $spacing-md;
+}
+
+.rutinaNombre {
+  font-family: $font-display;
+  font-size: 1.5rem;
+  letter-spacing: 0.06em;
+  color: $white;
+  margin-bottom: $spacing-xs;
+
+  @include mobile { font-size: 1.2rem; }
+}
+
+.rutinaMeta {
+  display: flex;
+  gap: $spacing-md;
+  flex-wrap: wrap;
+
+  span { font-family: $font-body; font-size: 0.8rem; color: $gray; }
+
+  @include mobile { gap: $spacing-sm; }
+}
+
+// ─── Semana indicador ─────────────────────────────────────
+.semanaIndicador {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.semanaLabel {
+  font-family: $font-condensed;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $gold;
+}
+
+.semanaBarras {
+  display: flex;
+  gap: $spacing-sm;
+  align-items: flex-end;
+}
+
+.semanaBarraWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+
+  &.enProceso { flex: 2; }
+}
+
+.semanaNum {
+  font-family: $font-condensed;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: $gray;
+}
+
+.semanaBarra {
+  width: 100%;
+  height: 8px;
+  background: rgba($white, 0.06);
+  border-radius: $radius-full;
+  overflow: hidden;
+}
+
+.semanaBarraFill {
+  height: 100%;
+  border-radius: $radius-full;
+  background: transparent;
+  transition: width $transition-slow;
+
+  &.completada { background: rgba($gold, 0.5); }
+  &.enProcesoFill { background: $gold; box-shadow: 0 0 8px rgba($gold, 0.4); }
+}
+
+// ─── Días semana ──────────────────────────────────────────
+.diasSemanaRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.diasSemana {
+  display: flex;
+  gap: $spacing-xs;
+  flex: 1;
+
+  @include mobile { gap: 2px; }
+}
+
+.diaSemana {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: $spacing-sm $spacing-xs;
+  border-radius: $radius-md;
+  background: rgba($white, 0.03);
+  border: 1px solid rgba($white, 0.05);
+  transition: all $transition-fast;
+
+  &.diaHoy {
+    background: rgba($gold, 0.08);
+    border-color: rgba($gold, 0.3);
+  }
+
+  &.diaCon {
+    cursor: pointer;
+    border-color: rgba($gold, 0.2);
+    &:hover { border-color: $gold; background: rgba($gold, 0.06); }
+  }
+}
+
+.diaSemanaLabel {
+  font-family: $font-condensed;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $gray;
+
+  .diaHoy & { color: $gold; }
+
+  @include mobile { font-size: 0.58rem; }
+}
+
+.diaSemanaNum {
+  font-family: $font-display;
+  font-size: 1rem;
+  color: $white;
+  line-height: 1;
+
+  .diaHoy & { color: $gold; }
+}
+
+.diaHoyDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: $gold;
+}
+
+.diaDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: $gold;
+
+  &.diaDotClase { background: $success; }
+}
+
+.calBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: $radius-md;
+  background: rgba($white, 0.04);
+  border: 1px solid rgba($white, 0.08);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all $transition-fast;
+  cursor: pointer;
+
+  &:hover { border-color: rgba($gold, 0.4); background: rgba($gold, 0.08); }
+}
+
+// ─── Fecha seleccionada ───────────────────────────────────
+.fechaSeleccionada {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-md;
+  padding: $spacing-sm $spacing-md;
+  background: rgba($gold, 0.06);
+  border: 1px solid rgba($gold, 0.2);
+  border-radius: $radius-md;
+  flex-wrap: wrap;
+
+  span {
+    font-family: $font-body;
+    font-size: 0.85rem;
+    color: $gray-light;
+    strong { color: $gold; }
+  }
+}
+
+// ─── Mini Calendario ──────────────────────────────────────
+.miniCal {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.miniCalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.miniCalNav {
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-sm;
+  color: $gray;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-fast;
+
+  &:hover { color: $gold; background: rgba($gold, 0.1); }
+}
+
+.miniCalMes {
+  font-family: $font-condensed;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: $white;
+  text-transform: capitalize;
+}
+
+.miniCalGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.miniCalDiaNombre {
+  font-family: $font-condensed;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $gray;
+  text-align: center;
+  padding: $spacing-xs 0;
+}
+
+.miniCalDia {
+  aspect-ratio: 1;
+  border-radius: $radius-sm;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-family: $font-body;
+  font-size: 0.82rem;
+  color: $gray-light;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover:not(.miniCalFut) { background: rgba($gold, 0.1); color: $gold; }
+  &.miniCalHoy { border: 1px solid rgba($gold, 0.4); color: $gold; }
+  &.miniCalSel { background: $gold !important; color: $black !important; font-weight: 700; }
+  &.miniCalFut { opacity: 0.25; cursor: not-allowed; }
+}
+
+.miniCalDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: $gold;
+  flex-shrink: 0;
+
+  &.miniCalDotClase { background: $success; }
+}
+
+.miniCalLeyenda {
+  display: flex;
+  gap: $spacing-lg;
+  padding-top: $spacing-sm;
+  border-top: 1px solid rgba($white, 0.06);
+}
+
+.miniCalLeyendaItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  font-family: $font-body;
+  font-size: 0.75rem;
+  color: $gray;
+}
+
+// ─── Selector días rutina ─────────────────────────────────
+.selectorDias {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.selectorLabel {
+  font-family: $font-condensed;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $gray;
+}
+
+.selectorBtns {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.selectorBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: $spacing-sm $spacing-lg;
+  border-radius: $radius-md;
+  background: rgba($white, 0.04);
+  border: 1px solid rgba($white, 0.08);
+  transition: all $transition-fast;
+  cursor: pointer;
+
+  &:hover { border-color: rgba($gold, 0.3); background: rgba($gold, 0.06); }
+  &.selectorBtnActive { border-color: $gold; background: rgba($gold, 0.1); }
+}
+
+.selectorBtnNum {
+  font-family: $font-condensed;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $gray;
+
+  .selectorBtnActive & { color: $gold; }
+}
+
+.selectorBtnNombre {
+  font-family: $font-condensed;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: $white;
+}
+
+.diaEnCurso {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.diaEnCursoMusculos {
+  font-family: $font-body;
+  font-size: 0.82rem;
+  color: $gray;
+}
+
+// ─── Iniciar card ─────────────────────────────────────────
+.iniciarCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-lg;
+  flex-wrap: wrap;
+}
+
+.iniciarInfo {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.iniciarNombre {
+  font-family: $font-condensed;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: $white;
+}
+
+.iniciarMusculos {
+  font-family: $font-body;
+  font-size: 0.82rem;
+  color: $gray;
+}
+
+.iniciarMeta {
+  display: flex;
+  gap: $spacing-lg;
+  flex-wrap: wrap;
+
+  span { font-family: $font-condensed; font-size: 0.8rem; color: $gray; }
+}
+
+.iniciarBtns {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+
+  @include mobile { width: 100%; justify-content: flex-end; }
+}
+
+// ─── Carrusel ─────────────────────────────────────────────
+.carrusel {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.carruselProgress {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.carruselDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba($white, 0.1);
+  transition: all $transition-base;
+
+  &.carruselDotActive { background: $gold; width: 24px; border-radius: $radius-full; }
+  &.carruselDotDone   { background: rgba($gold, 0.35); }
+}
+
+// ─── Tarjeta serie ────────────────────────────────────────
+.serieCard {
+  @include card;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.serieCardHeader {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid rgba($white, 0.06);
+  flex-wrap: wrap;
+}
+
+.serieTitulo {
+  font-family: $font-condensed;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  flex: 1;
+}
+
+.serieCantidad {
+  font-family: $font-condensed;
+  font-size: 0.78rem;
+  color: $gray;
+}
+
+// ─── Tabla ejercicios ─────────────────────────────────────
+.tablaWrapper {
+  overflow-x: auto;
+  @include scrollbar;
+}
+
+.tablaEjercicios {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  min-width: 280px;
+}
+
+.tablaHeader {
+  display: flex;
+  gap: $spacing-xs;
+  padding-bottom: $spacing-xs;
+  border-bottom: 1px solid rgba($white, 0.06);
+}
+
+.tablaFila {
+  display: flex;
+  gap: $spacing-xs;
+  align-items: center;
+  padding: $spacing-xs 0;
+  border-bottom: 1px solid rgba($white, 0.04);
+
+  &:last-child { border-bottom: none; }
+}
+
+.tablaDescanso {
+  display: flex;
+  gap: $spacing-xs;
+  align-items: center;
+  padding-top: $spacing-sm;
+  border-top: 1px solid rgba($white, 0.06);
+  margin-top: $spacing-xs;
+}
+
+.tablaColEj {
+  flex: 1;
+  min-width: 130px;
+  font-family: $font-condensed;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: $white;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+
+  .tablaHeader & {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $gray;
+  }
+
+  .tablaDescanso & {
+    font-size: 0.78rem;
+    color: $gray;
+    font-weight: 400;
+  }
+}
+
+.tablaEjNum {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba($gold, 0.1);
+  border: 1px solid rgba($gold, 0.2);
+  color: $gold;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ejNombreBtn {
+  font-family: $font-condensed;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: $white;
+  text-align: left;
+  cursor: pointer;
+  transition: color $transition-fast;
+  background: none;
+  border: none;
+  padding: 0;
+
+  &:hover { color: $gold; text-decoration: underline; }
+}
+
+.tablaColRep {
+  width: 52px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-family: $font-condensed;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $gray;
+  padding: 2px;
+  border-radius: $radius-sm;
+  transition: background $transition-fast;
+
+  &.colActiva {
+    background: rgba($gold, 0.08);
+    border: 1px solid rgba($gold, 0.2);
+    color: $gold;
+
+    .repBubble {
+      border-color: $gold;
+      color: $gold;
+      background: rgba($gold, 0.1);
+    }
+  }
+
+  &.colCompletada {
+    opacity: 0.45;
+    .repBubble { border-color: rgba($gold, 0.2); }
+  }
+}
+
+.repBubble {
+  width: 34px;
+  height: 34px;
+  border-radius: $radius-sm;
+  background: rgba($white, 0.06);
+  border: 1px solid rgba($white, 0.1);
+  color: $white;
+  font-family: $font-display;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-fast;
+}
+
+.pesoInput {
+  width: 44px;
+  height: 24px;
+  background: rgba($white, 0.04);
+  border: 1px solid rgba($white, 0.08);
+  border-radius: $radius-sm;
+  color: $gray;
+  font-family: $font-condensed;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-align: center;
+  outline: none;
+  transition: all $transition-fast;
+
+  &::placeholder { color: rgba($gray, 0.4); font-size: 0.62rem; }
+  &:focus { border-color: rgba($gold, 0.3); color: $white; }
+
+  &.pesoInputActivo {
+    border-color: rgba($gold, 0.3);
+    background: rgba($gold, 0.05);
+    color: $gold;
+  }
+}
+
+.descansoBubble {
+  width: 34px;
+  height: 28px;
+  border-radius: $radius-sm;
+  background: rgba($gray, 0.08);
+  border: 1px solid rgba($gray, 0.15);
+  color: $gray;
+  font-family: $font-condensed;
+  font-size: 0.68rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// ─── Temporizador barra ───────────────────────────────────
+.temporizadorBarra {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 36px;
+  background: rgba($white, 0.04);
+  border: 1px solid rgba($white, 0.08);
+  border-radius: $radius-md;
+  position: relative;
+  overflow: hidden;
+  padding-right: 44px;
+}
+
+.temporizadorFill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: rgba($gold, 0.2);
+  transition: width 1s linear;
+}
+
+.temporizadorTexto {
+  position: relative;
+  z-index: 1;
+  font-family: $font-condensed;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: $gold;
+  padding-left: $spacing-md;
+  white-space: nowrap;
+}
+
+.temporizadorPlayBtn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 36px;
+  height: 100%;
+  background: rgba($gold, 0.15);
+  border-left: 1px solid rgba($gold, 0.2);
+  color: $gold;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all $transition-fast;
+  flex-shrink: 0;
+  z-index: 1;
+  border-radius: 0;
+
+  &:hover:not(:disabled):not(.activo):not(.terminado) {
+    background: rgba($gold, 0.3);
+  }
+
+  &.activo { cursor: default; background: rgba($gold, 0.08); }
+  &.terminado { color: $success; border-color: rgba($success, 0.2); background: rgba($success, 0.1); }
+  &:disabled { cursor: default; }
+}
+
+// ─── Utilitarios ──────────────────────────────────────────
+.utilitariosSection {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  padding-top: $spacing-md;
+  border-top: 1px solid rgba($white, 0.06);
+}
+
+.utilitariosSectionTitle {
+  font-family: $font-condensed;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $gray;
+}
+
+.utilitariosList {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.utilChip {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: 4px $spacing-sm;
+  background: rgba($white, 0.04);
+  border: 1px solid rgba($white, 0.08);
+  border-radius: $radius-full;
+  font-family: $font-condensed;
+  font-size: 0.78rem;
+  color: $gray-light;
+}
+
+.utilChipFoto {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba($gold, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+
+  img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+}
+
+// ─── Botón completar ──────────────────────────────────────
+.completarBtn {
+  width: 100%;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  font-family: $font-condensed;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $black;
+  transition: all $transition-base;
+  cursor: pointer;
+  border: none;
+
+  &:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
+  &:disabled { color: $gray; cursor: default; transform: none; }
+}
+
+// ─── Miniaturas ───────────────────────────────────────────
+.miniaturas {
+  display: flex;
+  gap: $spacing-xs;
+  overflow-x: auto;
+  @include scrollbar;
+  padding-bottom: 2px;
+}
+
+.miniatura {
+  flex-shrink: 0;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-sm;
+  background: rgba($white, 0.04);
+  border: 1px solid rgba($white, 0.06);
+  font-family: $font-condensed;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: $gray;
+  transition: all $transition-fast;
+  cursor: pointer;
+
+  &:hover { color: $white; border-color: rgba($white, 0.15); }
+  &.miniaturaActive { border-color: $gold; color: $gold; background: rgba($gold, 0.08); }
+  &.miniaturaDone   { border-color: rgba($gold, 0.25); color: rgba($gold, 0.45); }
+}
+
+// ─── Completado card ──────────────────────────────────────
+.completadoCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-lg;
+  padding: $spacing-2xl $spacing-xl;
+  text-align: center;
+  max-width: 520px;
+
+  h3 {
+    font-family: $font-display;
+    font-size: 1.6rem;
+    letter-spacing: 0.06em;
+    color: $white;
+  }
+
+  p {
+    font-family: $font-body;
+    font-size: 0.9rem;
+    color: $gray;
+    line-height: 1.6;
+    strong { color: $white; }
+  }
+}
+
+.completadoIcono {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba($success, 0.15);
+  border: 2px solid $success;
+  color: $success;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.completadoEncuesta {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-sm;
+  padding: $spacing-md;
+  background: rgba($gold, 0.06);
+  border: 1px solid rgba($gold, 0.2);
+  border-radius: $radius-md;
+  font-family: $font-body;
+  font-size: 0.85rem;
+  color: $gray-light;
+  text-align: left;
+  line-height: 1.5;
+  width: 100%;
+
+  strong { color: $gold; }
+  span:first-child { font-size: 1rem; flex-shrink: 0; }
+}
+
+// ─── Clase card ───────────────────────────────────────────
+.claseCard {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  max-width: 480px;
+}
+
+.claseNombre {
+  font-family: $font-display;
+  font-size: 1.4rem;
+  letter-spacing: 0.06em;
+  color: $white;
+}
+
+.claseHorario {
+  font-family: $font-condensed;
+  font-size: 0.9rem;
+  color: $gold;
+}
+
+.claseField {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.claseFieldLabel {
+  font-family: $font-condensed;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $gray;
+}
+
+.claseFechaRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.claseFechaStr {
+  font-family: $font-condensed;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $white;
+  text-transform: capitalize;
+  flex: 1;
+}
+
+// ─── Modal ejercicio ──────────────────────────────────────
+.ejercicioModal {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.ejercicioModalNombre {
+  font-family: $font-condensed;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: $white;
+}
+
+.ejercicioModalDesc {
+  font-family: $font-body;
+  font-size: 0.9rem;
+  color: $gray-light;
+  line-height: 1.6;
+}
+
+.ejercicioModalVideo {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-sm;
+  font-family: $font-condensed;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: $gold;
+  letter-spacing: 0.06em;
+  transition: color $transition-fast;
+
+  &:hover { color: $gold-light; }
+}
+
+.ejercicioModalUtils {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.ejercicioModalUtilsTitle {
+  font-family: $font-condensed;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $gray;
+}
+
+.ejercicioModalUtilsList {
+  display: flex;
+  gap: $spacing-md;
+  flex-wrap: wrap;
+}
+
+.utilItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.utilFoto {
+  width: 48px;
+  height: 48px;
+  border-radius: $radius-md;
+  background: rgba($gold, 0.08);
+  border: 1px solid rgba($gold, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  overflow: hidden;
+
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+.utilNombre {
+  font-family: $font-condensed;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: $gray-light;
+  text-align: center;
+  max-width: 64px;
+}
+
+// ─── Modal historial ──────────────────────────────────────
+.historialDialogo {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.historialDialogoNombre {
+  font-family: $font-condensed;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: $white;
+}
+
+.historialDialogoFecha {
+  font-family: $font-body;
+  font-size: 0.85rem;
+  color: $gray;
+  text-transform: capitalize;
+}
+
+// ─── Ver rutina modal ─────────────────────────────────────
+.verRutina {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+}
+
+.verRutinaDayHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid rgba($gold, 0.15);
+}
+
+.verRutinaDayNum {
+  font-family: $font-condensed;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $gold;
+}
+
+.verRutinaDayNombre {
+  font-family: $font-display;
+  font-size: 1.2rem;
+  letter-spacing: 0.06em;
+  color: $white;
+}
+
+.verRutinaDayMusculos {
+  font-family: $font-body;
+  font-size: 0.82rem;
+  color: $gray;
+}
+
+.verRutinaBloque {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.verRutinaBloqueTitle {
+  font-family: $font-condensed;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.verRutinaTabla {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-x: auto;
+  @include scrollbar;
+}
+
+.verRutinaTablaHeader {
+  display: flex;
+  gap: $spacing-xs;
+  padding: $spacing-xs $spacing-sm;
+  border-bottom: 1px solid rgba($white, 0.06);
+}
+
+.verRutinaTablaRow {
+  display: flex;
+  gap: $spacing-xs;
+  align-items: center;
+  padding: $spacing-xs $spacing-sm;
+  background: rgba($white, 0.02);
+  border-radius: $radius-sm;
+}
+
+.verRutinaTablaEj {
+  flex: 1;
+  min-width: 130px;
+  font-family: $font-condensed;
+  font-size: 0.85rem;
+  color: $white;
+  font-weight: 600;
+
+  .verRutinaTablaHeader & {
+    font-size: 0.7rem;
+    color: $gray;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+}
+
+.verRutinaTablaRep {
+  width: 36px;
+  flex-shrink: 0;
+  text-align: center;
+  font-family: $font-condensed;
+  font-size: 0.85rem;
+  color: $gold;
+  font-weight: 600;
+
+  .verRutinaTablaHeader & {
+    font-size: 0.7rem;
+    color: $gray;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+}
+
+.serieCompletadaBadge {
+  width: 100%;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  background: rgba($success, 0.1);
+  border: 1px solid rgba($success, 0.2);
+  color: $success;
+  font-family: $font-condensed;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.ejNombre {
+  font-family: $font-condensed;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: $white;
+}
+
+.temporizadorWrapper {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.temporizadorSaltear {
+  font-family: $font-condensed;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: $gray;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color $transition-fast;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0 $spacing-xs;
+
+  &:hover { color: $gold; }
+}

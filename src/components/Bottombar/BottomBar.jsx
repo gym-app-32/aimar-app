@@ -4,22 +4,23 @@ import styles from './BottomBar.module.scss'
 
 const NAV_ITEMS = {
   alumno: [
-    { to: '/alumno',           label: 'Inicio',   icon: '⊞' },
-    { to: '/alumno/historial', label: 'Historial', icon: '📈' },
-    { to: '/alumno/encuesta',  label: 'Encuestaaaa',  icon: '📋' },
-    { to: '/alumno/perfil',           label: 'Perfil',    icon: '👤' },
+    { to: '/alumno',           label: 'Dashboard', icon: '⊞' },
+    { to: '/alumno/historial', label: 'Historial',  icon: '📈' },
+    { to: '/alumno/encuesta',  label: 'Encuesta',   icon: '📋' },
+    { to: '/alumno/perfil',           label: 'Mi Perfil',  icon: '👤' },
   ],
   profesor: [
-    { to: '/profesor',         label: 'Inicio',   icon: '⊞' },
-    { to: '/profesor/alumnos', label: 'Alumnos',  icon: '👥' },
-    { to: '/profesor/ejercicios', label: 'Ejercicios',  icon: '📋' },
-    { to: '/profesor/perfil',           label: 'Perfil',   icon: '👤' },
+    { to: '/profesor',         label: 'Dashboard', icon: '⊞' },
+    { to: '/profesor/alumnos', label: 'Alumnos',   icon: '👥' },
+    { to: '/profesor/ejercicios', label: 'Ejercicios',   icon: '📋' },
+    { to: '/profesor/perfil',           label: 'Mi Perfil', icon: '👤' },
   ],
   admin: [
-    { to: '/admin',          label: 'Inicio',    icon: '⊞' },
-    { to: '/admin/usuarios', label: 'Usuarios',  icon: '👥' },
-    { to: '/admin/perfil',         label: 'Perfil',    icon: '👤' },
-  ],
+  { to: '/admin',          label: 'Dashboard', icon: '⊞' },
+  { to: '/admin/usuarios', label: 'Profesores', icon: '👨‍🏫' },
+  { to: '/admin/alumnos',  label: 'Alumnos',   icon: '👥' },
+  { to: '/admin/perfil',         label: 'Mi Perfil', icon: '👤' },
+],
 }
 
 export default function BottomBar() {
