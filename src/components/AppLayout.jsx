@@ -19,8 +19,9 @@ export default function AppLayout() {
         <main className={styles.main}>
           <Outlet />
         </main>
+         <BottomBar />
       </div>
-      <BottomBar />
+     
     </div>
   )
 }
