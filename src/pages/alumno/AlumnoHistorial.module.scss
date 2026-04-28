@@ -371,3 +371,14 @@
   text-transform: uppercase;
   color: $gray;
 }
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  font-family: $font-condensed;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  color: $gray;
+}

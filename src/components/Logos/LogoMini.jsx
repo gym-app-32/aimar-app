@@ -3,7 +3,7 @@ import './Logo-colors-primary.scss';
 export default function LogoMini() {
   return (
             <svg
-            width='100'
+            //width='100'
             version="1.1"
             viewBox="3500 4000 10100 6100">
             <g id="Capa_x0020_1">
