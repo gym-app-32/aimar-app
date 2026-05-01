@@ -84,7 +84,18 @@
   transition: color $transition-fast;
   white-space: nowrap;
 
-  &:hover { color: $error; }
+  svg {
+    fill: $gray;
+    width: 13px;
+  }
+
+  &:hover { 
+    color: $error;
+    svg {
+    fill: $error;
+   
+  }
+  }
 
    @media (max-width: 500px) { 
     .textBtn {display: none;}

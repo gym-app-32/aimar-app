@@ -1,27 +1,27 @@
 import { useState } from 'react'
 import Modal from '../../components/UI/Modal/Modal'
 import styles from './ProfesorEjercicios.module.scss'
-
+import {IconEdit, IconDelete } from '../../components/Icons/Icons'
 // ─── Mock data ────────────────────────────────────────────
 const MOCK_UTILITARIOS = [
-  { id: 1, nombre: 'Barra olímpica',  descripcion: 'Barra de 20kg para ejercicios compuestos.',         imagen: null },
-  { id: 2, nombre: 'Mancuernas',      descripcion: 'Par de mancuernas ajustables de 2 a 40kg.',         imagen: null },
-  { id: 3, nombre: 'Soga de saltar',  descripcion: 'Soga para calentamiento y cardio.',                 imagen: null },
-  { id: 4, nombre: 'Press de banca',  descripcion: 'Banco regulable para press y ejercicios de pecho.', imagen: null },
-  { id: 5, nombre: 'Polea alta',      descripcion: 'Máquina de polea para jalones y tríceps.',          imagen: null },
-  { id: 6, nombre: 'Kettlebell',      descripcion: 'Pesas rusas de distintos pesos para funcional.',    imagen: null },
+  { id: 1, nombre: 'Barra olímpica', descripcion: 'Barra de 20kg para ejercicios compuestos.', imagen: null },
+  { id: 2, nombre: 'Mancuernas', descripcion: 'Par de mancuernas ajustables de 2 a 40kg.', imagen: null },
+  { id: 3, nombre: 'Soga de saltar', descripcion: 'Soga para calentamiento y cardio.', imagen: null },
+  { id: 4, nombre: 'Press de banca', descripcion: 'Banco regulable para press y ejercicios de pecho.', imagen: null },
+  { id: 5, nombre: 'Polea alta', descripcion: 'Máquina de polea para jalones y tríceps.', imagen: null },
+  { id: 6, nombre: 'Kettlebell', descripcion: 'Pesas rusas de distintos pesos para funcional.', imagen: null },
 ]
 
 const MOCK_EJERCICIOS = [
   { id: 1, nombre: 'Sentadilla con barra', descripcion: 'Ejercicio compuesto para piernas y glúteos.', video: '', utilitarios: [1, 4], imagen: null },
-  { id: 2, nombre: 'Press de banca',       descripcion: 'Ejercicio de empuje para pecho y tríceps.',   video: '', utilitarios: [1, 4], imagen: null },
-  { id: 3, nombre: 'Remo con barra',       descripcion: 'Ejercicio de tirón para espalda y bíceps.',   video: '', utilitarios: [1],    imagen: null },
-  { id: 4, nombre: 'Curl de bíceps',       descripcion: 'Ejercicio de aislamiento para bíceps.',       video: '', utilitarios: [2],    imagen: null },
-  { id: 5, nombre: 'Salto a la soga',      descripcion: 'Ejercicio cardiovascular de calentamiento.',  video: '', utilitarios: [3],    imagen: null },
+  { id: 2, nombre: 'Press de banca', descripcion: 'Ejercicio de empuje para pecho y tríceps.', video: '', utilitarios: [1, 4], imagen: null },
+  { id: 3, nombre: 'Remo con barra', descripcion: 'Ejercicio de tirón para espalda y bíceps.', video: '', utilitarios: [1], imagen: null },
+  { id: 4, nombre: 'Curl de bíceps', descripcion: 'Ejercicio de aislamiento para bíceps.', video: '', utilitarios: [2], imagen: null },
+  { id: 5, nombre: 'Salto a la soga', descripcion: 'Ejercicio cardiovascular de calentamiento.', video: '', utilitarios: [3], imagen: null },
 ]
 
 const EMPTY_UTILITARIO = { nombre: '', descripcion: '', imagen: null }
-const EMPTY_EJERCICIO  = { nombre: '', descripcion: '', video: '', utilitarios: [], imagen: null }
+const EMPTY_EJERCICIO = { nombre: '', descripcion: '', video: '', utilitarios: [], imagen: null }
 
 // ─── Componente imagen placeholder ───────────────────────
 function ImagePlaceholder({ imagen, label }) {
@@ -37,21 +37,21 @@ export default function ProfesorEjercicios() {
   const [tab, setTab] = useState('ejercicios') // 'ejercicios' | 'utilitarios'
 
   // ─── Utilitarios state ───────────────────────────────
-  const [utilitarios, setUtilitarios]       = useState(MOCK_UTILITARIOS)
-  const [modalUtilOpen, setModalUtilOpen]   = useState(false)
-  const [editandoUtil, setEditandoUtil]     = useState(null)
-  const [formUtil, setFormUtil]             = useState(EMPTY_UTILITARIO)
+  const [utilitarios, setUtilitarios] = useState(MOCK_UTILITARIOS)
+  const [modalUtilOpen, setModalUtilOpen] = useState(false)
+  const [editandoUtil, setEditandoUtil] = useState(null)
+  const [formUtil, setFormUtil] = useState(EMPTY_UTILITARIO)
   const [confirmDelUtil, setConfirmDelUtil] = useState(null)
 
   // ─── Ejercicios state ────────────────────────────────
-  const [ejercicios, setEjercicios]         = useState(MOCK_EJERCICIOS)
+  const [ejercicios, setEjercicios] = useState(MOCK_EJERCICIOS)
   const [modalEjercOpen, setModalEjercOpen] = useState(false)
-  const [editandoEjerc, setEditandoEjerc]   = useState(null)
-  const [formEjerc, setFormEjerc]           = useState(EMPTY_EJERCICIO)
+  const [editandoEjerc, setEditandoEjerc] = useState(null)
+  const [formEjerc, setFormEjerc] = useState(EMPTY_EJERCICIO)
   const [confirmDelEjerc, setConfirmDelEjerc] = useState(null)
 
-  const [guardando, setGuardando]           = useState(false)
-  const [busqueda, setBusqueda]             = useState('')
+  const [guardando, setGuardando] = useState(false)
+  const [busqueda, setBusqueda] = useState('')
 
   // ─── Utilitarios handlers ────────────────────────────
   const abrirCrearUtil = () => {
@@ -232,8 +232,8 @@ export default function ProfesorEjercicios() {
                   )}
                 </div>
                 <div className={styles.cardActions}>
-                  <button className="btn btn--ghost btn--sm" onClick={() => abrirEditarEjerc(ej)}>✏️ Editar</button>
-                  <button className="btn btn--ghost btn--sm" onClick={() => setConfirmDelEjerc(ej)}>🗑️ Borrar</button>
+                  <button  onClick={() => abrirEditarEjerc(ej)}><IconEdit /> Editar</button>
+                  <button  onClick={() => setConfirmDelEjerc(ej)}><IconDelete /> Borrar</button>
                 </div>
               </div>
             ))
@@ -243,47 +243,85 @@ export default function ProfesorEjercicios() {
 
       {/* ── TAB UTILITARIOS ── */}
       {tab === 'utilitarios' && (
-        <div className={`card ${styles.tableCard}`}>
-          <div className={styles.tableWrapper}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th>Imagen</th>
-                  <th>Nombre</th>
-                  <th>Descripción</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {utilitariosFiltrados.length === 0 ? (
+        <>
+          {/* Tabla desktop */}
+          <div className={`card ${styles.tableCard}`}>
+            <div className={styles.tableWrapper}>
+              <table className={styles.table}>
+                <thead>
                   <tr>
-                    <td colSpan={4} className={styles.empty}>No se encontraron utilitarios.</td>
+                    <th>Imagen</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
                   </tr>
-                ) : (
-                  utilitariosFiltrados.map(u => (
-                    <tr key={u.id}>
-                      <td>
-                        {u.imagen
-                          ? <img src={u.imagen} alt={u.nombre} className={styles.tableImg} />
-                          : <div className={styles.tableImgPlaceholder}>🏋️</div>
-                        }
-                      </td>
-                      <td className={styles.utilNombre}>{u.nombre}</td>
-                      <td className={styles.utilDesc}>{u.descripcion}</td>
-                      <td>
-                        <div className={styles.actions}>
-                          <button className="btn btn--ghost btn--sm" onClick={() => abrirEditarUtil(u)}>✏️</button>
-                          <button className="btn btn--ghost btn--sm" onClick={() => setConfirmDelUtil(u)}>🗑️</button>
-                        </div>
-                      </td>
+                </thead>
+                <tbody>
+                  {utilitariosFiltrados.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className={styles.empty}>No se encontraron utilitarios.</td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : (
+                    utilitariosFiltrados.map(u => (
+                      <tr key={u.id}>
+                        <td>
+                          {u.imagen
+                            ? <img src={u.imagen} alt={u.nombre} className={styles.tableImg} />
+                            : <div className={styles.tableImgPlaceholder}>🏋️</div>
+                          }
+                        </td>
+                        <td className={styles.utilNombre}>{u.nombre}</td>
+                        <td className={styles.utilDesc}>{u.descripcion}</td>
+                        <td>
+                          <div className={styles.actions}>
+                            <button  onClick={() => abrirEditarUtil(u)}>
+                              <IconEdit />
+                            </button>
+                            <button  onClick={() => setConfirmDelUtil(u)}>
+                              <IconDelete />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+
+          {/* Lista móvil */}
+          <div className={styles.utilMobileList}>
+            {utilitariosFiltrados.length === 0 ? (
+              <p className={styles.empty}>No se encontraron utilitarios.</p>
+            ) : (
+              utilitariosFiltrados.map(u => (
+                <div key={u.id} className={styles.utilMobileRow}>
+                  <div className={styles.utilMobileImg}>
+                    {u.imagen
+                      ? <img src={u.imagen} alt={u.nombre} />
+                      : <span>🏋️</span>
+                    }
+                  </div>
+                  <div className={styles.utilMobileInfo}>
+                    <span className={styles.utilMobileNombre}>{u.nombre}</span>
+                    <span className={styles.utilMobileDesc}>{u.descripcion}</span>
+                  </div>
+                  <div className={styles.utilMobileActions}>
+                    <button  onClick={() => abrirEditarUtil(u)}>
+                      <IconEdit />
+                    </button>
+                    <button  onClick={() => setConfirmDelUtil(u)}>
+                      <IconDelete />
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </>
       )}
+
 
       {/* ── MODAL UTILITARIO ── */}
       <Modal

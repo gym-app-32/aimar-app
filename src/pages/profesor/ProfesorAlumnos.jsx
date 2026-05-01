@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import Modal from '../../components/UI/Modal/Modal'
 import styles from './ProfesorAlumnos.module.scss'
+import TablaAlumnos from '../../components/TablaAlumnos/TablaAlumnos'
+
 
 const MOCK_PROFESORES = [
   { id: 1, nombre: 'Martín Gómez' },
@@ -10,11 +12,11 @@ const MOCK_PROFESORES = [
 ]
 
 const MOCK_ALUMNOS = [
-  { id: 1, nombre: 'Carlos Pérez',    email: 'carlos@gmail.com',  telefono: '221 1234567', fechaNacimiento: '1995-06-15', profesor: 'Martín Gómez',    rutina: 'Fuerza + Hipertrofia', activo: true },
-  { id: 2, nombre: 'Sofía López',     email: 'sofia@gmail.com',   telefono: '221 2345678', fechaNacimiento: '1998-03-22', profesor: 'Laura Fernández', rutina: 'Funcional Full Body',  activo: true },
-  { id: 3, nombre: 'Tomás García',    email: 'tomas@gmail.com',   telefono: '221 3456789', fechaNacimiento: '2000-11-08', profesor: 'Martín Gómez',    rutina: 'Sin asignar',          activo: false },
-  { id: 4, nombre: 'Valentina Ruiz',  email: 'vale@gmail.com',    telefono: '221 4567890', fechaNacimiento: '1993-07-30', profesor: 'Carla Méndez',    rutina: 'Kickboxing Básico',    activo: true },
-  { id: 5, nombre: 'Nicolás Torres',  email: 'nico@gmail.com',    telefono: '221 5678901', fechaNacimiento: '1997-01-14', profesor: 'Laura Fernández', rutina: 'Sin asignar',          activo: true },
+  { id: 1, nombre: 'Carlos Pérez', email: 'carlos@gmail.com', telefono: '221 1234567', fechaNacimiento: '1995-06-15', profesor: 'Martín Gómez', rutina: 'Fuerza + Hipertrofia', activo: true },
+  { id: 2, nombre: 'Sofía López', email: 'sofia@gmail.com', telefono: '221 2345678', fechaNacimiento: '1998-03-22', profesor: 'Laura Fernández', rutina: 'Funcional Full Body', activo: true },
+  { id: 3, nombre: 'Tomás García', email: 'tomas@gmail.com', telefono: '221 3456789', fechaNacimiento: '2000-11-08', profesor: 'Martín Gómez', rutina: 'Sin asignar', activo: false },
+  { id: 4, nombre: 'Valentina Ruiz', email: 'vale@gmail.com', telefono: '221 4567890', fechaNacimiento: '1993-07-30', profesor: 'Carla Méndez', rutina: 'Kickboxing Básico', activo: true },
+  { id: 5, nombre: 'Nicolás Torres', email: 'nico@gmail.com', telefono: '221 5678901', fechaNacimiento: '1997-01-14', profesor: 'Laura Fernández', rutina: 'Sin asignar', activo: true },
 ]
 
 const EMPTY_FORM = {
@@ -24,6 +26,15 @@ const EMPTY_FORM = {
   fechaNacimiento: '',
   profesor: '',
   password: '',
+}
+
+function StartCard({ num, label }) {
+  return (
+    <div className={`card ${styles.statCard}`}>
+      <span className={styles.statValue}>{num}</span>
+      <span className={styles.statLabel}>{label}</span>
+    </div>
+  )
 }
 
 export default function ProfesorAlumnos() {
@@ -50,12 +61,12 @@ export default function ProfesorAlumnos() {
   const abrirEditar = (alumno) => {
     setEditando(alumno)
     setForm({
-      nombre:          alumno.nombre,
-      email:           alumno.email,
-      telefono:        alumno.telefono,
+      nombre: alumno.nombre,
+      email: alumno.email,
+      telefono: alumno.telefono,
       fechaNacimiento: alumno.fechaNacimiento,
-      profesor:        alumno.profesor,
-      password:        '',
+      profesor: alumno.profesor,
+      password: '',
     })
     setModalOpen(true)
   }
@@ -101,6 +112,7 @@ export default function ProfesorAlumnos() {
   const totalActivos = alumnos.filter(a => a.activo).length
   const sinRutina = alumnos.filter(a => a.rutina === 'Sin asignar').length
 
+
   return (
     <div className={styles.page}>
       <div className="page-header">
@@ -108,22 +120,11 @@ export default function ProfesorAlumnos() {
         <p>Gestioná y seguí el progreso de tus alumnos.</p>
       </div>
 
-      {/* Stats */}
+      {/* Starts */}
       <div className={styles.statsRow}>
-        <div className={`card ${styles.statCard}`}>
-          <span className={styles.statValue}>{alumnos.length}</span>
-          <span className={styles.statLabel}>Total alumnos</span>
-        </div>
-        <div className={`card ${styles.statCard}`}>
-          <span className={styles.statValue}>{totalActivos}</span>
-          <span className={styles.statLabel}>Activos</span>
-        </div>
-        <div className={`card ${styles.statCard}`}>
-          <span className={`${styles.statValue} ${sinRutina > 0 ? styles.warning : ''}`}>
-            {sinRutina}
-          </span>
-          <span className={styles.statLabel}>Sin rutina</span>
-        </div>
+        <StartCard num={alumnos.length} label="Total alumnos" />
+        <StartCard num={totalActivos} label="Activos" />
+        <StartCard num={sinRutina} label="Sin rutina" />
       </div>
 
       {/* Toolbar */}
@@ -141,76 +142,22 @@ export default function ProfesorAlumnos() {
       </div>
 
       {/* Tabla */}
-      <div className={`card ${styles.tableCard}`}>
-        <div className={styles.tableWrapper}>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>Teléfono</th>
-                <th>Profesor</th>
-                <th>Rutina</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {alumnosFiltrados.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className={styles.empty}>
-                    No se encontraron alumnos.
-                  </td>
-                </tr>
-              ) : (
-                alumnosFiltrados.map(alumno => (
-                  <tr key={alumno.id} className={!alumno.activo ? styles.inactiveRow : ''}>
-                    <td className={styles.nameCell}>
-                      <div className={styles.avatar}>
-                        {alumno.nombre[0].toUpperCase()}
-                      </div>
-                      <span>{alumno.nombre}</span>
-                    </td>
-                    <td>{alumno.email}</td>
-                    <td>{alumno.telefono}</td>
-                    <td>
-                      <span className="badge badge--gold">{alumno.profesor || '—'}</span>
-                    </td>
-                    <td>
-                      <span className={`badge ${alumno.rutina === 'Sin asignar' ? 'badge--gray' : 'badge--success'}`}>
-                        {alumno.rutina}
-                      </span>
-                    </td>
-                    <td>
-                      <span className={`badge ${alumno.activo ? 'badge--success' : 'badge--error'}`}>
-                        {alumno.activo ? 'Activo' : 'Bloqueado'}
-                      </span>
-                    </td>
-                    <td>
-                      <div className={styles.actions}>
-                        <button
-                          className="btn btn--ghost btn--sm"
-                          onClick={() => abrirEditar(alumno)}
-                          title="Editar"
-                        >
-                          ✏️
-                        </button>
-                        <button
-                          className="btn btn--ghost btn--sm"
-                          onClick={() => toggleActivo(alumno.id)}
-                          title={alumno.activo ? 'Bloquear' : 'Desbloquear'}
-                        >
-                          {alumno.activo ? '🔒' : '🔓'}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <TablaAlumnos
+        alumnos={alumnosFiltrados}
+        onEditar={abrirEditar}
+        onToggleActivo={toggleActivo}
+        columnas={[
+          {
+            key: 'rutina',
+            label: 'Rutina',
+            render: (a) => (
+              <span className={`badge ${a.rutina === 'Sin asignar' ? 'badge--gray' : 'badge--gold'}`}>
+                {a.rutina}
+              </span>
+            )
+          },
+        ]}
+      />
 
       {/* Modal crear/editar */}
       <Modal

@@ -3,13 +3,25 @@
 }
 
 .statsRow {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
   gap: $spacing-md;
   margin-bottom: $spacing-lg;
 
-  @include mobile {
-    grid-template-columns: 1fr;
+  @media (max-width: 350px) {
+    flex-direction: column;
+
+    .statCard {
+      width: 100%;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .statValue {width: 30%;}
+
+    .statLabel {width: 50%;}
+
   }
 }
 
@@ -20,6 +32,7 @@
   text-align: center;
   gap: $spacing-xs;
   padding: $spacing-lg $spacing-md;
+  width: 100%;
 }
 
 .statValue {
@@ -39,9 +52,11 @@
   color: $gray;
 }
 
+
 .toolbar {
   display: flex;
   align-items: center;
+  justify-content: right;
   gap: $spacing-md;
   margin-bottom: $spacing-lg;
   flex-wrap: wrap;

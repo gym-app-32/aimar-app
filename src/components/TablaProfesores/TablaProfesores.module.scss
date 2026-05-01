@@ -1,0 +1,256 @@
+// ─── Tabla desktop ────────────────────────────────────────
+.tableCard {
+  background: $dark2;
+  border: 1px solid rgba($gold, 0.1);
+  border-radius: $radius-md;
+  padding: 0;
+  overflow: hidden;
+
+  @include mobile {
+    display: none;
+  }
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    font-family: $font-condensed;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $gray;
+    padding: $spacing-md $spacing-lg;
+    text-align: left;
+    border-bottom: 1px solid rgba($white, 0.06);
+    white-space: nowrap;
+  }
+
+  td {
+    font-family: $font-body;
+    font-size: 0.9rem;
+    color: $gray-light;
+    padding: $spacing-md $spacing-lg;
+    border-bottom: 1px solid rgba($white, 0.04);
+    vertical-align: middle;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover td {
+    background: rgba($white, 0.02);
+  }
+}
+
+.inactiveRow td {
+  opacity: 0.5;
+}
+
+.nameCell {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  white-space: nowrap;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+
+    &:hover {
+      background: rgba(47, 47, 47, 0.375);
+    }
+  }
+
+  svg {
+    width: 20px; // más pequeño, más manejable
+    //height: 18px;
+    flex-shrink: 0;
+    fill: rgba($gold, 0.8);
+    display: block; // evita baseline gap
+  }
+}
+
+.empty {
+  font-family: $font-body;
+  font-size: 0.9rem;
+  color: $gray;
+  font-style: italic;
+  text-align: center;
+  padding: $spacing-2xl;
+}
+
+// ─── Avatar ───────────────────────────────────────────────
+.avatar {
+  border-radius: 50%;
+  background: rgba($gold, 0.15);
+  border: 1px solid rgba($gold, 0.2);
+  color: $gold;
+  font-family: $font-display;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatarMd {
+  width: 32px;
+  height: 32px;
+  font-size: 0.9rem;
+}
+
+.avatarLg {
+  width: 56px;
+  height: 56px;
+  font-size: 1.4rem;
+  border-width: 2px;
+}
+
+// ─── Lista móvil ──────────────────────────────────────────
+.mobileList {
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+
+  @include mobile {
+    display: flex;
+  }
+}
+
+.mobileRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-sm $spacing-md;
+  background: $dark2;
+  border: 1px solid rgba($white, 0.05);
+  border-radius: $radius-md;
+  transition: border-color $transition-fast;
+
+  &:hover {
+    border-color: rgba($gold, 0.2);
+  }
+
+  &.mobileRowInactivo {
+    opacity: 0.5;
+  }
+}
+
+.mobileInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.mobileNombre {
+  font-family: $font-condensed;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $white;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobileActions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+
+    &:hover {
+      background: rgba(47, 47, 47, 0.375);
+    }
+  }
+
+  svg {
+    width: 20px; // más pequeño, más manejable
+    //height: 18px;
+    flex-shrink: 0;
+    fill: rgba($gold, 0.8);
+    display: block; // evita baseline gap
+  }
+}
+
+// ─── Modal info ───────────────────────────────────────────
+.infoModal {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.infoModalHeader {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.infoModalNombre {
+  display: block;
+  font-family: $font-condensed;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: $white;
+  margin-bottom: $spacing-xs;
+}
+
+.infoModalGrid {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.infoModalItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid rgba($white, 0.05);
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.infoModalLabel {
+  font-family: $font-condensed;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $gray;
+}
+
+.infoModalValue {
+  font-family: $font-body;
+  font-size: 0.95rem;
+  color: $white;
+}

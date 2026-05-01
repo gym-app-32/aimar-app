@@ -3,13 +3,25 @@
 }
 
 .statsRow {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
   gap: $spacing-md;
   margin-bottom: $spacing-lg;
 
-  @include mobile {
-    grid-template-columns: 1fr;
+  @media (max-width: 350px) {
+    flex-direction: column;
+
+    .statCard {
+      width: 100%;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .statValue {width: 30%;}
+
+    .statLabel {width: 50%;}
+
   }
 }
 
@@ -20,6 +32,7 @@
   text-align: center;
   gap: $spacing-xs;
   padding: $spacing-lg $spacing-md;
+  width: 100%;
 }
 
 .statValue {
@@ -131,6 +144,26 @@
   display: flex;
   align-items: center;
   gap: $spacing-xs;
+  
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    &:hover {
+      background: rgba(47, 47, 47, 0.375);
+    }
+  }
+
+  svg {
+    width: 20px;      // más pequeño, más manejable
+    //height: 18px;
+    flex-shrink: 0;
+    fill: rgba($gold, 0.8);
+    display: block;   // evita baseline gap
+  }
 }
 
 .empty {

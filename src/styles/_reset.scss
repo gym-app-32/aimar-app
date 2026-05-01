@@ -22,6 +22,7 @@ body {
   background-size: cover;/* Hace que cubra todo el div */
   background-position: center;/* Centra la imagen */
   background-repeat: no-repeat;/* Evita que se repita */
+ background-attachment: fixed;
   //overflow: hidden;
  // height: 100%;
 }

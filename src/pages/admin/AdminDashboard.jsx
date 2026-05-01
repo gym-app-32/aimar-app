@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './AdminDashboard.module.scss'
-
+import { IconAlumnanos, IconEjercicios, IconsProfesores } from '../../components/Icons/Icons'
 const MOCK_STATS = {
-  alumnosActivos: 48,
+  alumnosActivos: 35,
   entrenamientosSemana: 127,
-  fatigaPromedio: 5.8,
+  profesoresActivos: 6,
 }
 
 const MOCK_SIN_RUTINA = [
@@ -37,9 +37,6 @@ export default function AdminDashboard() {
   const [sinRutina] = useState(MOCK_SIN_RUTINA)
   const [sinEntrenar] = useState(MOCK_SIN_ENTRENAR)
 
-  const fatigaColor =
-    stats.fatigaPromedio <= 4 ? '#52c07a' :
-    stats.fatigaPromedio <= 7 ? '#f0a500' : '#e05252'
 
   return (
     <div className={styles.page}>
@@ -53,20 +50,20 @@ export default function AdminDashboard() {
         <StatCard
           value={stats.alumnosActivos}
           label="Alumnos activos"
-          icon="👥"
+          icon= {<IconAlumnanos />}
           color="#F5C518"
         />
         <StatCard
           value={stats.entrenamientosSemana}
           label="Entrenamientos esta semana"
-          icon="💪"
+          icon={<IconEjercicios />}
           color="#F5C518"
         />
         <StatCard
-          value={`${stats.fatigaPromedio}/10`}
-          label="Fatiga promedio"
-          icon="📊"
-          color={fatigaColor}
+          value={stats.profesoresActivos}
+          label="Profesores Activos"
+          icon={<IconsProfesores />}
+          color="#F5C518"
         />
       </div>
 

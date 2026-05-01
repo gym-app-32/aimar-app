@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import styles from './Topbar.module.scss'
+import { IconLogOut } from '../Icons/Icons'
 
 const ROLE_LABELS = {
   alumno: 'Alumno',
@@ -29,7 +30,7 @@ export default function Topbar() {
         </span>
       </div>
       <button className={styles.logoutBtn} onClick={handleLogout} title="Cerrar sesión">
-        <span className={styles.icon}>⏻</span>
+        <span className={styles.icon}><IconLogOut /></span>
         <span className={styles.textBtn}>Cerrar sesión</span>
       </button>
     </header>
