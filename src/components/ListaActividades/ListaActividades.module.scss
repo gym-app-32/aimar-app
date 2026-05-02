@@ -1,0 +1,177 @@
+// ─── Toolbar ──────────────────────────────────────────────
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+  flex-wrap: wrap;
+}
+
+.espCount {
+  font-family: $font-condensed;
+  font-size: 0.85rem;
+  color: $gray;
+  letter-spacing: 0.04em;
+  flex: 1;
+}
+
+// ─── Especialidades ───────────────────────────────────────
+.espTitulos {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.espAbreviatura {
+  font-family: $font-condensed;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $gold;
+  background: rgba($gold, 0.08);
+  border: 1px solid rgba($gold, 0.2);
+  border-radius: $radius-full;
+  padding: 2px $spacing-sm;
+}
+
+.espLista {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.espCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-md;
+  transition: border-color $transition-fast;
+
+  &:hover { border-color: rgba($gold, 0.3); }
+}
+
+.espInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.espNombre {
+  font-family: $font-condensed;
+  font-size: 1rem;
+  font-weight: 600;
+  color: $white;
+}
+
+.espDesc {
+  font-family: $font-body;
+  font-size: 0.85rem;
+  color: $gray;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  flex-shrink: 0;
+
+    button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    &:hover {
+      background: rgba(47, 47, 47, 0.375);
+    }
+  }
+
+  svg {
+    width: 20px;      // más pequeño, más manejable
+    //height: 18px;
+    flex-shrink: 0;
+    fill: rgba($gold, 0.8);
+    display: block;   // evita baseline gap
+  }
+}
+
+// ─── Modal ────────────────────────────────────────────────
+//.modalForm { }
+
+.fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+
+  @include mobile { grid-template-columns: 1fr; }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  &.fullWidth { grid-column: 1 / -1; }
+
+  label {
+    font-family: $font-condensed;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $gray;
+  }
+
+  input, select, textarea {
+    background: $dark2;
+    border: 1px solid rgba($white, 0.08);
+    border-radius: $radius-md;
+    padding: $spacing-sm $spacing-md;
+    color: $white;
+    font-size: 0.9rem;
+    font-family: $font-body;
+    outline: none;
+    transition: border-color $transition-fast;
+    resize: vertical;
+
+    &::placeholder { color: rgba($gray, 0.4); }
+    &:focus { border-color: rgba($gold, 0.4); }
+  }
+
+  select option { background: $dark2; color: $white; }
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-md;
+  padding-top: $spacing-lg;
+  border-top: 1px solid rgba($white, 0.06);
+}
+
+.confirmBody {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+
+  p {
+    font-family: $font-body;
+    font-size: 0.95rem;
+    color: $gray-light;
+    strong { color: $white; }
+  }
+}
+
+.confirmWarning {
+  font-size: 0.85rem !important;
+  color: $error !important;
+}
+
+

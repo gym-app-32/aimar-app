@@ -7,6 +7,8 @@ const MOCK_PERFIL = {
   email: 'alumno@aimar.com',
   telefono: '221 4567890',
   fechaNacimiento: '1995-06-15',
+  dni: '35123456',
+  sexo: 'M',
   foto: null,
 }
 
@@ -157,7 +159,34 @@ export default function PerfilPage() {
                 disabled={!editando}
               />
             </div>
+            <div className={styles.field}>
+            <label>DNI</label>
+            <input
+              type="text"
+              name="dni"
+              value={form.dni}
+              onChange={handleChange}
+              disabled={!editando}
+              placeholder="Ej: 35123456"
+            />
           </div>
+
+          <div className={styles.field}>
+            <label>Sexo</label>
+            <select
+              name="sexo"
+              value={form.sexo}
+              onChange={handleChange}
+              disabled={!editando}
+            >
+              <option value="">Seleccioná</option>
+              <option value="M">Masculino</option>
+              <option value="F">Femenino</option>
+              <option value="X">No decide</option>
+            </select>
+          </div>
+          </div>
+          
 
           {editando && (
             <div className={styles.actions}>

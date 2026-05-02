@@ -1,3 +1,30 @@
+
+// ─── Toolbar ──────────────────────────────────────────────
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+  flex-wrap: wrap;
+}
+
+.search {
+  flex: 1;
+  min-width: 200px;
+  background: $dark2;
+  border: 1px solid rgba($white, 0.08);
+  border-radius: $radius-md;
+  padding: $spacing-sm $spacing-md;
+  color: $white;
+  font-family: $font-body;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color $transition-fast;
+
+  &::placeholder { color: rgba($gray, 0.5); }
+  &:focus { border-color: rgba($gold, 0.4); }
+}
+
 // ─── Tabla desktop ────────────────────────────────────────
 .tableCard {
   background: $dark2;
@@ -83,6 +110,20 @@
   font-style: italic;
   text-align: center;
   padding: $spacing-2xl;
+}
+
+// ─── Tabla extras ─────────────────────────────────────────
+.dniCell {
+  font-family: $font-condensed;
+  font-size: 0.9rem;
+  color: $gray-light;
+  white-space: nowrap;
+}
+
+.actividadesTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
 }
 
 // ─── Avatar ───────────────────────────────────────────────
@@ -234,4 +275,264 @@
   font-family: $font-body;
   font-size: 0.95rem;
   color: $white;
+}
+
+// ─── Step indicator ───────────────────────────────────────
+.stepIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: $spacing-lg;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.stepCircle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid rgba($white, 0.15);
+  color: $gray;
+  font-family: $font-condensed;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-base;
+  flex-shrink: 0;
+
+  &.stepActive {
+    border-color: $gold;
+    background: rgba($gold, 0.15);
+    color: $gold;
+  }
+}
+
+.stepLabel {
+  font-family: $font-condensed;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $gray;
+  white-space: nowrap;
+
+  &.stepLabelActive { color: $gold; }
+
+  @include mobile { display: none; }
+}
+
+.stepLine {
+  width: 40px;
+  height: 2px;
+  background: rgba($white, 0.1);
+  margin: 0 $spacing-sm;
+  flex-shrink: 0;
+
+  &.stepLineActive { background: rgba($gold, 0.4); }
+
+  @include mobile { width: 20px; }
+}
+
+// ─── Modal ────────────────────────────────────────────────
+.modalInner {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-md;
+
+  @include mobile { grid-template-columns: 1fr; }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  &.fullWidth { grid-column: 1 / -1; }
+
+  label {
+    font-family: $font-condensed;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $gray;
+  }
+
+  input, select {
+    background: $dark2;
+    border: 1px solid rgba($white, 0.08);
+    border-radius: $radius-md;
+    padding: $spacing-sm $spacing-md;
+    color: $white;
+    font-size: 0.9rem;
+    font-family: $font-body;
+    outline: none;
+    transition: border-color $transition-fast;
+
+    &::placeholder { color: rgba($gray, 0.4); }
+    &:focus { border-color: rgba($gold, 0.4); }
+  }
+
+  select option { background: $dark2; color: $white; }
+
+  input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.5); }
+}
+
+
+// ─── Actividades step ─────────────────────────────────────
+.actividadesStep {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.actividadesHint {
+  font-family: $font-body;
+  font-size: 0.85rem;
+  color: $gray;
+  line-height: 1.5;
+}
+
+.especialidadesList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.especialidadItem {
+  border: 1px solid rgba($white, 0.06);
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  background: rgba($white, 0.02);
+  transition: all $transition-fast;
+
+  &.especialidadSeleccionada {
+    border-color: rgba($gold, 0.3);
+    background: rgba($gold, 0.04);
+  }
+}
+
+.especialidadHeader {
+  display: flex;
+  align-items: center;
+}
+
+.especialidadCheck {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  cursor: pointer;
+  flex: 1;
+
+  input[type="checkbox"] {
+    accent-color: $gold;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+}
+
+.especialidadNombre {
+  font-family: $font-condensed;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $white;
+  flex: 1;
+}
+
+.especialidadAbrev {
+  font-family: $font-condensed;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $gold;
+  background: rgba($gold, 0.08);
+  border: 1px solid rgba($gold, 0.2);
+  border-radius: $radius-full;
+  padding: 2px $spacing-sm;
+}
+
+.profesorSelector {
+  margin-top: $spacing-sm;
+  padding-top: $spacing-sm;
+  border-top: 1px solid rgba($white, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  label {
+    font-family: $font-condensed;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $gray;
+  }
+
+  select {
+    background: $dark2;
+    border: 1px solid rgba($white, 0.08);
+    border-radius: $radius-md;
+    padding: $spacing-xs $spacing-md;
+    color: $white;
+    font-size: 0.88rem;
+    font-family: $font-body;
+    outline: none;
+    transition: border-color $transition-fast;
+
+    &:focus { border-color: rgba($gold, 0.4); }
+    option { background: $dark2; color: $white; }
+  }
+}
+
+// ─── Navegación modal ─────────────────────────────────────
+.modalNav {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: $spacing-md;
+  padding-top: $spacing-lg;
+  border-top: 1px solid rgba($white, 0.06);
+  flex-wrap: wrap;
+}
+
+// ─── Confirm modal ────────────────────────────────────────
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-md;
+  padding-top: $spacing-lg;
+  border-top: 1px solid rgba($white, 0.06);
+}
+
+.confirmBody {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+
+  p {
+    font-family: $font-body;
+    font-size: 0.95rem;
+    color: $gray-light;
+    strong { color: $white; }
+  }
+}
+
+.confirmWarning {
+  font-size: 0.85rem !important;
+  color: $error !important;
 }

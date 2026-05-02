@@ -148,3 +148,25 @@
   color: $success;
   text-align: right;
 }
+
+select {
+  background: $dark3;
+  border: 1px solid rgba($white, 0.08);
+  border-radius: $radius-md;
+  padding: $spacing-sm $spacing-md;
+  color: $white;
+  font-size: 0.95rem;
+  transition: border-color $transition-fast;
+  outline: none;
+
+  &:focus { border-color: rgba($gold, 0.5); }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+    border-color: transparent;
+    background: rgba($white, 0.03);
+  }
+
+  option { background: $dark2; color: $white; }
+}

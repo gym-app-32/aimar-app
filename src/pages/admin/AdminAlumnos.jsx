@@ -3,31 +3,64 @@ import Modal from '../../components/UI/Modal/Modal'
 import TablaAlumnos from '../../components/TablaAlumnos/TablaAlumnos'
 import styles from './AdminAlumnos.module.scss'
 
+// ─── Mock data compartido ─────────────────────────────────
+const MOCK_ESPECIALIDADES = [
+  { id: 1, nombre: 'Musculación',                 abreviatura: 'Musculación' },
+  { id: 2, nombre: 'Entrenamiento Funcional',     abreviatura: 'Funcional' },
+  { id: 3, nombre: 'Boxeo',                       abreviatura: 'Boxeo' },
+  { id: 4, nombre: 'Kickboxing Recreativo',       abreviatura: 'Kickboxing' },
+  { id: 5, nombre: 'Judo',                        abreviatura: 'Judo' },
+  { id: 6, nombre: 'Masajes Deportivos',          abreviatura: 'Masajes' },
+  { id: 7, nombre: 'Entrenamiento Personalizado', abreviatura: 'Personal' },
+]
+
 const MOCK_PROFESORES = [
-  { id: 1, nombre: 'Martín Gómez' },
-  { id: 2, nombre: 'Laura Fernández' },
-  { id: 3, nombre: 'Diego Rojas' },
-  { id: 4, nombre: 'Carla Méndez' },
+  { id: 1, nombre: 'Martín Gómez',    especialidad: 'Musculación' },
+  { id: 2, nombre: 'Laura Fernández', especialidad: 'Funcional' },
+  { id: 3, nombre: 'Diego Rojas',     especialidad: 'Boxeo' },
+  { id: 4, nombre: 'Carla Méndez',    especialidad: 'Kickboxing' },
 ]
 
 const MOCK_ALUMNOS = [
-  { id: 1, nombre: 'Carlos Pérez',   email: 'carlos@gmail.com', telefono: '221 1234567', fechaNacimiento: '1995-06-15', profesor: 'Martín Gómez',    rutina: 'Fuerza + Hipertrofia', activo: true },
-  { id: 2, nombre: 'Sofía López',    email: 'sofia@gmail.com',  telefono: '221 2345678', fechaNacimiento: '1998-03-22', profesor: 'Laura Fernández', rutina: 'Funcional Full Body',  activo: true },
-  { id: 3, nombre: 'Tomás García',   email: 'tomas@gmail.com',  telefono: '221 3456789', fechaNacimiento: '2000-11-08', profesor: 'Martín Gómez',    rutina: 'Sin asignar',          activo: false },
-  { id: 4, nombre: 'Valentina Ruiz', email: 'vale@gmail.com',   telefono: '221 4567890', fechaNacimiento: '1993-07-30', profesor: 'Carla Méndez',    rutina: 'Kickboxing Básico',    activo: true },
-  { id: 5, nombre: 'Nicolás Torres', email: 'nico@gmail.com',   telefono: '221 5678901', fechaNacimiento: '1997-01-14', profesor: 'Laura Fernández', rutina: 'Sin asignar',          activo: true },
+  {
+    id: 1, nombre: 'Carlos Pérez',   email: 'carlos@gmail.com', telefono: '221 1234567',
+    fechaNacimiento: '1995-06-15', dni: '35123456', sexo: 'M',
+    actividades: [
+      { especialidadId: 1, profesorId: 1 },
+      { especialidadId: 4, profesorId: 4 },
+    ],
+    rutina: 'Fuerza + Hipertrofia', activo: true,
+  },
+  {
+    id: 2, nombre: 'Sofía López',    email: 'sofia@gmail.com',  telefono: '221 2345678',
+    fechaNacimiento: '1998-03-22', dni: '38456789', sexo: 'F',
+    actividades: [{ especialidadId: 2, profesorId: 2 }],
+    rutina: 'Funcional Full Body', activo: true,
+  },
+  {
+    id: 3, nombre: 'Tomás García',   email: 'tomas@gmail.com',  telefono: '221 3456789',
+    fechaNacimiento: '2000-11-08', dni: '40789012', sexo: 'M',
+    actividades: [],
+    rutina: 'Sin asignar', activo: false,
+  },
+  {
+    id: 4, nombre: 'Valentina Ruiz', email: 'vale@gmail.com',   telefono: '221 4567890',
+    fechaNacimiento: '1993-07-30', dni: '32345678', sexo: 'F',
+    actividades: [{ especialidadId: 4, profesorId: 4 }],
+    rutina: 'Kickboxing Básico', activo: true,
+  },
+  {
+    id: 5, nombre: 'Nicolás Torres', email: 'nico@gmail.com',   telefono: '221 5678901',
+    fechaNacimiento: '1997-01-14', dni: '37901234', sexo: 'M',
+    actividades: [],
+    rutina: 'Sin asignar', activo: true,
+  },
 ]
 
-const EMPTY_FORM = {
-  nombre: '',
-  email: '',
-  telefono: '',
-  fechaNacimiento: '',
-  profesor: '',
-  password: '',
-}
 
-function StartCard({ num, label }) {
+
+// ─── StatCard ─────────────────────────────────────────────
+function StatCard({ num, label }) {
   return (
     <div className={`card ${styles.statCard}`}>
       <span className={styles.statValue}>{num}</span>
@@ -36,83 +69,9 @@ function StartCard({ num, label }) {
   )
 }
 
+// ─── Página principal ─────────────────────────────────────
 export default function AdminAlumnos() {
-  const [alumnos,       setAlumnos]       = useState(MOCK_ALUMNOS)
-  const [modalOpen,     setModalOpen]     = useState(false)
-  const [editando,      setEditando]      = useState(null)
-  const [form,          setForm]          = useState(EMPTY_FORM)
-  const [confirmDelete, setConfirmDelete] = useState(null)
-  const [guardando,     setGuardando]     = useState(false)
-  const [busqueda,      setBusqueda]      = useState('')
-
-  const alumnosFiltrados = alumnos.filter(a =>
-    a.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-    a.email.toLowerCase().includes(busqueda.toLowerCase()) ||
-    a.profesor.toLowerCase().includes(busqueda.toLowerCase()) ||
-    a.rutina.toLowerCase().includes(busqueda.toLowerCase())
-  )
-
-  const abrirCrear = () => {
-    setEditando(null)
-    setForm(EMPTY_FORM)
-    setModalOpen(true)
-  }
-
-  const abrirEditar = (alumno) => {
-    setEditando(alumno)
-    setForm({
-      nombre:          alumno.nombre,
-      email:           alumno.email,
-      telefono:        alumno.telefono,
-      fechaNacimiento: alumno.fechaNacimiento,
-      profesor:        alumno.profesor,
-      password:        '',
-    })
-    setModalOpen(true)
-  }
-
-  const cerrarModal = () => {
-    setModalOpen(false)
-    setEditando(null)
-    setForm(EMPTY_FORM)
-  }
-
-  const handleChange = (e) => {
-    setForm(p => ({ ...p, [e.target.name]: e.target.value }))
-  }
-
-  const handleGuardar = async (e) => {
-    e.preventDefault()
-    setGuardando(true)
-    await new Promise(r => setTimeout(r, 700))
-
-    if (editando) {
-      setAlumnos(prev =>
-        prev.map(a => a.id === editando.id ? { ...a, ...form } : a)
-      )
-    } else {
-      setAlumnos(prev => [...prev, {
-        id: Date.now(),
-        ...form,
-        rutina: 'Sin asignar',
-        activo: true,
-      }])
-    }
-
-    setGuardando(false)
-    cerrarModal()
-  }
-
-  const toggleActivo = (id) => {
-    setAlumnos(prev =>
-      prev.map(a => a.id === id ? { ...a, activo: !a.activo } : a)
-    )
-  }
-
-  const handleEliminar = (id) => {
-    setAlumnos(prev => prev.filter(a => a.id !== id))
-    setConfirmDelete(null)
-  }
+  const [alumnos, setAlumnos] = useState(MOCK_ALUMNOS)
 
   const totalActivos = alumnos.filter(a => a.activo).length
   const sinRutina    = alumnos.filter(a => a.rutina === 'Sin asignar').length
@@ -126,162 +85,18 @@ export default function AdminAlumnos() {
 
       {/* Stats */}
       <div className={styles.statsRow}>
-        <StartCard num={alumnos.length} label="Total alumnos" />
-        <StartCard num={totalActivos}   label="Activos" />
-        <StartCard num={sinRutina}      label="Sin rutina" />
-      </div>
-
-      {/* Toolbar */}
-      <div className={styles.toolbar}>
-        <input
-          type="text"
-          className={styles.search}
-          placeholder="Buscar por nombre, email, profesor o rutina..."
-          value={busqueda}
-          onChange={e => setBusqueda(e.target.value)}
-        />
-        <button className="btn btn--primary" onClick={abrirCrear}>
-          + Nuevo alumno
-        </button>
+        <StatCard num={alumnos.length} label="Total alumnos" />
+        <StatCard num={totalActivos}   label="Activos" />
+        <StatCard num={sinRutina}      label="Sin rutina" />
       </div>
 
       {/* Tabla */}
       <TablaAlumnos
-        alumnos={alumnosFiltrados}
-        onEditar={abrirEditar}
-        onToggleActivo={toggleActivo}
-        onEliminar={setConfirmDelete}
-        columnas={[
-          {
-            key: 'profesor',
-            label: 'Profesor',
-            render: (a) => (
-              <span className="badge badge--gold">{a.profesor || '—'}</span>
-            ),
-          },
-          {
-            key: 'rutina',
-            label: 'Rutina',
-            render: (a) => (
-              <span className={`badge ${a.rutina === 'Sin asignar' ? 'badge--gray' : 'badge--success'}`}>
-                {a.rutina}
-              </span>
-            ),
-          },
-        ]}
+        alumnos={alumnos}
+        setAlumnos={setAlumnos}
+        listProfesores={MOCK_PROFESORES}
+        listActividades={MOCK_ESPECIALIDADES}
       />
-
-      {/* Modal crear/editar */}
-      <Modal
-        isOpen={modalOpen}
-        onClose={cerrarModal}
-        title={editando ? 'EDITAR ALUMNO' : 'NUEVO ALUMNO'}
-      >
-        <form onSubmit={handleGuardar} className={styles.modalForm}>
-          <div className={styles.fields}>
-            <div className={styles.field}>
-              <label>Nombre completo</label>
-              <input
-                type="text"
-                name="nombre"
-                value={form.nombre}
-                onChange={handleChange}
-                placeholder="Nombre y apellido"
-                required
-              />
-            </div>
-
-            <div className={styles.field}>
-              <label>Email</label>
-              <input
-                type="email"
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                placeholder="correo@ejemplo.com"
-                required
-              />
-            </div>
-
-            <div className={styles.field}>
-              <label>Teléfono</label>
-              <input
-                type="tel"
-                name="telefono"
-                value={form.telefono}
-                onChange={handleChange}
-                placeholder="221 0000000"
-              />
-            </div>
-
-            <div className={styles.field}>
-              <label>Fecha de nacimiento</label>
-              <input
-                type="date"
-                name="fechaNacimiento"
-                value={form.fechaNacimiento}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className={`${styles.field} ${styles.fullWidth}`}>
-              <label>Profesor asignado</label>
-              <select
-                name="profesor"
-                value={form.profesor}
-                onChange={handleChange}
-              >
-                <option value="">Sin asignar</option>
-                {MOCK_PROFESORES.map(p => (
-                  <option key={p.id} value={p.nombre}>{p.nombre}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className={`${styles.field} ${styles.fullWidth}`}>
-              <label>{editando ? 'Nueva contraseña (dejá vacío para no cambiar)' : 'Contraseña'}</label>
-              <input
-                type="password"
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-                placeholder="••••••••"
-                required={!editando}
-              />
-            </div>
-          </div>
-
-          <div className={styles.modalFooter}>
-            <button type="button" className="btn btn--ghost" onClick={cerrarModal}>
-              Cancelar
-            </button>
-            <button type="submit" className="btn btn--primary" disabled={guardando}>
-              {guardando ? 'Guardando...' : editando ? 'Guardar cambios' : 'Crear alumno'}
-            </button>
-          </div>
-        </form>
-      </Modal>
-
-      {/* Modal confirmar eliminación */}
-      <Modal
-        isOpen={!!confirmDelete}
-        onClose={() => setConfirmDelete(null)}
-        title="ELIMINAR ALUMNO"
-        maxWidth="420px"
-      >
-        <div className={styles.confirmBody}>
-          <p>¿Estás seguro que querés eliminar a <strong>{confirmDelete?.nombre}</strong>?</p>
-          <p className={styles.confirmWarning}>Esta acción no se puede deshacer.</p>
-        </div>
-        <div className={styles.modalFooter}>
-          <button className="btn btn--ghost" onClick={() => setConfirmDelete(null)}>
-            Cancelar
-          </button>
-          <button className="btn btn--danger" onClick={() => handleEliminar(confirmDelete.id)}>
-            Sí, eliminar
-          </button>
-        </div>
-      </Modal>
     </div>
   )
 }

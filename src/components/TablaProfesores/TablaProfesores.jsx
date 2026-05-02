@@ -20,6 +20,8 @@ function Avatar({ nombre, size = 'md' }) {
 
 function InfoModal({ profesor }) {
   if (!profesor) return null
+  const sexoLabel = { M: 'Masculino', F: 'Femenino', X: 'No binario' }
+
   return (
     <div className={styles.infoModal}>
       <div className={styles.infoModalHeader}>
@@ -41,6 +43,14 @@ function InfoModal({ profesor }) {
           <span className={styles.infoModalLabel}>Teléfono</span>
           <span className={styles.infoModalValue}>{profesor.telefono || '—'}</span>
         </div>
+        <div className={styles.infoModalItem}>
+          <span className={styles.infoModalLabel}>DNI</span>
+          <span className={styles.infoModalValue}>{profesor.dni || '—'}</span>
+        </div>
+        <div className={styles.infoModalItem}>
+          <span className={styles.infoModalLabel}>Sexo</span>
+          <span className={styles.infoModalValue}>{sexoLabel[profesor.sexo] || '—'}</span>
+        </div>
         {profesor.fechaNacimiento && (
           <div className={styles.infoModalItem}>
             <span className={styles.infoModalLabel}>Fecha de nacimiento</span>
@@ -58,13 +68,153 @@ function InfoModal({ profesor }) {
   )
 }
 
-export default function TablaProfesores({
-  profesores = [],
-  onEditar,
-  onToggleActivo,
-  onEliminar,
-}) {
+function ModalCrearEditar({ handleGuardar, form, handleChange, especialidades, editando, guardando, cerrarModal }) {
+
+  return (
+    <>
+      <form onSubmit={handleGuardar} className={styles.modalForm}>
+        <div className={styles.fields}>
+          <div className={styles.field}>
+            <label>Nombre completo</label>
+            <input type="text" name="nombre" value={form.nombre} onChange={handleChange} placeholder="Nombre y apellido" required />
+          </div>
+          <div className={styles.field}>
+            <label>Email</label>
+            <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="correo@ejemplo.com" required />
+          </div>
+          <div className={styles.field}>
+            <label>Teléfono</label>
+            <input type="tel" name="telefono" value={form.telefono} onChange={handleChange} placeholder="221 0000000" />
+          </div>
+          <div className={styles.field}>
+            <label>DNI</label>
+            <input
+              type="text"
+              name="dni"
+              value={form.dni}
+              onChange={handleChange}
+              placeholder="Ej: 35123456"
+            />
+          </div>
+          <div className={styles.field}>
+            <label>Sexo</label>
+            <select name="sexo" value={form.sexo} onChange={handleChange}>
+              <option value="">Seleccioná</option>
+              <option value="M">Masculino</option>
+              <option value="F">Femenino</option>
+              <option value="X">No binario</option>
+            </select>
+          </div>
+          <div className={styles.field}>
+            <label>Especialidad</label>
+            <select name="especialidad" value={form.especialidad} onChange={handleChange} required>
+              <option value="">Seleccioná una especialidad</option>
+              {especialidades.map(e => (
+                <option key={e.id} value={e.nombre}>{e.nombre}</option>
+              ))}
+            </select>
+          </div>
+          <div className={`${styles.field} ${styles.fullWidth}`}>
+            <label>{editando ? 'Nueva contraseña (dejá vacío para no cambiar)' : 'Contraseña'}</label>
+            <input type="password" name="password" value={form.password} onChange={handleChange} placeholder="••••••••" required={!editando} />
+          </div>
+        </div>
+        <div className={styles.modalFooter}>
+          <button type="button" className="btn btn--ghost" onClick={cerrarModal}>Cancelar</button>
+          <button type="submit" className="btn btn--primary" disabled={guardando}>
+            {guardando ? 'Guardando...' : editando ? 'Guardar cambios' : 'Crear profesor'}
+          </button>
+        </div>
+      </form>
+
+    </>
+  )
+}
+
+function ModalEliminacion({ setConfirmDelete, handleEliminar, confirmDelete }) {
+  return (
+    <>
+      <div className={styles.confirmBody}>
+        <p>¿Estás seguro que querés eliminar a <strong>{confirmDelete?.nombre}</strong>?</p>
+        <p className={styles.confirmWarning}>Esta acción no se puede deshacer.</p>
+      </div>
+      <div className={styles.modalFooter}>
+        <button className="btn btn--ghost" onClick={() => setConfirmDelete(null)}>Cancelar</button>
+        <button className="btn btn--danger" onClick={() => handleEliminar(confirmDelete.id)}>Sí, eliminar</button>
+      </div>
+    </>
+  )
+}
+
+
+const EMPTY_FORM_PROF = { nombre: '', email: '', telefono: '', especialidad: '', dni: '', sexo: '', password: '' }
+
+export default function TablaProfesores({ profesores, setProfesores, especialidades }) {
   const [infoModal, setInfoModal] = useState(null)
+
+  // Eliminá el useState de profesores — ahora viene por props
+  const [modalOpen, setModalOpen] = useState(false)
+  const [editando, setEditando] = useState(null)
+  const [form, setForm] = useState(EMPTY_FORM_PROF)
+  const [confirmDelete, setConfirmDelete] = useState(null)
+  const [guardando, setGuardando] = useState(false)
+  const [busqueda, setBusqueda] = useState('')
+
+  const filtrados = profesores.filter(p =>
+    p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+    p.email.toLowerCase().includes(busqueda.toLowerCase()) ||
+    p.especialidad.toLowerCase().includes(busqueda.toLowerCase())
+  )
+
+  const abrirCrear = () => {
+    setEditando(null)
+    setForm(EMPTY_FORM_PROF)
+    setModalOpen(true)
+  }
+
+  const abrirEditar = (prof) => {
+    setEditando(prof)
+    setForm({
+      nombre: prof.nombre,
+      email: prof.email,
+      telefono: prof.telefono,
+      especialidad: prof.especialidad,
+      dni: prof.dni || '',
+      sexo: prof.sexo || '',
+      password: '',
+    })
+    setModalOpen(true)
+  }
+
+  const cerrarModal = () => {
+    setModalOpen(false)
+    setEditando(null)
+    setForm(EMPTY_FORM_PROF)
+  }
+
+  const handleChange = (e) => setForm(p => ({ ...p, [e.target.name]: e.target.value }))
+
+  const handleGuardar = async (e) => {
+    e.preventDefault()
+    setGuardando(true)
+    await new Promise(r => setTimeout(r, 700))
+    if (editando) {
+      setProfesores(prev => prev.map(p => p.id === editando.id ? { ...p, ...form } : p))
+    } else {
+      setProfesores(prev => [...prev, { id: Date.now(), ...form, activo: true }])
+    }
+    setGuardando(false)
+    cerrarModal()
+  }
+
+  const toggleActivo = (id) => {
+    setProfesores(prev => prev.map(p => p.id === id ? { ...p, activo: !p.activo } : p))
+  }
+
+  const handleEliminar = (id) => {
+    setProfesores(prev => prev.filter(p => p.id !== id))
+    setConfirmDelete(null)
+  }
 
   if (profesores.length === 0) {
     return <p className={styles.empty}>No se encontraron profesores.</p>
@@ -72,6 +222,18 @@ export default function TablaProfesores({
 
   return (
     <>
+      <div className={styles.toolbar}>
+        <input
+          type="text"
+          className={styles.search}
+          placeholder="Buscar por nombre, email o especialidad..."
+          value={busqueda}
+          onChange={e => setBusqueda(e.target.value)}
+        />
+        <button className="btn btn--primary" onClick={abrirCrear}>
+          + Nuevo profesor
+        </button>
+      </div>
       {/* ── Tabla desktop ── */}
       <div className={styles.tableCard}>
         <div className={styles.tableWrapper}>
@@ -87,7 +249,7 @@ export default function TablaProfesores({
               </tr>
             </thead>
             <tbody>
-              {profesores.map(profesor => (
+              {filtrados.map(profesor => (
                 <tr key={profesor.id} className={!profesor.activo ? styles.inactiveRow : ''}>
                   <td className={styles.nameCell}>
                     <Avatar nombre={profesor.nombre} />
@@ -114,20 +276,20 @@ export default function TablaProfesores({
                   <td>
                     <div className={styles.actions}>
                       <button
-                        onClick={() => onEditar(profesor)}
+                        onClick={() => abrirEditar(profesor)}
                         title="Editar"
                       >
                         <IconEdit />
                       </button>
                       <button
-                        onClick={() => onToggleActivo(profesor.id)}
+                        onClick={() => toggleActivo(profesor.id)}
                         title={profesor.activo ? 'Bloquear' : 'Desbloquear'}
                       >
                         {profesor.activo ? <IconUnlocked2 /> : <IconLocked />}
                       </button>
-                      {onEliminar && (
+                      {setConfirmDelete && (
                         <button
-                          onClick={() => onEliminar(profesor)}
+                          onClick={() => setConfirmDelete(profesor)}
                           title="Eliminar"
                         >
                           <IconDelete />
@@ -167,20 +329,20 @@ export default function TablaProfesores({
                 👁
               </button>
               <button
-                onClick={() => onEditar(profesor)}
+                onClick={() => abrirEditar(profesor)}
                 title="Editar"
               >
                 <IconEdit />
               </button>
               <button
-                onClick={() => onToggleActivo(profesor.id)}
+                onClick={() => toggleActivo(profesor.id)}
                 title={profesor.activo ? 'Bloquear' : 'Desbloquear'}
               >
                 {profesor.activo ? <IconUnlocked2 /> : <IconLocked />}
               </button>
-              {onEliminar && (
+              {setConfirmDelete && (
                 <button
-                  onClick={() => onEliminar(profesor)}
+                  onClick={() => setConfirmDelete(profesor)}
                   title="Eliminar"
                 >
                   <IconDelete />
@@ -200,6 +362,26 @@ export default function TablaProfesores({
       >
         <InfoModal profesor={infoModal} />
       </Modal>
+
+      {/* Modal crear/editar */}
+      <Modal
+        isOpen={modalOpen}
+        onClose={cerrarModal}
+        title={editando ? 'EDITAR PROFESOR' : 'NUEVO PROFESOR'}
+      >
+        <ModalCrearEditar handleGuardar={handleGuardar} form={form} handleChange={handleChange} especialidades={especialidades} editando={editando} guardando={guardando} cerrarModal={cerrarModal} />
+      </Modal>
+
+      {/* Modal confirmar eliminación */}
+      <Modal
+        isOpen={!!confirmDelete}
+        onClose={() => setConfirmDelete(null)}
+        title="ELIMINAR PROFESOR"
+        maxWidth="420px"
+      >
+        <ModalEliminacion setConfirmDelete={setConfirmDelete} handleEliminar={handleEliminar} confirmDelete={confirmDelete} />
+      </Modal>
+
     </>
   )
 }
