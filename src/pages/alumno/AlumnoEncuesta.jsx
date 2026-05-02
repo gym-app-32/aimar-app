@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import styles from './AlumnoEncuesta.module.scss'
 import BodyMap from '../../components/UI/BodyMap/BodyMap'
+import BodyMapWrapper from '../../components/UI/BodyMap/BodyMapWrapper'
 
 // ─── Mock entrenamientos de hoy sin encuesta completada ───
 const hoy = new Date().toISOString().split('T')[0]
@@ -154,7 +155,8 @@ function FormularioEncuesta({ entrenamiento, onEnviado, onCancelar }) {
             <p className={styles.preguntaDesc}>¿Qué músculos sentís más cargados o doloridos?</p>
           </div>
         </div>
-        <BodyMap
+        <BodyMapWrapper
+          genero="male"
           seleccionados={form.musculos}
           onChange={(musculos) => setForm(p => ({ ...p, musculos }))}
         />
