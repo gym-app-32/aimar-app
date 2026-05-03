@@ -103,6 +103,12 @@
   gap: $spacing-lg;
   background: rgba($success, 0.05);
   border-color: rgba($success, 0.2);
+  margin-bottom: 30px;
+
+  
+   @media (max-width: 400px) { 
+    flex-wrap: wrap;
+   }
 
   h3 {
     font-family: $font-condensed;
@@ -117,6 +123,8 @@
     font-size: 0.85rem;
     color: $gray;
     line-height: 1.5;
+    width: 100%;
+    min-width: 200px;
   }
 }
 
@@ -213,11 +221,13 @@
 .scale {
   display: flex;
   gap: 6px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .scaleBtn {
-  width: 40px;
+  width: 8% !important;
+  max-width: 40px;
+  overflow: hidden;
   height: 40px;
   border-radius: $radius-md;
   border: 1px solid rgba($white, 0.1);
@@ -310,6 +320,7 @@
 
 .formFooter {
   display: flex;
+  flex-flow: row wrap;
   justify-content: flex-end;
   gap: $spacing-md;
   padding-bottom: $spacing-xl;

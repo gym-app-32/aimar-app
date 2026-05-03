@@ -13,8 +13,8 @@ const MOCK_ENTRENAMIENTOS = [
     duracion: 55,
     ejercicios: [
       { nombre: 'Sentadilla con barra', series: [{ reps: [8, 8, 7, 6] }] },
-      { nombre: 'Prensa de piernas',    series: [{ reps: [12, 12, 10] }] },
-      { nombre: 'Curl femoral',         series: [{ reps: [12, 12, 12] }] },
+      { nombre: 'Prensa de piernas', series: [{ reps: [12, 12, 10] }] },
+      { nombre: 'Curl femoral', series: [{ reps: [12, 12, 12] }] },
     ],
     fatiga: { cansancio: 7, dolorMuscular: 6, sueno: 4 },
   },
@@ -38,9 +38,9 @@ const MOCK_ENTRENAMIENTOS = [
     rutina: 'Fuerza + Hipertrofia',
     duracion: 50,
     ejercicios: [
-      { nombre: 'Press de banca',      series: [{ reps: [8, 8, 7] }] },
-      { nombre: 'Press militar',       series: [{ reps: [10, 10, 8] }] },
-      { nombre: 'Extensión tríceps',   series: [{ reps: [12, 12, 12] }] },
+      { nombre: 'Press de banca', series: [{ reps: [8, 8, 7] }] },
+      { nombre: 'Press militar', series: [{ reps: [10, 10, 8] }] },
+      { nombre: 'Extensión tríceps', series: [{ reps: [12, 12, 12] }] },
     ],
     fatiga: { cansancio: 5, dolorMuscular: 4, sueno: 7 },
   },
@@ -53,8 +53,8 @@ const MOCK_ENTRENAMIENTOS = [
     rutina: 'Fuerza + Hipertrofia',
     duracion: 52,
     ejercicios: [
-      { nombre: 'Remo con barra',   series: [{ reps: [8, 8, 8] }] },
-      { nombre: 'Curl de bíceps',   series: [{ reps: [12, 12, 10] }] },
+      { nombre: 'Remo con barra', series: [{ reps: [8, 8, 8] }] },
+      { nombre: 'Curl de bíceps', series: [{ reps: [12, 12, 10] }] },
     ],
     fatiga: { cansancio: 4, dolorMuscular: 3, sueno: 8 },
   },
@@ -79,7 +79,7 @@ const MOCK_ENTRENAMIENTOS = [
     duracion: 58,
     ejercicios: [
       { nombre: 'Sentadilla con barra', series: [{ reps: [8, 8, 8, 7] }] },
-      { nombre: 'Prensa de piernas',    series: [{ reps: [12, 12, 12] }] },
+      { nombre: 'Prensa de piernas', series: [{ reps: [12, 12, 12] }] },
     ],
     fatiga: { cansancio: 6, dolorMuscular: 7, sueno: 5 },
   },
@@ -92,8 +92,8 @@ const MOCK_ENTRENAMIENTOS = [
     rutina: 'Fuerza + Hipertrofia',
     duracion: 48,
     ejercicios: [
-      { nombre: 'Press de banca',  series: [{ reps: [8, 7, 7] }] },
-      { nombre: 'Press militar',   series: [{ reps: [10, 9, 8] }] },
+      { nombre: 'Press de banca', series: [{ reps: [8, 7, 7] }] },
+      { nombre: 'Press militar', series: [{ reps: [10, 9, 8] }] },
     ],
     fatiga: { cansancio: 5, dolorMuscular: 3, sueno: 7 },
   },
@@ -101,7 +101,7 @@ const MOCK_ENTRENAMIENTOS = [
 
 // ─── Helpers ──────────────────────────────────────────────
 const DIAS_SEMANA = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
-const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+const MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
 
 function getFechasConEntrenamiento() {
   return new Set(MOCK_ENTRENAMIENTOS.map(e => e.fecha))
@@ -273,9 +273,9 @@ function DetalleDia({ fecha, entrenamientos }) {
                 <div className={styles.fatigaSection}>
                   <span className={styles.detalleSeccion}>Encuesta de fatiga</span>
                   <div className={styles.fatigaGrid}>
-                    <FatigaBadge valor={ent.fatiga.cansancio}    label="Cansancio" />
+                    <FatigaBadge valor={ent.fatiga.cansancio} label="Cansancio" />
                     <FatigaBadge valor={ent.fatiga.dolorMuscular} label="Dolor muscular" />
-                    <FatigaBadge valor={ent.fatiga.sueno}         label="Calidad de sueño" />
+                    <FatigaBadge valor={ent.fatiga.sueno} label="Calidad de sueño" />
                   </div>
                 </div>
               )}
@@ -283,6 +283,16 @@ function DetalleDia({ fecha, entrenamientos }) {
           )}
         </div>
       ))}
+    </div>
+  )
+}
+
+// ─── StarsCards ──────────────────────
+const StartCard = ({ num = '', label = '' }) => {
+  return (
+    <div className={`card ${styles.statCard}`}>
+      <span className={styles.statValue}>{num}</span>
+      <span className={styles.statLabel}>{label}</span>
     </div>
   )
 }
@@ -316,20 +326,11 @@ export default function AlumnoHistorial() {
         <p>Revisá tus entrenamientos pasados.</p>
       </div>
 
-      {/* Stats */}
+      {/* Stars */}
       <div className={styles.statsRow}>
-        <div className={`card ${styles.statCard}`}>
-          <span className={styles.statValue}>{totalEntrenamientos}</span>
-          <span className={styles.statLabel}>Entrenamientos</span>
-        </div>
-        <div className={`card ${styles.statCard}`}>
-          <span className={styles.statValue}>{diasUnicos}</span>
-          <span className={styles.statLabel}>Días activos</span>
-        </div>
-        <div className={`card ${styles.statCard}`}>
-          <span className={styles.statValue}>{Math.round(totalMinutos / 60)}h</span>
-          <span className={styles.statLabel}>Total entrenado</span>
-        </div>
+        <StartCard num={totalEntrenamientos} label="Entrenamientos" />
+        <StartCard num={diasUnicos} label="Días activos" />
+        <StartCard num={`${Math.round(totalMinutos / 60)}h`} label="Total entrenado" />
       </div>
 
       {/* Layout principal */}

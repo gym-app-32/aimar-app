@@ -233,6 +233,16 @@ export default function AlumnoEncuesta() {
         <h1>ENCUESTA DE <span>FATIGA</span></h1>
         <p>Completá una encuesta por cada entrenamiento de hoy.</p>
       </div>
+      {/* Todo completado */}
+      {pendientes.length === 0 && completadas.length > 0 && (
+        <div className={`card ${styles.successCard}`}>
+          <span className={styles.successIcon}>✓</span>
+          <div>
+            <h3>¡Todo al día!</h3>
+            <p>Completaste todas las encuestas de hoy. Tu profe ya puede ver tus resultados.</p>
+          </div>
+        </div>
+      )}
 
       {/* Sin entrenamientos hoy */}
       {entrenamientos.length === 0 && (
@@ -293,17 +303,6 @@ export default function AlumnoEncuesta() {
                 <span className={styles.checkIcon}>✓ Enviada</span>
               </div>
             ))}
-          </div>
-        </div>
-      )}
-
-      {/* Todo completado */}
-      {pendientes.length === 0 && completadas.length > 0 && (
-        <div className={`card ${styles.successCard}`}>
-          <span className={styles.successIcon}>✓</span>
-          <div>
-            <h3>¡Todo al día!</h3>
-            <p>Completaste todas las encuestas de hoy. Tu profe ya puede ver tus resultados.</p>
           </div>
         </div>
       )}

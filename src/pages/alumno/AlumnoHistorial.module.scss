@@ -2,12 +2,26 @@
 
 // ─── Stats ────────────────────────────────────────────────
 .statsRow {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
   gap: $spacing-md;
-  margin-bottom: $spacing-xl;
+  margin-bottom: $spacing-lg;
 
-  @include mobile { grid-template-columns: 1fr; }
+  @media (max-width: 350px) {
+    flex-direction: column;
+
+    .statCard {
+      width: 100%;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .statValue {width: 30%;}
+
+    .statLabel {width: 50%;}
+
+  }
 }
 
 .statCard {
@@ -17,6 +31,7 @@
   text-align: center;
   gap: $spacing-xs;
   padding: $spacing-lg $spacing-md;
+  width: 100%;
 }
 
 .statValue {
@@ -24,6 +39,8 @@
   font-size: 2.2rem;
   color: $gold;
   line-height: 1;
+
+  &.warning { color: $warning; }
 }
 
 .statLabel {
@@ -34,15 +51,19 @@
   color: $gray;
 }
 
+
 // ─── Layout ───────────────────────────────────────────────
 .layout {
-  display: grid;
-  grid-template-columns: 320px 1fr;
+  display: flex;
+  flex-direction: row;
   gap: $spacing-lg;
   align-items: start;
+  justify-content: start;
+  
 
   @include tablet {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items:center;
   }
 }
 
@@ -54,6 +75,8 @@
   gap: $spacing-md;
   position: sticky;
   top: 80px;
+  max-width: 350px;
+  width: 100%;
 }
 
 .calHeader {
@@ -179,6 +202,8 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-md;
+  width: 100%;
+
 }
 
 .detalleFecha {
