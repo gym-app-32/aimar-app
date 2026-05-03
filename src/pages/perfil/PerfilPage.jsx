@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import styles from './PerfilPage.module.scss'
+import Loader from '../../components/Loader/Loader'
 
 const MOCK_PERFIL = {
   nombre: 'Carlos Pérez',
@@ -20,6 +21,20 @@ export default function PerfilPage() {
   const [guardando, setGuardando] = useState(false)
   const [guardado, setGuardado] = useState(false)
   const fileRef = useRef()
+
+    const [loading, setLoading] = useState(true)
+  
+    useEffect(() => {
+      // Definimos el temporizador (ejemplo: 1 segundos)
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+  
+      // Limpieza: si el componente se desmonta antes de los 3s, 
+      // cancelamos el timer para evitar errores.
+      return () => clearTimeout(timer);
+    }, []);
+  
 
   const handleChange = (e) => {
     setForm(p => ({ ...p, [e.target.name]: e.target.value }))
@@ -60,7 +75,10 @@ export default function PerfilPage() {
     .toUpperCase()
 
   return (
-    <div className={styles.page}>
+    <>
+          {loading
+            ? <Loader />
+            : <div className={styles.page}>
       <div className="page-header">
         <h1>MI <span>PERFIL</span></h1>
         <p>Tus datos personales.</p>
@@ -214,5 +232,7 @@ export default function PerfilPage() {
 
       </div>
     </div>
+    }
+    </>
   )
 }
