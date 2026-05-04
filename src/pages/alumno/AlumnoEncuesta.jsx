@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './AlumnoEncuesta.module.scss'
 import BodyMap from '../../components/UI/BodyMap/BodyMap'
 import BodyMapWrapper from '../../components/UI/BodyMap/BodyMapWrapper'
+import Loader from '../../components/Loader/Loader'
 
 // ─── Mock entrenamientos de hoy sin encuesta completada ───
 const hoy = new Date().toISOString().split('T')[0]
@@ -195,6 +196,20 @@ function FormularioEncuesta({ entrenamiento, onEnviado, onCancelar }) {
 
 // ─── Página principal ─────────────────────────────────────
 export default function AlumnoEncuesta() {
+  const [loading, setLoading] = useState(true)
+  
+    useEffect(() => {
+      // Definimos el temporizador (ejemplo: 1 segundos)
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+  
+      // Limpieza: si el componente se desmonta antes de los 3s, 
+      // cancelamos el timer para evitar errores.
+      return () => clearTimeout(timer);
+    }, []);
+
+
   const [entrenamientos, setEntrenamientos] = useState(MOCK_ENTRENAMIENTOS_HOY)
   const [entrenamientoActivo, setEntrenamientoActivo] = useState(null)
   const [completados, setCompletados] = useState([])
@@ -228,84 +243,89 @@ export default function AlumnoEncuesta() {
   }
 
   return (
-    <div className={styles.page}>
-      <div className="page-header">
-        <h1>ENCUESTA DE <span>FATIGA</span></h1>
-        <p>Completá una encuesta por cada entrenamiento de hoy.</p>
-      </div>
-      {/* Todo completado */}
-      {pendientes.length === 0 && completadas.length > 0 && (
-        <div className={`card ${styles.successCard}`}>
-          <span className={styles.successIcon}>✓</span>
-          <div>
-            <h3>¡Todo al día!</h3>
-            <p>Completaste todas las encuestas de hoy. Tu profe ya puede ver tus resultados.</p>
+    <>
+      {loading
+        ? <Loader />
+        : <div className={styles.page}>
+          <div className="page-header">
+            <h1>ENCUESTA DE <span>FATIGA</span></h1>
+            <p>Completá una encuesta por cada entrenamiento de hoy.</p>
           </div>
-        </div>
-      )}
-
-      {/* Sin entrenamientos hoy */}
-      {entrenamientos.length === 0 && (
-        <div className={styles.vacio}>
-          <span className={styles.vacioIcon}>📅</span>
-          <p>No registraste entrenamientos hoy.</p>
-        </div>
-      )}
-
-      {/* Pendientes */}
-      {pendientes.length > 0 && (
-        <div className={styles.seccion}>
-          <h2 className={styles.seccionTitulo}>
-            Pendientes <span className="badge badge--warning">{pendientes.length}</span>
-          </h2>
-          <div className={styles.lista}>
-            {pendientes.map(ent => (
-              <div key={ent.id} className={`card ${styles.entrenamientoCard}`}>
-                <div className={styles.entrenamientoInfo}>
-                  <span className={`badge ${ent.tipo === 'rutina' ? 'badge--gold' : 'badge--success'}`}>
-                    {ent.tipo === 'rutina' ? '💪 Rutina' : '🥊 Clase'}
-                  </span>
-                  <div>
-                    <span className={styles.entrenamientoNombre}>{ent.nombre}</span>
-                    <span className={styles.entrenamientoHora}>🕐 {ent.hora}</span>
-                  </div>
-                </div>
-                <button
-                  className="btn btn--primary btn--sm"
-                  onClick={() => setEntrenamientoActivo(ent)}
-                >
-                  Completar encuesta
-                </button>
+          {/* Todo completado */}
+          {pendientes.length === 0 && completadas.length > 0 && (
+            <div className={`card ${styles.successCard}`}>
+              <span className={styles.successIcon}>✓</span>
+              <div>
+                <h3>¡Todo al día!</h3>
+                <p>Completaste todas las encuestas de hoy. Tu profe ya puede ver tus resultados.</p>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+            </div>
+          )}
 
-      {/* Completadas */}
-      {completadas.length > 0 && (
-        <div className={styles.seccion}>
-          <h2 className={styles.seccionTitulo}>
-            Completadas <span className="badge badge--success">{completadas.length}</span>
-          </h2>
-          <div className={styles.lista}>
-            {completadas.map(ent => (
-              <div key={ent.id} className={`card ${styles.entrenamientoCard} ${styles.completada}`}>
-                <div className={styles.entrenamientoInfo}>
-                  <span className={`badge ${ent.tipo === 'rutina' ? 'badge--gold' : 'badge--success'}`}>
-                    {ent.tipo === 'rutina' ? '💪 Rutina' : '🥊 Clase'}
-                  </span>
-                  <div>
-                    <span className={styles.entrenamientoNombre}>{ent.nombre}</span>
-                    <span className={styles.entrenamientoHora}>🕐 {ent.hora}</span>
+          {/* Sin entrenamientos hoy */}
+          {entrenamientos.length === 0 && (
+            <div className={styles.vacio}>
+              <span className={styles.vacioIcon}>📅</span>
+              <p>No registraste entrenamientos hoy.</p>
+            </div>
+          )}
+
+          {/* Pendientes */}
+          {pendientes.length > 0 && (
+            <div className={styles.seccion}>
+              <h2 className={styles.seccionTitulo}>
+                Pendientes <span className="badge badge--warning">{pendientes.length}</span>
+              </h2>
+              <div className={styles.lista}>
+                {pendientes.map(ent => (
+                  <div key={ent.id} className={`card ${styles.entrenamientoCard}`}>
+                    <div className={styles.entrenamientoInfo}>
+                      <span className={`badge ${ent.tipo === 'rutina' ? 'badge--gold' : 'badge--success'}`}>
+                        {ent.tipo === 'rutina' ? '💪 Rutina' : '🥊 Clase'}
+                      </span>
+                      <div>
+                        <span className={styles.entrenamientoNombre}>{ent.nombre}</span>
+                        <span className={styles.entrenamientoHora}>🕐 {ent.hora}</span>
+                      </div>
+                    </div>
+                    <button
+                      className="btn btn--primary btn--sm"
+                      onClick={() => setEntrenamientoActivo(ent)}
+                    >
+                      Completar encuesta
+                    </button>
                   </div>
-                </div>
-                <span className={styles.checkIcon}>✓ Enviada</span>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          )}
+
+          {/* Completadas */}
+          {completadas.length > 0 && (
+            <div className={styles.seccion}>
+              <h2 className={styles.seccionTitulo}>
+                Completadas <span className="badge badge--success">{completadas.length}</span>
+              </h2>
+              <div className={styles.lista}>
+                {completadas.map(ent => (
+                  <div key={ent.id} className={`card ${styles.entrenamientoCard} ${styles.completada}`}>
+                    <div className={styles.entrenamientoInfo}>
+                      <span className={`badge ${ent.tipo === 'rutina' ? 'badge--gold' : 'badge--success'}`}>
+                        {ent.tipo === 'rutina' ? '💪 Rutina' : '🥊 Clase'}
+                      </span>
+                      <div>
+                        <span className={styles.entrenamientoNombre}>{ent.nombre}</span>
+                        <span className={styles.entrenamientoHora}>🕐 {ent.hora}</span>
+                      </div>
+                    </div>
+                    <span className={styles.checkIcon}>✓ Enviada</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-      )}
-    </div>
+      }
+    </>
   )
 }

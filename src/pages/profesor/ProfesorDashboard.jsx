@@ -1,14 +1,15 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import Modal from '../../components/UI/Modal/Modal'
 import styles from './ProfesorDashboard.module.scss'
+import Loader from '../../components/Loader/Loader'
 
 // ─── Mock data ────────────────────────────────────────────
 const MOCK_ALUMNOS = [
-  { id: 1, nombre: 'Carlos Pérez',   rutina: { id: 1, nombre: 'Fuerza + Hipertrofia', inicio: '2025-01-01', semanas: 8,  dias: [] }, activo: true },
-  { id: 2, nombre: 'Sofía López',    rutina: { id: 2, nombre: 'Funcional Full Body',  inicio: '2025-01-06', semanas: 4,  dias: [] }, activo: true },
-  { id: 3, nombre: 'Tomás García',   rutina: null,                                                                                   activo: false },
-  { id: 4, nombre: 'Valentina Ruiz', rutina: { id: 3, nombre: 'Kickboxing Básico',    inicio: '2025-01-10', semanas: 6,  dias: [] }, activo: true },
-  { id: 5, nombre: 'Nicolás Torres', rutina: null,                                                                                   activo: true },
+  { id: 1, nombre: 'Carlos Pérez', rutina: { id: 1, nombre: 'Fuerza + Hipertrofia', inicio: '2025-01-01', semanas: 8, dias: [] }, activo: true },
+  { id: 2, nombre: 'Sofía López', rutina: { id: 2, nombre: 'Funcional Full Body', inicio: '2025-01-06', semanas: 4, dias: [] }, activo: true },
+  { id: 3, nombre: 'Tomás García', rutina: null, activo: false },
+  { id: 4, nombre: 'Valentina Ruiz', rutina: { id: 3, nombre: 'Kickboxing Básico', inicio: '2025-01-10', semanas: 6, dias: [] }, activo: true },
+  { id: 5, nombre: 'Nicolás Torres', rutina: null, activo: true },
 ]
 
 const MOCK_EJERCICIOS = [
@@ -24,8 +25,8 @@ const MOCK_EJERCICIOS = [
 
 const PLANTILLAS = [
   { id: 1, nombre: 'Fuerza + Hipertrofia', dias: [] },
-  { id: 2, nombre: 'Funcional Full Body',  dias: [] },
-  { id: 3, nombre: 'Kickboxing Básico',    dias: [] },
+  { id: 2, nombre: 'Funcional Full Body', dias: [] },
+  { id: 3, nombre: 'Kickboxing Básico', dias: [] },
 ]
 
 // ─── Helpers ──────────────────────────────────────────────
@@ -301,6 +302,22 @@ function StepIndicator({ pasoActual }) {
 export default function ProfesorDashboard() {
   const [alumnos, setAlumnos] = useState(MOCK_ALUMNOS)
 
+    const [loading, setLoading] = useState(true)
+  
+    useEffect(() => {
+      // Definimos el temporizador (ejemplo: 1 segundos)
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+  
+      // Limpieza: si el componente se desmonta antes de los 3s, 
+      // cancelamos el timer para evitar errores.
+      return () => clearTimeout(timer);
+    }, []);
+
+
+
+
   // Selector con buscador
   const [busqueda, setBusqueda] = useState('')
   const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -332,10 +349,10 @@ export default function ProfesorDashboard() {
     if (editar && alumnoSeleccionado?.rutina) {
       const r = alumnoSeleccionado.rutina
       setRutina({
-        nombre:      r.nombre,
-        inicio:      r.inicio,
-        semanas:     r.semanas,
-        dias:        r.dias.length ? r.dias : [nuevoDia()],
+        nombre: r.nombre,
+        inicio: r.inicio,
+        semanas: r.semanas,
+        dias: r.dias.length ? r.dias : [nuevoDia()],
         plantillaId: '',
       })
     } else {
@@ -380,9 +397,9 @@ export default function ProfesorDashboard() {
     if (plantilla) {
       setRutina(p => ({
         ...p,
-        nombre:      plantilla.nombre,
+        nombre: plantilla.nombre,
         plantillaId,
-        dias:        plantilla.dias.length ? plantilla.dias : [nuevoDia()],
+        dias: plantilla.dias.length ? plantilla.dias : [nuevoDia()],
       }))
     }
   }
@@ -394,275 +411,281 @@ export default function ProfesorDashboard() {
   }
 
   return (
-    <div className={styles.page}>
-      <div className="page-header">
-        <h1>PANEL <span>PROFESOR</span></h1>
-        <p>Buscá un alumno para ver o gestionar su rutina.</p>
-      </div>
+    <>
+      {loading
+        ? <Loader />
+        : <div className={styles.page}>
+          <div className="page-header">
+            <h1>PANEL <span>PROFESOR</span></h1>
+            <p>Buscá un alumno para ver o gestionar su rutina.</p>
+          </div>
 
-      {/* ── Selector con buscador ── */}
-      <div className={styles.selectorSection}>
-        <label className={styles.selectorLabel}>Seleccionar alumno</label>
-        <div className={styles.selectorWrapper}>
-          <input
-            type="text"
-            className={styles.selectorInput}
-            placeholder="Buscar alumno por nombre..."
-            value={busqueda}
-            onChange={e => {
-              setBusqueda(e.target.value)
-              setDropdownOpen(true)
-              if (!e.target.value) setAlumnoSeleccionado(null)
-            }}
-            onFocus={() => setDropdownOpen(true)}
-          />
-          {dropdownOpen && busqueda && (
-            <div className={styles.dropdown}>
-              {alumnosFiltrados.length === 0 ? (
-                <div className={styles.dropdownEmpty}>No se encontraron alumnos</div>
-              ) : (
-                alumnosFiltrados.map(a => (
-                  <div
-                    key={a.id}
-                    className={`${styles.dropdownItem} ${!a.activo ? styles.dropdownInactivo : ''}`}
-                    onClick={() => seleccionarAlumno(a)}
-                  >
-                    <div className={styles.dropdownAvatar}>{a.nombre[0].toUpperCase()}</div>
-                    <div>
-                      <span className={styles.dropdownNombre}>{a.nombre}</span>
-                      <span className={styles.dropdownSub}>
-                        {a.activo ? (a.rutina ? `📋 ${a.rutina.nombre}` : '⚠️ Sin rutina') : '🔒 Inactivo'}
-                      </span>
+          {/* ── Selector con buscador ── */}
+          <div className={styles.selectorSection}>
+            <label className={styles.selectorLabel}>Seleccionar alumno</label>
+            <div className={styles.selectorWrapper}>
+              <input
+                type="text"
+                className={styles.selectorInput}
+                placeholder="Buscar alumno por nombre..."
+                value={busqueda}
+                onChange={e => {
+                  setBusqueda(e.target.value)
+                  setDropdownOpen(true)
+                  if (!e.target.value) setAlumnoSeleccionado(null)
+                }}
+                onFocus={() => setDropdownOpen(true)}
+              />
+              {dropdownOpen && busqueda && (
+                <div className={styles.dropdown}>
+                  {alumnosFiltrados.length === 0 ? (
+                    <div className={styles.dropdownEmpty}>No se encontraron alumnos</div>
+                  ) : (
+                    alumnosFiltrados.map(a => (
+                      <div
+                        key={a.id}
+                        className={`${styles.dropdownItem} ${!a.activo ? styles.dropdownInactivo : ''}`}
+                        onClick={() => seleccionarAlumno(a)}
+                      >
+                        <div className={styles.dropdownAvatar}>{a.nombre[0].toUpperCase()}</div>
+                        <div>
+                          <span className={styles.dropdownNombre}>{a.nombre}</span>
+                          <span className={styles.dropdownSub}>
+                            {a.activo ? (a.rutina ? `📋 ${a.rutina.nombre}` : '⚠️ Sin rutina') : '🔒 Inactivo'}
+                          </span>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ── Card del alumno seleccionado ── */}
+          {alumnoSeleccionado && (
+            <div className={`card ${styles.alumnoCard}`}>
+              <div className={styles.alumnoCardHeader}>
+                <div className={styles.alumnoInfo}>
+                  <div className={styles.alumnoAvatar}>
+                    {alumnoSeleccionado.nombre[0].toUpperCase()}
+                  </div>
+                  <div>
+                    <span className={styles.alumnoNombre}>{alumnoSeleccionado.nombre}</span>
+                    <span className={`badge ${alumnoSeleccionado.activo ? 'badge--success' : 'badge--error'}`}>
+                      {alumnoSeleccionado.activo ? 'Activo' : 'Inactivo'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {alumnoSeleccionado.rutina ? (
+                <div className={styles.rutinaInfo}>
+                  <div className={styles.rutinaInfoGrid}>
+                    <div className={styles.rutinaInfoItem}>
+                      <span className={styles.rutinaInfoLabel}>Rutina actual</span>
+                      <span className={styles.rutinaInfoValue}>{alumnoSeleccionado.rutina.nombre}</span>
+                    </div>
+                    <div className={styles.rutinaInfoItem}>
+                      <span className={styles.rutinaInfoLabel}>Inicio</span>
+                      <span className={styles.rutinaInfoValue}>{formatFecha(alumnoSeleccionado.rutina.inicio)}</span>
+                    </div>
+                    <div className={styles.rutinaInfoItem}>
+                      <span className={styles.rutinaInfoLabel}>Duración</span>
+                      <span className={styles.rutinaInfoValue}>{alumnoSeleccionado.rutina.semanas} semanas</span>
+                    </div>
+                    <div className={styles.rutinaInfoItem}>
+                      <span className={styles.rutinaInfoLabel}>Días</span>
+                      <span className={styles.rutinaInfoValue}>{alumnoSeleccionado.rutina.dias.length || '—'}</span>
                     </div>
                   </div>
-                ))
+                  <div className={styles.rutinaAcciones}>
+                    <button
+                      className="btn btn--outline"
+                      onClick={() => abrirBuilder(true)}
+                      disabled={!alumnoSeleccionado.activo}
+                    >
+                      ✏️ Editar rutina
+                    </button>
+                    <button
+                      className="btn btn--ghost"
+                      onClick={() => setConfirmEliminar(true)}
+                    >
+                      🗑️ Eliminar rutina
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className={styles.sinRutina}>
+                  <span className={styles.sinRutinaMsg}>⚠️ Este alumno no tiene rutina asignada.</span>
+                  <button
+                    className="btn btn--primary"
+                    onClick={() => abrirBuilder(false)}
+                    disabled={!alumnoSeleccionado.activo}
+                  >
+                    + Crear rutina
+                  </button>
+                </div>
               )}
             </div>
           )}
-        </div>
-      </div>
 
-      {/* ── Card del alumno seleccionado ── */}
-      {alumnoSeleccionado && (
-        <div className={`card ${styles.alumnoCard}`}>
-          <div className={styles.alumnoCardHeader}>
-            <div className={styles.alumnoInfo}>
-              <div className={styles.alumnoAvatar}>
-                {alumnoSeleccionado.nombre[0].toUpperCase()}
-              </div>
-              <div>
-                <span className={styles.alumnoNombre}>{alumnoSeleccionado.nombre}</span>
-                <span className={`badge ${alumnoSeleccionado.activo ? 'badge--success' : 'badge--error'}`}>
-                  {alumnoSeleccionado.activo ? 'Activo' : 'Inactivo'}
-                </span>
-              </div>
-            </div>
-          </div>
+          {/* ── BUILDER MODAL ── */}
+          <Modal
+            isOpen={builderOpen}
+            onClose={cerrarBuilder}
+            title={`RUTINA — ${alumnoSeleccionado?.nombre?.toUpperCase() || ''}`}
+            maxWidth="780px"
+          >
+            <div className={styles.builder}>
+              <StepIndicator pasoActual={paso} />
 
-          {alumnoSeleccionado.rutina ? (
-            <div className={styles.rutinaInfo}>
-              <div className={styles.rutinaInfoGrid}>
-                <div className={styles.rutinaInfoItem}>
-                  <span className={styles.rutinaInfoLabel}>Rutina actual</span>
-                  <span className={styles.rutinaInfoValue}>{alumnoSeleccionado.rutina.nombre}</span>
-                </div>
-                <div className={styles.rutinaInfoItem}>
-                  <span className={styles.rutinaInfoLabel}>Inicio</span>
-                  <span className={styles.rutinaInfoValue}>{formatFecha(alumnoSeleccionado.rutina.inicio)}</span>
-                </div>
-                <div className={styles.rutinaInfoItem}>
-                  <span className={styles.rutinaInfoLabel}>Duración</span>
-                  <span className={styles.rutinaInfoValue}>{alumnoSeleccionado.rutina.semanas} semanas</span>
-                </div>
-                <div className={styles.rutinaInfoItem}>
-                  <span className={styles.rutinaInfoLabel}>Días</span>
-                  <span className={styles.rutinaInfoValue}>{alumnoSeleccionado.rutina.dias.length || '—'}</span>
-                </div>
-              </div>
-              <div className={styles.rutinaAcciones}>
-                <button
-                  className="btn btn--outline"
-                  onClick={() => abrirBuilder(true)}
-                  disabled={!alumnoSeleccionado.activo}
-                >
-                  ✏️ Editar rutina
-                </button>
-                <button
-                  className="btn btn--ghost"
-                  onClick={() => setConfirmEliminar(true)}
-                >
-                  🗑️ Eliminar rutina
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className={styles.sinRutina}>
-              <span className={styles.sinRutinaMsg}>⚠️ Este alumno no tiene rutina asignada.</span>
-              <button
-                className="btn btn--primary"
-                onClick={() => abrirBuilder(false)}
-                disabled={!alumnoSeleccionado.activo}
-              >
-                + Crear rutina
-              </button>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* ── BUILDER MODAL ── */}
-      <Modal
-        isOpen={builderOpen}
-        onClose={cerrarBuilder}
-        title={`RUTINA — ${alumnoSeleccionado?.nombre?.toUpperCase() || ''}`}
-        maxWidth="780px"
-      >
-        <div className={styles.builder}>
-          <StepIndicator pasoActual={paso} />
-
-          {/* PASO 0 — Datos generales */}
-          {paso === 0 && (
-            <div className={styles.paso}>
-              <h3 className={styles.pasoTitulo}>Datos generales</h3>
-              <div className={styles.pasoFields}>
-                <div className={styles.field}>
-                  <label>¿Usar plantilla?</label>
-                  <select
-                    value={rutina.plantillaId}
-                    onChange={e => aplicarPlantilla(e.target.value)}
-                  >
-                    <option value="">Crear desde cero</option>
-                    {PLANTILLAS.map(p => (
-                      <option key={p.id} value={p.id}>{p.nombre}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className={styles.field}>
-                  <label>Nombre de la rutina</label>
-                  <input
-                    type="text"
-                    value={rutina.nombre}
-                    onChange={e => setRutina(p => ({ ...p, nombre: e.target.value }))}
-                    placeholder="Ej: Fuerza + Hipertrofia — Fase 1"
-                    required
-                  />
-                </div>
-                <div className={styles.field}>
-                  <label>Fecha de inicio</label>
-                  <input
-                    type="date"
-                    value={rutina.inicio}
-                    onChange={e => setRutina(p => ({ ...p, inicio: e.target.value }))}
-                    required
-                  />
-                </div>
-                <div className={styles.field}>
-                  <label>Duración (semanas)</label>
-                  <input
-                    type="number"
-                    min={1}
-                    max={52}
-                    value={rutina.semanas}
-                    onChange={e => setRutina(p => ({ ...p, semanas: Number(e.target.value) }))}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* PASO 1 — Días */}
-          {paso === 1 && (
-            <div className={styles.paso}>
-              <h3 className={styles.pasoTitulo}>Armá los días de la rutina</h3>
-              <div className={styles.diasList}>
-                {rutina.dias.map((dia, i) => (
-                  <DiaEditor
-                    key={dia.id}
-                    dia={dia}
-                    index={i}
-                    onChange={updated => updateDia(dia.id, updated)}
-                    onRemove={() => removeDia(dia.id)}
-                  />
-                ))}
-              </div>
-              <button type="button" className="btn btn--outline" onClick={() => setRutina(p => ({ ...p, dias: [...p.dias, nuevoDia()] }))}>
-                + Agregar día
-              </button>
-            </div>
-          )}
-
-          {/* PASO 2 — Resumen */}
-          {paso === 2 && (
-            <div className={styles.paso}>
-              <h3 className={styles.pasoTitulo}>Resumen de la rutina</h3>
-              <div className={`card ${styles.resumenCard}`}>
-                <div className={styles.resumenItem}>
-                  <span className={styles.resumenLabel}>Alumno</span>
-                  <span className={styles.resumenValue}>{alumnoSeleccionado?.nombre}</span>
-                </div>
-                <div className={styles.resumenItem}>
-                  <span className={styles.resumenLabel}>Rutina</span>
-                  <span className={styles.resumenValue}>{rutina.nombre}</span>
-                </div>
-                <div className={styles.resumenItem}>
-                  <span className={styles.resumenLabel}>Inicio</span>
-                  <span className={styles.resumenValue}>{formatFecha(rutina.inicio)}</span>
-                </div>
-                <div className={styles.resumenItem}>
-                  <span className={styles.resumenLabel}>Duración</span>
-                  <span className={styles.resumenValue}>{rutina.semanas} semanas</span>
-                </div>
-                <div className={styles.resumenItem}>
-                  <span className={styles.resumenLabel}>Días</span>
-                  <span className={styles.resumenValue}>{rutina.dias.length}</span>
-                </div>
-                <div className={styles.resumenDias}>
-                  {rutina.dias.map((dia, i) => (
-                    <div key={dia.id} className={styles.resumenDia}>
-                      <span className={styles.resumenDiaTitulo}>Día {i + 1} — {dia.nombre || 'Sin nombre'}</span>
-                      <span className={styles.resumenDiaSub}>
-                        {dia.series.length} serie{dia.series.length !== 1 ? 's' : ''} · {dia.gruposMusculares || 'Sin grupos musculares'}
-                      </span>
+              {/* PASO 0 — Datos generales */}
+              {paso === 0 && (
+                <div className={styles.paso}>
+                  <h3 className={styles.pasoTitulo}>Datos generales</h3>
+                  <div className={styles.pasoFields}>
+                    <div className={styles.field}>
+                      <label>¿Usar plantilla?</label>
+                      <select
+                        value={rutina.plantillaId}
+                        onChange={e => aplicarPlantilla(e.target.value)}
+                      >
+                        <option value="">Crear desde cero</option>
+                        {PLANTILLAS.map(p => (
+                          <option key={p.id} value={p.id}>{p.nombre}</option>
+                        ))}
+                      </select>
                     </div>
-                  ))}
+                    <div className={styles.field}>
+                      <label>Nombre de la rutina</label>
+                      <input
+                        type="text"
+                        value={rutina.nombre}
+                        onChange={e => setRutina(p => ({ ...p, nombre: e.target.value }))}
+                        placeholder="Ej: Fuerza + Hipertrofia — Fase 1"
+                        required
+                      />
+                    </div>
+                    <div className={styles.field}>
+                      <label>Fecha de inicio</label>
+                      <input
+                        type="date"
+                        value={rutina.inicio}
+                        onChange={e => setRutina(p => ({ ...p, inicio: e.target.value }))}
+                        required
+                      />
+                    </div>
+                    <div className={styles.field}>
+                      <label>Duración (semanas)</label>
+                      <input
+                        type="number"
+                        min={1}
+                        max={52}
+                        value={rutina.semanas}
+                        onChange={e => setRutina(p => ({ ...p, semanas: Number(e.target.value) }))}
+                      />
+                    </div>
+                  </div>
                 </div>
+              )}
+
+              {/* PASO 1 — Días */}
+              {paso === 1 && (
+                <div className={styles.paso}>
+                  <h3 className={styles.pasoTitulo}>Armá los días de la rutina</h3>
+                  <div className={styles.diasList}>
+                    {rutina.dias.map((dia, i) => (
+                      <DiaEditor
+                        key={dia.id}
+                        dia={dia}
+                        index={i}
+                        onChange={updated => updateDia(dia.id, updated)}
+                        onRemove={() => removeDia(dia.id)}
+                      />
+                    ))}
+                  </div>
+                  <button type="button" className="btn btn--outline" onClick={() => setRutina(p => ({ ...p, dias: [...p.dias, nuevoDia()] }))}>
+                    + Agregar día
+                  </button>
+                </div>
+              )}
+
+              {/* PASO 2 — Resumen */}
+              {paso === 2 && (
+                <div className={styles.paso}>
+                  <h3 className={styles.pasoTitulo}>Resumen de la rutina</h3>
+                  <div className={`card ${styles.resumenCard}`}>
+                    <div className={styles.resumenItem}>
+                      <span className={styles.resumenLabel}>Alumno</span>
+                      <span className={styles.resumenValue}>{alumnoSeleccionado?.nombre}</span>
+                    </div>
+                    <div className={styles.resumenItem}>
+                      <span className={styles.resumenLabel}>Rutina</span>
+                      <span className={styles.resumenValue}>{rutina.nombre}</span>
+                    </div>
+                    <div className={styles.resumenItem}>
+                      <span className={styles.resumenLabel}>Inicio</span>
+                      <span className={styles.resumenValue}>{formatFecha(rutina.inicio)}</span>
+                    </div>
+                    <div className={styles.resumenItem}>
+                      <span className={styles.resumenLabel}>Duración</span>
+                      <span className={styles.resumenValue}>{rutina.semanas} semanas</span>
+                    </div>
+                    <div className={styles.resumenItem}>
+                      <span className={styles.resumenLabel}>Días</span>
+                      <span className={styles.resumenValue}>{rutina.dias.length}</span>
+                    </div>
+                    <div className={styles.resumenDias}>
+                      {rutina.dias.map((dia, i) => (
+                        <div key={dia.id} className={styles.resumenDia}>
+                          <span className={styles.resumenDiaTitulo}>Día {i + 1} — {dia.nombre || 'Sin nombre'}</span>
+                          <span className={styles.resumenDiaSub}>
+                            {dia.series.length} serie{dia.series.length !== 1 ? 's' : ''} · {dia.gruposMusculares || 'Sin grupos musculares'}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Navegación */}
+              <div className={styles.builderNav}>
+                {paso > 0 && (
+                  <button className="btn btn--ghost" onClick={() => setPaso(p => p - 1)}>← Anterior</button>
+                )}
+                <button className="btn btn--ghost" onClick={cerrarBuilder}>Cancelar</button>
+                {paso < PASOS.length - 1 ? (
+                  <button className="btn btn--primary" onClick={() => setPaso(p => p + 1)} disabled={!puedeAvanzar()}>
+                    Siguiente →
+                  </button>
+                ) : (
+                  <button className="btn btn--primary" onClick={handleGuardar}>✓ Guardar rutina</button>
+                )}
               </div>
             </div>
-          )}
+          </Modal>
 
-          {/* Navegación */}
-          <div className={styles.builderNav}>
-            {paso > 0 && (
-              <button className="btn btn--ghost" onClick={() => setPaso(p => p - 1)}>← Anterior</button>
-            )}
-            <button className="btn btn--ghost" onClick={cerrarBuilder}>Cancelar</button>
-            {paso < PASOS.length - 1 ? (
-              <button className="btn btn--primary" onClick={() => setPaso(p => p + 1)} disabled={!puedeAvanzar()}>
-                Siguiente →
-              </button>
-            ) : (
-              <button className="btn btn--primary" onClick={handleGuardar}>✓ Guardar rutina</button>
-            )}
-          </div>
+          {/* ── CONFIRMAR ELIMINAR RUTINA ── */}
+          <Modal
+            isOpen={confirmEliminar}
+            onClose={() => setConfirmEliminar(false)}
+            title="ELIMINAR RUTINA"
+            maxWidth="420px"
+          >
+            <div className={styles.confirmBody}>
+              <p>¿Estás seguro que querés eliminar la rutina de <strong>{alumnoSeleccionado?.nombre}</strong>?</p>
+              <p className={styles.confirmWarning}>Esta acción no se puede deshacer.</p>
+            </div>
+            <div className={styles.confirmFooter}>
+              <button className="btn btn--ghost" onClick={() => setConfirmEliminar(false)}>Cancelar</button>
+              <button className="btn btn--danger" onClick={handleEliminarRutina}>Sí, eliminar</button>
+            </div>
+          </Modal>
         </div>
-      </Modal>
+      }
+    </>
 
-      {/* ── CONFIRMAR ELIMINAR RUTINA ── */}
-      <Modal
-        isOpen={confirmEliminar}
-        onClose={() => setConfirmEliminar(false)}
-        title="ELIMINAR RUTINA"
-        maxWidth="420px"
-      >
-        <div className={styles.confirmBody}>
-          <p>¿Estás seguro que querés eliminar la rutina de <strong>{alumnoSeleccionado?.nombre}</strong>?</p>
-          <p className={styles.confirmWarning}>Esta acción no se puede deshacer.</p>
-        </div>
-        <div className={styles.confirmFooter}>
-          <button className="btn btn--ghost" onClick={() => setConfirmEliminar(false)}>Cancelar</button>
-          <button className="btn btn--danger" onClick={handleEliminarRutina}>Sí, eliminar</button>
-        </div>
-      </Modal>
-    </div>
   )
 }

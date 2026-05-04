@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './AlumnoHistorial.module.scss'
+import Loader from '../../components/Loader/Loader'
 
 // ─── Mock data ────────────────────────────────────────────
 const MOCK_ENTRENAMIENTOS = [
@@ -299,6 +300,21 @@ const StartCard = ({ num = '', label = '' }) => {
 
 // ─── Página principal ─────────────────────────────────────
 export default function AlumnoHistorial() {
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // Definimos el temporizador (ejemplo: 1 segundos)
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    // Limpieza: si el componente se desmonta antes de los 3s, 
+    // cancelamos el timer para evitar errores.
+    return () => clearTimeout(timer);
+  }, []);
+
+
+
   const hoy = new Date()
   const [mes, setMes] = useState(hoy.getMonth())
   const [año, setAño] = useState(hoy.getFullYear())
@@ -320,33 +336,38 @@ export default function AlumnoHistorial() {
   const diasUnicos = new Set(MOCK_ENTRENAMIENTOS.map(e => e.fecha)).size
 
   return (
-    <div className={styles.page}>
-      <div className="page-header">
-        <h1>MI <span>HISTORIAL</span></h1>
-        <p>Revisá tus entrenamientos pasados.</p>
-      </div>
+    <>
+      {loading
+        ? <Loader />
+        : <div className={styles.page}>
+          <div className="page-header">
+            <h1>MI <span>HISTORIAL</span></h1>
+            <p>Revisá tus entrenamientos pasados.</p>
+          </div>
 
-      {/* Stars */}
-      <div className={styles.statsRow}>
-        <StartCard num={totalEntrenamientos} label="Entrenamientos" />
-        <StartCard num={diasUnicos} label="Días activos" />
-        <StartCard num={`${Math.round(totalMinutos / 60)}h`} label="Total entrenado" />
-      </div>
+          {/* Stars */}
+          <div className={styles.statsRow}>
+            <StartCard num={totalEntrenamientos} label="Entrenamientos" />
+            <StartCard num={diasUnicos} label="Días activos" />
+            <StartCard num={`${Math.round(totalMinutos / 60)}h`} label="Total entrenado" />
+          </div>
 
-      {/* Layout principal */}
-      <div className={styles.layout}>
-        <Calendario
-          año={año}
-          mes={mes}
-          fechaSeleccionada={fechaSeleccionada}
-          onSelectFecha={setFechaSeleccionada}
-          onCambiarMes={cambiarMes}
-        />
-        <DetalleDia
-          fecha={fechaSeleccionada}
-          entrenamientos={entrenamientosDelDia}
-        />
-      </div>
-    </div>
+          {/* Layout principal */}
+          <div className={styles.layout}>
+            <Calendario
+              año={año}
+              mes={mes}
+              fechaSeleccionada={fechaSeleccionada}
+              onSelectFecha={setFechaSeleccionada}
+              onCambiarMes={cambiarMes}
+            />
+            <DetalleDia
+              fecha={fechaSeleccionada}
+              entrenamientos={entrenamientosDelDia}
+            />
+          </div>
+        </div>
+      }
+    </>
   )
 }
