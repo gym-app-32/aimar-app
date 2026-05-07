@@ -1,0 +1,108 @@
+// ─── Clase card ───────────────────────────────────────────
+.claseCard {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  max-width: 480px;
+}
+
+.claseNombre {
+  font-family: $font-display;
+  font-size: 1.4rem;
+  letter-spacing: 0.06em;
+  color: $white;
+}
+
+.claseHorario {
+  font-family: $font-condensed;
+  font-size: 0.9rem;
+  color: $gold;
+}
+
+.claseField {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.claseFieldLabel {
+  font-family: $font-condensed;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $gray;
+}
+
+.claseFechaRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.claseFechaStr {
+  font-family: $font-condensed;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $white;
+  text-transform: capitalize;
+  flex: 1;
+}
+
+// ─── Completado card ──────────────────────────────────────
+.completadoCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-lg;
+  padding: $spacing-2xl $spacing-xl;
+  text-align: center;
+  max-width: 520px;
+
+  h3 {
+    font-family: $font-display;
+    font-size: 1.6rem;
+    letter-spacing: 0.06em;
+    color: $white;
+  }
+
+  p {
+    font-family: $font-body;
+    font-size: 0.9rem;
+    color: $gray;
+    line-height: 1.6;
+    strong { color: $white; }
+  }
+}
+
+.completadoIcono {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba($success, 0.15);
+  border: 2px solid $success;
+  color: $success;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.completadoEncuesta {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-sm;
+  padding: $spacing-md;
+  background: rgba($gold, 0.06);
+  border: 1px solid rgba($gold, 0.2);
+  border-radius: $radius-md;
+  font-family: $font-body;
+  font-size: 0.85rem;
+  color: $gray-light;
+  text-align: left;
+  line-height: 1.5;
+  width: 100%;
+
+  strong { color: $gold; }
+  span:first-child { font-size: 1rem; flex-shrink: 0; }
+}
