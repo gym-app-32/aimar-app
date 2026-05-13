@@ -355,3 +355,92 @@
   font-size: 0.85rem !important;
   color: $error !important;
 }
+
+// ─── Modal permisos ───────────────────────────────────────
+.btnPermisos {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.permisosModal {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.permisosSubtitle {
+  font-family: $font-body;
+  font-size: 0.9rem;
+  color: $gray-light;
+  strong { color: $white; }
+}
+
+.permisosTabla {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border: 1px solid rgba($white, 0.08);
+  border-radius: $radius-md;
+  overflow: hidden;
+}
+
+.permisosHeader {
+  display: grid;
+  grid-template-columns: 1fr repeat(4, 64px);
+  background: $dark3;
+  padding: $spacing-sm $spacing-md;
+  gap: $spacing-sm;
+}
+
+.permisosAccionLabel {
+  font-family: $font-condensed;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $gray;
+  text-align: center;
+}
+
+.permisosSeccionLabel {
+  font-family: $font-condensed;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $gray;
+}
+
+.permisosRow {
+  display: grid;
+  grid-template-columns: 1fr repeat(4, 64px);
+  align-items: center;
+  padding: $spacing-sm $spacing-md;
+  gap: $spacing-sm;
+  background: $dark2;
+  border-top: 1px solid rgba($white, 0.05);
+  transition: background $transition-fast;
+
+  &:hover { background: rgba($white, 0.03); }
+}
+
+.permisosSeccionNombre {
+  font-family: $font-condensed;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: $white;
+  letter-spacing: 0.03em;
+}
+
+.permisosCheck {
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+
+  input[type='checkbox'] {
+    width: 16px;
+    height: 16px;
+    accent-color: $gold;
+    cursor: pointer;
+  }
+}

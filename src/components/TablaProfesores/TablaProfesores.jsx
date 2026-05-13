@@ -3,6 +3,25 @@ import Modal from '../UI/Modal/Modal'
 import styles from './TablaProfesores.module.scss'
 import { IconDelete, IconEdit, IconLocked, IconUnlocked2 } from '../Icons/Icons'
 
+const PERMISOS_DEFAULT = {
+  alumnos:     { ver: true, crear: false, editar: false, eliminar: false },
+  ejercicios:  { ver: true, crear: false, editar: false, eliminar: false },
+  utilitarios: { ver: true, crear: false, editar: false, eliminar: false },
+}
+
+const SECCIONES = [
+  { key: 'alumnos',     label: 'Alumnos' },
+  { key: 'ejercicios',  label: 'Ejercicios' },
+  { key: 'utilitarios', label: 'Utilitarios' },
+]
+
+const ACCIONES = [
+  { key: 'ver',      label: 'Ver' },
+  { key: 'crear',    label: 'Crear' },
+  { key: 'editar',   label: 'Editar' },
+  { key: 'eliminar', label: 'Eliminar' },
+]
+
 function formatFecha(str) {
   if (!str) return '—'
   return new Date(str + 'T00:00:00').toLocaleDateString('es-AR', {
@@ -68,8 +87,82 @@ function InfoModal({ profesor }) {
   )
 }
 
-function ModalCrearEditar({ handleGuardar, form, handleChange, especialidades, editando, guardando, cerrarModal }) {
+function ModalPermisos({ profesor, onGuardar, onCerrar, guardando }) {
+  const inicial = {
+    alumnos:     { ...PERMISOS_DEFAULT.alumnos,     ...(profesor?.permisos?.alumnos     || {}) },
+    ejercicios:  { ...PERMISOS_DEFAULT.ejercicios,  ...(profesor?.permisos?.ejercicios  || {}) },
+    utilitarios: { ...PERMISOS_DEFAULT.utilitarios, ...(profesor?.permisos?.utilitarios || {}) },
+  }
+  const [permisos, setPermisos] = useState(inicial)
 
+  const toggle = (seccion, accion) => {
+    setPermisos(prev => {
+      const nuevoValor = !prev[seccion][accion]
+      // Si se desactiva "ver", desactivar todo lo demás también
+      if (accion === 'ver' && !nuevoValor) {
+        return {
+          ...prev,
+          [seccion]: { ver: false, crear: false, editar: false, eliminar: false }
+        }
+      }
+      // Si se activa crear/editar/eliminar, forzar ver en true
+      if (accion !== 'ver' && nuevoValor) {
+        return {
+          ...prev,
+          [seccion]: { ...prev[seccion], ver: true, [accion]: true }
+        }
+      }
+      return {
+        ...prev,
+        [seccion]: { ...prev[seccion], [accion]: nuevoValor }
+      }
+    })
+  }
+
+  return (
+    <div className={styles.permisosModal}>
+      <p className={styles.permisosSubtitle}>
+        Configurá qué puede hacer <strong>{profesor?.nombre}</strong> en cada sección.
+      </p>
+      <div className={styles.permisosTabla}>
+        {/* Header */}
+        <div className={styles.permisosHeader}>
+          <span className={styles.permisosSeccionLabel}>Sección</span>
+          {ACCIONES.map(a => (
+            <span key={a.key} className={styles.permisosAccionLabel}>{a.label}</span>
+          ))}
+        </div>
+        {/* Filas */}
+        {SECCIONES.map(s => (
+          <div key={s.key} className={styles.permisosRow}>
+            <span className={styles.permisosSeccionNombre}>{s.label}</span>
+            {ACCIONES.map(a => (
+              <label key={a.key} className={styles.permisosCheck}>
+                <input
+                  type="checkbox"
+                  checked={permisos[s.key][a.key]}
+                  onChange={() => toggle(s.key, a.key)}
+                />
+              </label>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className={styles.modalFooter}>
+        <button className="btn btn--ghost" onClick={onCerrar}>Cancelar</button>
+        <button
+          className="btn btn--primary"
+          onClick={() => onGuardar(permisos)}
+          disabled={guardando}
+        >
+          {guardando ? 'Guardando...' : 'Guardar permisos'}
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function ModalCrearEditar({ handleGuardar, form, handleChange, especialidades, editando, guardando, cerrarModal }) {
   return (
     <>
       <form onSubmit={handleGuardar} className={styles.modalForm}>
@@ -88,13 +181,7 @@ function ModalCrearEditar({ handleGuardar, form, handleChange, especialidades, e
           </div>
           <div className={styles.field}>
             <label>DNI</label>
-            <input
-              type="text"
-              name="dni"
-              value={form.dni}
-              onChange={handleChange}
-              placeholder="Ej: 35123456"
-            />
+            <input type="text" name="dni" value={form.dni} onChange={handleChange} placeholder="Ej: 35123456" />
           </div>
           <div className={styles.field}>
             <label>Sexo</label>
@@ -126,7 +213,6 @@ function ModalCrearEditar({ handleGuardar, form, handleChange, especialidades, e
           </button>
         </div>
       </form>
-
     </>
   )
 }
@@ -146,19 +232,18 @@ function ModalEliminacion({ setConfirmDelete, handleEliminar, confirmDelete }) {
   )
 }
 
-
 const EMPTY_FORM_PROF = { nombre: '', email: '', telefono: '', especialidad: '', dni: '', sexo: '', password: '' }
 
 export default function TablaProfesores({ profesores, setProfesores, especialidades }) {
-  const [infoModal, setInfoModal] = useState(null)
-
-  // Eliminá el useState de profesores — ahora viene por props
-  const [modalOpen, setModalOpen] = useState(false)
-  const [editando, setEditando] = useState(null)
-  const [form, setForm] = useState(EMPTY_FORM_PROF)
-  const [confirmDelete, setConfirmDelete] = useState(null)
-  const [guardando, setGuardando] = useState(false)
-  const [busqueda, setBusqueda] = useState('')
+  const [infoModal, setInfoModal]           = useState(null)
+  const [modalOpen, setModalOpen]           = useState(false)
+  const [editando, setEditando]             = useState(null)
+  const [form, setForm]                     = useState(EMPTY_FORM_PROF)
+  const [confirmDelete, setConfirmDelete]   = useState(null)
+  const [guardando, setGuardando]           = useState(false)
+  const [busqueda, setBusqueda]             = useState('')
+  const [permisosModal, setPermisosModal]   = useState(null)
+  const [guardandoPermisos, setGuardandoPermisos] = useState(false)
 
   const filtrados = profesores.filter(p =>
     p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
@@ -201,7 +286,12 @@ export default function TablaProfesores({ profesores, setProfesores, especialida
     if (editando) {
       setProfesores(prev => prev.map(p => p.id === editando.id ? { ...p, ...form } : p))
     } else {
-      setProfesores(prev => [...prev, { id: Date.now(), ...form, activo: true }])
+      setProfesores(prev => [...prev, {
+        id: Date.now(),
+        ...form,
+        activo: true,
+        permisos: { ...PERMISOS_DEFAULT },
+      }])
     }
     setGuardando(false)
     cerrarModal()
@@ -214,6 +304,16 @@ export default function TablaProfesores({ profesores, setProfesores, especialida
   const handleEliminar = (id) => {
     setProfesores(prev => prev.filter(p => p.id !== id))
     setConfirmDelete(null)
+  }
+
+  const handleGuardarPermisos = async (nuevosPermisos) => {
+    setGuardandoPermisos(true)
+    await new Promise(r => setTimeout(r, 600))
+    setProfesores(prev =>
+      prev.map(p => p.id === permisosModal.id ? { ...p, permisos: nuevosPermisos } : p)
+    )
+    setGuardandoPermisos(false)
+    setPermisosModal(null)
   }
 
   if (profesores.length === 0) {
@@ -234,6 +334,7 @@ export default function TablaProfesores({ profesores, setProfesores, especialida
           + Nuevo profesor
         </button>
       </div>
+
       {/* ── Tabla desktop ── */}
       <div className={styles.tableCard}>
         <div className={styles.tableWrapper}>
@@ -275,11 +376,15 @@ export default function TablaProfesores({ profesores, setProfesores, especialida
                   </td>
                   <td>
                     <div className={styles.actions}>
-                      <button
-                        onClick={() => abrirEditar(profesor)}
-                        title="Editar"
-                      >
+                      <button onClick={() => abrirEditar(profesor)} title="Editar">
                         <IconEdit />
+                      </button>
+                      <button
+                        onClick={() => setPermisosModal(profesor)}
+                        title="Permisos"
+                        className={styles.btnPermisos}
+                      >
+                        🔐
                       </button>
                       <button
                         onClick={() => toggleActivo(profesor.id)}
@@ -288,10 +393,7 @@ export default function TablaProfesores({ profesores, setProfesores, especialida
                         {profesor.activo ? <IconUnlocked2 /> : <IconLocked />}
                       </button>
                       {setConfirmDelete && (
-                        <button
-                          onClick={() => setConfirmDelete(profesor)}
-                          title="Eliminar"
-                        >
+                        <button onClick={() => setConfirmDelete(profesor)} title="Eliminar">
                           <IconDelete />
                         </button>
                       )}
@@ -321,18 +423,14 @@ export default function TablaProfesores({ profesores, setProfesores, especialida
             </div>
 
             <div className={styles.mobileActions}>
-              <button
-                className="btn btn--ghost btn--sm"
-                onClick={() => setInfoModal(profesor)}
-                title="Ver info"
-              >
+              <button className="btn btn--ghost btn--sm" onClick={() => setInfoModal(profesor)} title="Ver info">
                 👁
               </button>
-              <button
-                onClick={() => abrirEditar(profesor)}
-                title="Editar"
-              >
+              <button onClick={() => abrirEditar(profesor)} title="Editar">
                 <IconEdit />
+              </button>
+              <button onClick={() => setPermisosModal(profesor)} title="Permisos">
+                🔐
               </button>
               <button
                 onClick={() => toggleActivo(profesor.id)}
@@ -341,10 +439,7 @@ export default function TablaProfesores({ profesores, setProfesores, especialida
                 {profesor.activo ? <IconUnlocked2 /> : <IconLocked />}
               </button>
               {setConfirmDelete && (
-                <button
-                  onClick={() => setConfirmDelete(profesor)}
-                  title="Eliminar"
-                >
+                <button onClick={() => setConfirmDelete(profesor)} title="Eliminar">
                   <IconDelete />
                 </button>
               )}
@@ -354,34 +449,39 @@ export default function TablaProfesores({ profesores, setProfesores, especialida
       </div>
 
       {/* ── Modal info ── */}
-      <Modal
-        isOpen={!!infoModal}
-        onClose={() => setInfoModal(null)}
-        title="INFO DEL PROFESOR"
-        maxWidth="420px"
-      >
+      <Modal isOpen={!!infoModal} onClose={() => setInfoModal(null)} title="INFO DEL PROFESOR" maxWidth="420px">
         <InfoModal profesor={infoModal} />
       </Modal>
 
-      {/* Modal crear/editar */}
-      <Modal
-        isOpen={modalOpen}
-        onClose={cerrarModal}
-        title={editando ? 'EDITAR PROFESOR' : 'NUEVO PROFESOR'}
-      >
-        <ModalCrearEditar handleGuardar={handleGuardar} form={form} handleChange={handleChange} especialidades={especialidades} editando={editando} guardando={guardando} cerrarModal={cerrarModal} />
+      {/* ── Modal crear/editar ── */}
+      <Modal isOpen={modalOpen} onClose={cerrarModal} title={editando ? 'EDITAR PROFESOR' : 'NUEVO PROFESOR'}>
+        <ModalCrearEditar
+          handleGuardar={handleGuardar} form={form} handleChange={handleChange}
+          especialidades={especialidades} editando={editando} guardando={guardando} cerrarModal={cerrarModal}
+        />
       </Modal>
 
-      {/* Modal confirmar eliminación */}
+      {/* ── Modal permisos ── */}
       <Modal
-        isOpen={!!confirmDelete}
-        onClose={() => setConfirmDelete(null)}
-        title="ELIMINAR PROFESOR"
-        maxWidth="420px"
+        isOpen={!!permisosModal}
+        onClose={() => setPermisosModal(null)}
+        title="PERMISOS DEL PROFESOR"
+        maxWidth="520px"
       >
+        {permisosModal && (
+          <ModalPermisos
+            profesor={permisosModal}
+            onGuardar={handleGuardarPermisos}
+            onCerrar={() => setPermisosModal(null)}
+            guardando={guardandoPermisos}
+          />
+        )}
+      </Modal>
+
+      {/* ── Modal confirmar eliminación ── */}
+      <Modal isOpen={!!confirmDelete} onClose={() => setConfirmDelete(null)} title="ELIMINAR PROFESOR" maxWidth="420px">
         <ModalEliminacion setConfirmDelete={setConfirmDelete} handleEliminar={handleEliminar} confirmDelete={confirmDelete} />
       </Modal>
-
     </>
   )
 }

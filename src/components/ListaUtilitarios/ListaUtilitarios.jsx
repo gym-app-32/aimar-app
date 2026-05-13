@@ -10,7 +10,12 @@ function ImagePlaceholder({ imagen, nombre }) {
   return <div className={styles.tableImgPlaceholder}>🏋️</div>
 }
 
-export default function ListaUtilitarios({ utilitarios: utilitariosIniciales = [] }) {
+export default function ListaUtilitarios({
+  utilitarios: utilitariosIniciales = [],
+  puedeCrear    = true,
+  puedeEditar   = true,
+  puedeEliminar = true,
+}) {
   const [utilitarios, setUtilitarios] = useState(utilitariosIniciales)
   const [busqueda, setBusqueda] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
@@ -19,7 +24,6 @@ export default function ListaUtilitarios({ utilitarios: utilitariosIniciales = [
   const [confirmDel, setConfirmDel] = useState(null)
   const [guardando, setGuardando] = useState(false)
 
-  // ─── Handlers ─────────────────────────────────────────
   const abrirCrear = () => {
     setEditando(null)
     setForm(EMPTY_FORM)
@@ -64,7 +68,6 @@ export default function ListaUtilitarios({ utilitarios: utilitariosIniciales = [
     reader.readAsDataURL(file)
   }
 
-  // ─── Filtro ────────────────────────────────────────────
   const filtrados = utilitarios.filter(u =>
     u.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
     u.descripcion.toLowerCase().includes(busqueda.toLowerCase())
@@ -82,9 +85,11 @@ export default function ListaUtilitarios({ utilitarios: utilitariosIniciales = [
           value={busqueda}
           onChange={e => setBusqueda(e.target.value)}
         />
-        <button className="btn btn--primary" onClick={abrirCrear}>
-          + Nuevo utilitario
-        </button>
+        {puedeCrear && (
+          <button className="btn btn--primary" onClick={abrirCrear}>
+            + Nuevo utilitario
+          </button>
+        )}
       </div>
 
       {/* Tabla desktop */}
@@ -96,13 +101,15 @@ export default function ListaUtilitarios({ utilitarios: utilitariosIniciales = [
                 <th>Imagen</th>
                 <th>Nombre</th>
                 <th>Descripción</th>
-                <th>Acciones</th>
+                {(puedeEditar || puedeEliminar) && <th>Acciones</th>}
               </tr>
             </thead>
             <tbody>
               {filtrados.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className={styles.empty}>No se encontraron utilitarios.</td>
+                  <td colSpan={puedeEditar || puedeEliminar ? 4 : 3} className={styles.empty}>
+                    No se encontraron utilitarios.
+                  </td>
                 </tr>
               ) : (
                 filtrados.map(u => (
@@ -110,12 +117,14 @@ export default function ListaUtilitarios({ utilitarios: utilitariosIniciales = [
                     <td><ImagePlaceholder imagen={u.imagen} nombre={u.nombre} /></td>
                     <td className={styles.utilNombre}>{u.nombre}</td>
                     <td className={styles.utilDesc}>{u.descripcion}</td>
-                    <td>
-                      <div className={styles.actions}>
-                        <button onClick={() => abrirEditar(u)}><IconEdit /></button>
-                        <button onClick={() => setConfirmDel(u)}><IconDelete /></button>
-                      </div>
-                    </td>
+                    {(puedeEditar || puedeEliminar) && (
+                      <td>
+                        <div className={styles.actions}>
+                          {puedeEditar   && <button onClick={() => abrirEditar(u)}><IconEdit /></button>}
+                          {puedeEliminar && <button onClick={() => setConfirmDel(u)}><IconDelete /></button>}
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 ))
               )}
@@ -138,10 +147,12 @@ export default function ListaUtilitarios({ utilitarios: utilitariosIniciales = [
                 <span className={styles.mobileNombre}>{u.nombre}</span>
                 <span className={styles.mobileDesc}>{u.descripcion}</span>
               </div>
-              <div className={styles.mobileActions}>
-                <button onClick={() => abrirEditar(u)}><IconEdit /></button>
-                <button onClick={() => setConfirmDel(u)}><IconDelete /></button>
-              </div>
+              {(puedeEditar || puedeEliminar) && (
+                <div className={styles.mobileActions}>
+                  {puedeEditar   && <button onClick={() => abrirEditar(u)}><IconEdit /></button>}
+                  {puedeEliminar && <button onClick={() => setConfirmDel(u)}><IconDelete /></button>}
+                </div>
+              )}
             </div>
           ))
         )}

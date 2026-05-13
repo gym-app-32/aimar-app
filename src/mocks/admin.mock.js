@@ -1,3 +1,10 @@
+// ─── Permisos por defecto ──────────────────────────────────
+export const PERMISOS_DEFAULT = {
+  alumnos:     { ver: true, crear: false, editar: false, eliminar: false },
+  ejercicios:  { ver: true, crear: false, editar: false, eliminar: false },
+  utilitarios: { ver: true, crear: false, editar: false, eliminar: false },
+}
+
 // ─── Especialidades ───────────────────────────────────────
 export const ESPECIALIDADES = [
   { id: 1, nombre: 'Musculación',                 abreviatura: 'Musculación',  descripcion: 'Entrenamiento con pesas y máquinas.' },
@@ -11,10 +18,38 @@ export const ESPECIALIDADES = [
 
 // ─── Profesores ───────────────────────────────────────────
 export const PROFESORES = [
-  { id: 1, nombre: 'Martín Gómez',    email: 'martin@aimar.com', telefono: '221 4567890', dni: '28123456', sexo: 'M', especialidad: 'Musculación', activo: true },
-  { id: 2, nombre: 'Laura Fernández', email: 'laura@aimar.com',  telefono: '221 5678901', dni: '31456789', sexo: 'F', especialidad: 'Funcional',   activo: true },
-  { id: 3, nombre: 'Diego Rojas',     email: 'diego@aimar.com',  telefono: '221 6789012', dni: '29789012', sexo: 'M', especialidad: 'Boxeo',       activo: false },
-  { id: 4, nombre: 'Carla Méndez',    email: 'carla@aimar.com',  telefono: '221 7890123', dni: '33012345', sexo: 'F', especialidad: 'Kickboxing',  activo: true },
+  {
+    id: 1, nombre: 'Martín Gómez', email: 'martin@aimar.com', telefono: '221 4567890',
+    dni: '28123456', sexo: 'M', especialidad: 'Musculación', activo: true,
+    permisos: {
+      alumnos:     { ver: true, crear: true,  editar: true,  eliminar: false },
+      ejercicios:  { ver: true, crear: true,  editar: true,  eliminar: true  },
+      utilitarios: { ver: true, crear: true,  editar: true,  eliminar: false },
+    },
+  },
+  {
+    id: 2, nombre: 'Laura Fernández', email: 'laura@aimar.com', telefono: '221 5678901',
+    dni: '31456789', sexo: 'F', especialidad: 'Funcional', activo: true,
+    permisos: {
+      alumnos:     { ver: true, crear: false, editar: true,  eliminar: false },
+      ejercicios:  { ver: true, crear: false, editar: false, eliminar: false },
+      utilitarios: { ver: true, crear: false, editar: false, eliminar: false },
+    },
+  },
+  {
+    id: 3, nombre: 'Diego Rojas', email: 'diego@aimar.com', telefono: '221 6789012',
+    dni: '29789012', sexo: 'M', especialidad: 'Boxeo', activo: false,
+    permisos: { ...PERMISOS_DEFAULT },
+  },
+  {
+    id: 4, nombre: 'Carla Méndez', email: 'carla@aimar.com', telefono: '221 7890123',
+    dni: '33012345', sexo: 'F', especialidad: 'Kickboxing', activo: true,
+    permisos: {
+      alumnos:     { ver: true, crear: true,  editar: true,  eliminar: true  },
+      ejercicios:  { ver: true, crear: true,  editar: true,  eliminar: true  },
+      utilitarios: { ver: true, crear: true,  editar: true,  eliminar: true  },
+    },
+  },
 ]
 
 // ─── Alumnos ──────────────────────────────────────────────

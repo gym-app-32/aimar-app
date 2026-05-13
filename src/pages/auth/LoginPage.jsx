@@ -6,11 +6,17 @@ import Logo from '../../components/Logos/Logo'
 import styles from './LoginPage.module.scss'
 import { ThreeArrows } from '../../components/Icons/Icons'
 
-// Mock temporal hasta tener el backend
+// Permisos del profesor de prueba
+const PROFESOR_PERMISOS = {
+  alumnos:     { ver: true, crear: true,  editar: true,  eliminar: false },
+  ejercicios:  { ver: true, crear: true,  editar: true,  eliminar: true  },
+  utilitarios: { ver: true, crear: false, editar: false, eliminar: false },
+}
+
 const MOCK_USERS = [
-  { id: 1, name: 'Carlos Pérez', email: 'alumno@aimar.com', password: '123456', role: 'alumno' },
-  { id: 2, name: 'Martín Gómez', email: 'profesor@aimar.com', password: '123456', role: 'profesor' },
-  { id: 3, name: 'Admin Aimar', email: 'admin@aimar.com', password: '123456', role: 'admin' },
+  { id: 1, name: 'Carlos Pérez',  email: 'alumno@aimar.com',   password: '123456', role: 'alumno' },
+  { id: 2, name: 'Martín Gómez',  email: 'profesor@aimar.com', password: '123456', role: 'profesor', permisos: PROFESOR_PERMISOS },
+  { id: 3, name: 'Admin Aimar',   email: 'admin@aimar.com',    password: '123456', role: 'admin' },
 ]
 
 export default function LoginPage() {
@@ -29,7 +35,6 @@ export default function LoginPage() {
     e.preventDefault()
     setLoading(true)
 
-    // Mock login — reemplazar por api.post('/auth/login') cuando haya backend
     await new Promise(r => setTimeout(r, 600))
     const user = MOCK_USERS.find(
       u => u.email === form.email && u.password === form.password
@@ -44,9 +49,9 @@ export default function LoginPage() {
     const { password, ...safeUser } = user
     login('mock-token-123', safeUser)
 
-    if (safeUser.role === 'alumno') navigate('/alumno')
+    if (safeUser.role === 'alumno')   navigate('/alumno')
     if (safeUser.role === 'profesor') navigate('/profesor')
-    if (safeUser.role === 'admin') navigate('/admin')
+    if (safeUser.role === 'admin')    navigate('/admin')
   }
 
   return (
@@ -88,7 +93,7 @@ export default function LoginPage() {
 
           {error && <p className={styles.error}>{error}</p>}
           <div className={styles.containerButtonArrows}>
-            <ThreeArrows  />
+            <ThreeArrows />
             <button
               type="submit"
               className="btn btn--primary btn--full btn--lg"
@@ -96,9 +101,8 @@ export default function LoginPage() {
             >
               {loading ? 'Ingresando...' : 'Ingresar'}
             </button>
-            <ThreeArrows  className={styles.right}/>
+            <ThreeArrows className={styles.right} />
           </div>
-
         </form>
 
         <div className={styles.hint}>

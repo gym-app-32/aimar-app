@@ -10,7 +10,13 @@ function ImagePlaceholder({ imagen, nombre }) {
   return <div className={styles.cardImgPlaceholder}><span>🏋️</span></div>
 }
 
-export default function ListaEjercicios({ ejercicios: ejerciciosIniciales = [], utilitarios = [] }) {
+export default function ListaEjercicios({
+  ejercicios: ejerciciosIniciales = [],
+  utilitarios = [],
+  puedeCrear    = true,
+  puedeEditar   = true,
+  puedeEliminar = true,
+}) {
   const [ejercicios, setEjercicios] = useState(ejerciciosIniciales)
   const [busqueda, setBusqueda] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
@@ -19,7 +25,6 @@ export default function ListaEjercicios({ ejercicios: ejerciciosIniciales = [], 
   const [confirmDel, setConfirmDel] = useState(null)
   const [guardando, setGuardando] = useState(false)
 
-  // ─── Handlers ─────────────────────────────────────────
   const abrirCrear = () => {
     setEditando(null)
     setForm(EMPTY_FORM)
@@ -73,7 +78,6 @@ export default function ListaEjercicios({ ejercicios: ejerciciosIniciales = [], 
     reader.readAsDataURL(file)
   }
 
-  // ─── Filtro ────────────────────────────────────────────
   const filtrados = ejercicios.filter(ej =>
     ej.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
     ej.descripcion.toLowerCase().includes(busqueda.toLowerCase())
@@ -91,9 +95,11 @@ export default function ListaEjercicios({ ejercicios: ejerciciosIniciales = [], 
           value={busqueda}
           onChange={e => setBusqueda(e.target.value)}
         />
-        <button className="btn btn--primary" onClick={abrirCrear}>
-          + Nuevo ejercicio
-        </button>
+        {puedeCrear && (
+          <button className="btn btn--primary" onClick={abrirCrear}>
+            + Nuevo ejercicio
+          </button>
+        )}
       </div>
 
       {/* Grid de cards */}
@@ -123,10 +129,12 @@ export default function ListaEjercicios({ ejercicios: ejerciciosIniciales = [], 
                   </a>
                 )}
               </div>
-              <div className={styles.cardActions}>
-                <button onClick={() => abrirEditar(ej)}><IconEdit /> Editar</button>
-                <button onClick={() => setConfirmDel(ej)}><IconDelete /> Borrar</button>
-              </div>
+              {(puedeEditar || puedeEliminar) && (
+                <div className={styles.cardActions}>
+                  {puedeEditar   && <button onClick={() => abrirEditar(ej)}><IconEdit /> Editar</button>}
+                  {puedeEliminar && <button onClick={() => setConfirmDel(ej)}><IconDelete /> Borrar</button>}
+                </div>
+              )}
             </div>
           ))
         )}

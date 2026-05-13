@@ -63,12 +63,12 @@ function InfoModal({ alumno }) {
     </div>
   )
 }
+
 const EMPTY_FORM = {
   nombre: '', email: '', telefono: '', fechaNacimiento: '',
   dni: '', sexo: '', password: '',
 }
 
-// ─── Pasos del modal ──────────────────────────────────────
 const PASOS = ['Datos personales', 'Actividades']
 
 function StepIndicator({ pasoActual }) {
@@ -92,13 +92,21 @@ function StepIndicator({ pasoActual }) {
 }
 
 
-export default function TablaAlumnos({ alumnos = [], setAlumnos, listProfesores=[], listActividades=[]}) {
+export default function TablaAlumnos({
+  alumnos = [],
+  setAlumnos,
+  listProfesores = [],
+  listActividades = [],
+  puedeCrear    = true,
+  puedeEditar   = true,
+  puedeEliminar = true,
+}) {
   const [infoModal, setInfoModal] = useState(null)
   const [modalOpen, setModalOpen] = useState(false)
   const [editando, setEditando] = useState(null)
   const [paso, setPaso] = useState(0)
   const [form, setForm] = useState(EMPTY_FORM)
-  const [actividades, setActividades] = useState([]) // [{ especialidadId, profesorId }]
+  const [actividades, setActividades] = useState([])
   const [confirmDelete, setConfirmDelete] = useState(null)
   const [guardando, setGuardando] = useState(false)
   const [busqueda, setBusqueda] = useState('')
@@ -149,7 +157,6 @@ export default function TablaAlumnos({ alumnos = [], setAlumnos, listProfesores=
     setForm(p => ({ ...p, [e.target.name]: e.target.value }))
   }
 
-  // ─── Actividades handlers ─────────────────────────────
   const toggleEspecialidad = (espId) => {
     const existe = actividades.find(a => a.especialidadId === espId)
     if (existe) {
@@ -172,7 +179,6 @@ export default function TablaAlumnos({ alumnos = [], setAlumnos, listProfesores=
     )
   }
 
-  // ─── Guardar ──────────────────────────────────────────
   const handleGuardar = async () => {
     setGuardando(true)
     await new Promise(r => setTimeout(r, 700))
@@ -212,8 +218,6 @@ export default function TablaAlumnos({ alumnos = [], setAlumnos, listProfesores=
     return true
   }
 
-
-
   if (alumnos.length === 0) {
     return <p className={styles.empty}>No se encontraron alumnos.</p>
   }
@@ -229,9 +233,11 @@ export default function TablaAlumnos({ alumnos = [], setAlumnos, listProfesores=
           value={busqueda}
           onChange={e => setBusqueda(e.target.value)}
         />
-        <button className="btn btn--primary" onClick={abrirCrear}>
-          + Nuevo alumno
-        </button>
+        {puedeCrear && (
+          <button className="btn btn--primary" onClick={abrirCrear}>
+            + Nuevo alumno
+          </button>
+        )}
       </div>
 
       {/* ── Tabla desktop ── */}
@@ -291,26 +297,19 @@ export default function TablaAlumnos({ alumnos = [], setAlumnos, listProfesores=
                   </td>
                   <td>
                     <div className={styles.actions}>
+                      {puedeEditar && (
+                        <button onClick={() => abrirEditar(alumno)} title="Editar">
+                          <IconEdit />
+                        </button>
+                      )}
                       <button
-
-                        onClick={() =>abrirEditar(alumno)}
-                        title="Editar"
-                      >
-                        <IconEdit />
-                      </button>
-                      <button
-
                         onClick={() => toggleActivo(alumno.id)}
                         title={alumno.activo ? 'Bloquear' : 'Desbloquear'}
                       >
                         {alumno.activo ? <IconUnlocked2 /> : <IconLocked />}
                       </button>
-                      {setConfirmDelete && (
-                        <button
-
-                          onClick={() => setConfirmDelete(alumno)}
-                          title="Eliminar"
-                        >
+                      {puedeEliminar && (
+                        <button onClick={() => setConfirmDelete(alumno)} title="Eliminar">
                           <IconDelete />
                         </button>
                       )}
@@ -340,34 +339,22 @@ export default function TablaAlumnos({ alumnos = [], setAlumnos, listProfesores=
             </div>
 
             <div className={styles.mobileActions}>
-              <button
-
-                onClick={() => setInfoModal(alumno)}
-                title="Ver info"
-              >
+              <button onClick={() => setInfoModal(alumno)} title="Ver info">
                 👁
               </button>
+              {puedeEditar && (
+                <button onClick={() => abrirEditar(alumno)} title="Editar">
+                  <IconEdit />
+                </button>
+              )}
               <button
-
-                onClick={() =>abrirEditar(alumno)}
-                title="Editar"
-              >
-                <IconEdit />
-              </button>
-              <button
-
                 onClick={() => toggleActivo(alumno.id)}
                 title={alumno.activo ? 'Bloquear' : 'Desbloquear'}
               >
                 {alumno.activo ? <IconUnlocked2 /> : <IconLocked />}
-
               </button>
-              {setConfirmDelete && (
-                <button
-
-                  onClick={() => setConfirmDelete(alumno)}
-                  title="Eliminar"
-                >
+              {puedeEliminar && (
+                <button onClick={() => setConfirmDelete(alumno)} title="Eliminar">
                   <IconDelete />
                 </button>
               )}

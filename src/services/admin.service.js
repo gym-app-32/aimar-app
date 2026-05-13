@@ -47,6 +47,11 @@ export const updateProfesor = async (id, datos) => {
   return api.put(`/admin/profesores/${id}`, datos).then(r => r.data)
 }
 
+export const updatePermisos = async (id, permisos) => {
+  if (USE_MOCK) { await delay(); return { id, permisos } }
+  return api.patch(`/admin/profesores/${id}/permisos`, { permisos }).then(r => r.data)
+}
+
 export const toggleProfesorActivo = async (id, activo) => {
   if (USE_MOCK) { await delay(); return { id, activo } }
   return api.patch(`/admin/profesores/${id}/activo`, { activo }).then(r => r.data)
