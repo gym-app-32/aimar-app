@@ -34,7 +34,7 @@
 .figura {
   width: 130px;
   height: auto;
-  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.4));
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.4));
 
   @include mobile {
     width: 110px;
@@ -109,7 +109,9 @@
   cursor: pointer;
   transition: opacity $transition-fast;
 
-  &:hover { opacity: 0.75; }
+  &:hover {
+    opacity: 0.75;
+  }
 }
 
 .hint {
@@ -118,4 +120,87 @@
   color: rgba($gray, 0.5);
   text-align: center;
   font-style: italic;
+}
+
+// ─── BodyMapWrapper ───────────────────────────────────────
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.fatigaLista {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.fatigaFila {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba($gold, 0.1);
+  border: 1.5px solid rgba($gold, 0.2);
+}
+
+.fatigaPastilla {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.fatigaNombre {
+  flex: 1;
+  font-family: $font-body;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: $white;
+}
+
+.fatigaBotones {
+  display: flex;
+  gap: 4px;
+}
+
+.fatigaBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1.5px solid rgba($white, 0.15);
+  background: rgba($dark3, 0.5);
+  color: $gray;
+  font-weight: 700;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background $transition-fast, border-color $transition-fast, color $transition-fast;
+
+  &:hover {
+    border-color: rgba($white, 0.3);
+    color: $white;
+  }
+}
+
+.fatigaBtnActivo {
+  color: $dark;
+}
+
+.fatigaQuitar {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $gray;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 2px;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $error;
+  }
 }

@@ -1,20 +1,125 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Modal from '../UI/Modal/Modal'
 import { IconEdit, IconDelete } from '../Icons/Icons'
+import BodyMap, {
+  bodyFront, bodyBack,
+  bodyFemaleFront, bodyFemaleBack
+} from '../UI/BodyMap/BodyMap'
 import styles from './ListaEjercicios.module.scss'
 
-const EMPTY_FORM = { nombre: '', descripcion: '', video: '', utilitarios: [], imagen: null }
+// ─── Labels de músculos (mismo objeto que BodyMap) ────────
+const MUSCULOS_LABEL = {
+  chest: 'Pecho',
+  deltoids: 'Hombros',
+  biceps: 'Bíceps',
+  triceps: 'Tríceps',
+  forearm: 'Antebrazos',
+  abs: 'Abdomen',
+  obliques: 'Oblicuos',
+  quadriceps: 'Cuádriceps',
+  calves: 'Gemelos',
+  trapezius: 'Trapecios',
+  'upper-back': 'Espalda alta',
+  'lower-back': 'Lumbar',
+  gluteal: 'Glúteos',
+  hamstring: 'Isquiotibiales',
+  adductors: 'Aductores',
+  knees: 'Rodillas',
+  tibialis: 'Tibial',
+  ankles: 'Tobillos',
+  hands: 'Manos',
+  feet: 'Pies',
+  neck: 'Cuello',
+}
 
-function ImagePlaceholder({ imagen, nombre }) {
-  if (imagen) return <img src={imagen} alt={nombre} className={styles.cardImg} />
-  return <div className={styles.cardImgPlaceholder}><span>🏋️</span></div>
+const EMPTY_FORM = {
+  nombre: '',
+  descripcion: '',
+  video: '',
+  utilitarios: [],
+  musculos: [],
+}
+
+// ─── Dropdown multiselect para utilitarios ────────────────
+function DropdownUtilitarios({ utilitarios, seleccionados, onChange }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+
+  // Cerrar al hacer click afuera
+  useEffect(() => {
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  const toggle = (id) => {
+    onChange(
+      seleccionados.includes(id)
+        ? seleccionados.filter(u => u !== id)
+        : [...seleccionados, id]
+    )
+  }
+
+  const label = seleccionados.length === 0
+    ? 'Seleccioná el equipamiento'
+    : seleccionados.length === 1
+      ? utilitarios.find(u => u.id === seleccionados[0])?.nombre
+      : `${seleccionados.length} utilitarios seleccionados`
+
+  return (
+    <div className={styles.dropdown} ref={ref}>
+      <button
+        type="button"
+        className={styles.dropdownTrigger}
+        onClick={() => setOpen(o => !o)}
+      >
+        <span className={seleccionados.length === 0 ? styles.dropdownPlaceholder : ''}>
+          {label}
+        </span>
+        <span className={`${styles.dropdownArrow} ${open ? styles.dropdownArrowOpen : ''}`}>▾</span>
+      </button>
+
+      {open && (
+        <div className={styles.dropdownMenu}>
+          {utilitarios.length === 0
+            ? <p className={styles.dropdownEmpty}>No hay utilitarios cargados</p>
+            : utilitarios.map(u => (
+              <label key={u.id} className={styles.dropdownItem}>
+                <input
+                  type="checkbox"
+                  checked={seleccionados.includes(u.id)}
+                  onChange={() => toggle(u.id)}
+                />
+                <span>{u.nombre}</span>
+              </label>
+            ))
+          }
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── Helper embed YouTube ─────────────────────────────────
+function youtubeEmbed(url) {
+  try {
+    const u = new URL(url)
+    let id = u.searchParams.get('v')
+    if (!id && u.hostname === 'youtu.be') id = u.pathname.slice(1)
+    if (!id) return url
+    return `https://www.youtube.com/embed/${id}`
+  } catch {
+    return url
+  }
 }
 
 export default function ListaEjercicios({
   ejercicios: ejerciciosIniciales = [],
   utilitarios = [],
-  puedeCrear    = true,
-  puedeEditar   = true,
+  puedeCrear = true,
+  puedeEditar = true,
   puedeEliminar = true,
 }) {
   const [ejercicios, setEjercicios] = useState(ejerciciosIniciales)
@@ -33,7 +138,13 @@ export default function ListaEjercicios({
 
   const abrirEditar = (ej) => {
     setEditando(ej)
-    setForm({ nombre: ej.nombre, descripcion: ej.descripcion, video: ej.video, utilitarios: ej.utilitarios, imagen: ej.imagen })
+    setForm({
+      nombre: ej.nombre,
+      descripcion: ej.descripcion,
+      video: ej.video ?? '',
+      utilitarios: ej.utilitarios ?? [],
+      musculos: ej.musculos ?? [],
+    })
     setModalOpen(true)
   }
 
@@ -59,23 +170,6 @@ export default function ListaEjercicios({
   const handleEliminar = (id) => {
     setEjercicios(prev => prev.filter(ej => ej.id !== id))
     setConfirmDel(null)
-  }
-
-  const toggleUtilitario = (id) => {
-    setForm(p => ({
-      ...p,
-      utilitarios: p.utilitarios.includes(id)
-        ? p.utilitarios.filter(u => u !== id)
-        : [...p.utilitarios, id]
-    }))
-  }
-
-  const handleImagen = (e) => {
-    const file = e.target.files[0]
-    if (!file) return
-    const reader = new FileReader()
-    reader.onloadend = () => setForm(p => ({ ...p, imagen: reader.result }))
-    reader.readAsDataURL(file)
   }
 
   const filtrados = ejercicios.filter(ej =>
@@ -109,29 +203,59 @@ export default function ListaEjercicios({
         ) : (
           filtrados.map(ej => (
             <div key={ej.id} className={`card ${styles.card}`}>
-              <ImagePlaceholder imagen={ej.imagen} nombre={ej.nombre} />
+
+              {/* Video o placeholder */}
+              {ej.video
+                ? <div className={styles.videoWrapper}>
+                  <iframe
+                    src={youtubeEmbed(ej.video)}
+                    title={ej.nombre}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className={styles.videoIframe}
+                  />
+                </div>
+                : <div className={styles.cardImgPlaceholder}><span>🏋️</span></div>
+              }
+
               <div className={styles.cardBody}>
                 <h3 className={styles.cardNombre}>{ej.nombre}</h3>
                 <p className={styles.cardDesc}>{ej.descripcion}</p>
-                {ej.utilitarios.length > 0 && (
-                  <div className={styles.utilitarioTags}>
-                    {ej.utilitarios.map(uid => {
-                      const u = utilitarios.find(u => u.id === uid)
-                      return u
-                        ? <span key={uid} className="badge badge--gray">{u.nombre}</span>
-                        : null
-                    })}
+
+                {/* Grupos musculares */}
+                {ej.musculos?.length > 0 && (
+                  <div className={styles.tagGroup}>
+                    <span className={styles.tagGroupLabel}>Músculos</span>
+                    <div className={styles.tags}>
+                      {ej.musculos.map(slug => (
+                        <span key={slug} className="badge badge--gold">
+                          {MUSCULOS_LABEL[slug] ?? slug}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 )}
-                {ej.video && (
-                  <a href={ej.video} target="_blank" rel="noopener noreferrer" className={styles.videoLink}>
-                    ▶ Ver video
-                  </a>
+
+                {/* Utilitarios */}
+                {ej.utilitarios?.length > 0 && (
+                  <div className={styles.tagGroup}>
+                    <span className={styles.tagGroupLabel}>Equipamiento</span>
+                    <div className={styles.tags}>
+                      {ej.utilitarios.map(uid => {
+                        const u = utilitarios.find(u => u.id === uid)
+                        return u
+                          ? <span key={uid} className="badge badge--gray">{u.nombre}</span>
+                          : null
+                      })}
+                    </div>
+                  </div>
                 )}
               </div>
+
               {(puedeEditar || puedeEliminar) && (
                 <div className={styles.cardActions}>
-                  {puedeEditar   && <button onClick={() => abrirEditar(ej)}><IconEdit /> Editar</button>}
+                  {puedeEditar && <button onClick={() => abrirEditar(ej)}><IconEdit /> Editar</button>}
                   {puedeEliminar && <button onClick={() => setConfirmDel(ej)}><IconDelete /> Borrar</button>}
                 </div>
               )}
@@ -148,17 +272,8 @@ export default function ListaEjercicios({
       >
         <form onSubmit={handleGuardar} className={styles.modalForm}>
           <div className={styles.fields}>
-            <div className={styles.field}>
-              <label>Imagen de referencia</label>
-              <div className={styles.uploadArea}>
-                {form.imagen
-                  ? <img src={form.imagen} alt="preview" className={styles.uploadPreview} />
-                  : <span className={styles.uploadPlaceholder}>🏋️ Subir imagen</span>
-                }
-                <input type="file" accept="image/*" onChange={handleImagen} className={styles.uploadInput} />
-              </div>
-            </div>
-            <div className={styles.field}>
+
+            <div className={`${styles.field} ${styles.fullWidth}`}>
               <label>Nombre</label>
               <input
                 type="text"
@@ -168,42 +283,69 @@ export default function ListaEjercicios({
                 required
               />
             </div>
-            <div className={styles.field}>
+
+            <div className={`${styles.field} ${styles.fullWidth}`}>
               <label>Descripción</label>
               <textarea
                 value={form.descripcion}
                 onChange={e => setForm(p => ({ ...p, descripcion: e.target.value }))}
-                placeholder="Descripción del ejercicio y músculos que trabaja..."
+                placeholder="Descripción del ejercicio..."
                 rows={3}
               />
             </div>
-            <div className={styles.field}>
-              <label>Video de muestra (URL)</label>
+
+            <div className={`${styles.field} ${styles.fullWidth}`}>
+              <label>Video de muestra (URL de YouTube)</label>
               <input
                 type="url"
                 value={form.video}
                 onChange={e => setForm(p => ({ ...p, video: e.target.value }))}
-                placeholder="https://youtube.com/..."
+                placeholder="https://youtube.com/watch?v=..."
               />
             </div>
+
+            {/* Utilitarios — dropdown */}
             {utilitarios.length > 0 && (
-              <div className={styles.field}>
-                <label>Utilitarios necesarios</label>
-                <div className={styles.utilitariosCheck}>
-                  {utilitarios.map(u => (
-                    <label key={u.id} className={styles.checkItem}>
-                      <input
-                        type="checkbox"
-                        checked={form.utilitarios.includes(u.id)}
-                        onChange={() => toggleUtilitario(u.id)}
-                      />
-                      <span>{u.nombre}</span>
-                    </label>
-                  ))}
-                </div>
+              <div className={`${styles.field} ${styles.fullWidth}`}>
+                <label>Equipamiento necesario</label>
+                <DropdownUtilitarios
+                  utilitarios={utilitarios}
+                  seleccionados={form.utilitarios}
+                  onChange={(val) => setForm(p => ({ ...p, utilitarios: val }))}
+                />
               </div>
             )}
+
+            {/* Grupos musculares — BodyMap */}
+            {/* Grupos musculares — BodyMap */}
+            <div className={`${styles.field} ${styles.fullWidth}`}>
+              <label>Grupos musculares trabajados</label>
+              <div className={styles.bodyMapContainer}>
+                <BodyMap
+                  genero="male"
+                  seleccionados={form.musculos}
+                  onChange={(slugs) => setForm(p => ({ ...p, musculos: slugs }))}
+                  bodyFront={bodyFront}
+                  bodyBack={bodyBack}
+                  scale={0.75}
+                  border="#dfdfdf"
+                  coloresFatiga={{}}
+                />
+              </div>
+              {form.musculos.length > 0
+                ? <div className={styles.musculosSeleccionados}>
+                  {form.musculos.map(slug => (
+                    <span key={slug} className="badge badge--gold">
+                      {MUSCULOS_LABEL[slug] ?? slug}
+                    </span>
+                  ))}
+                </div>
+                : <p className={styles.fieldHint}>Tocá los músculos en la figura para seleccionarlos.</p>
+              }
+            </div>
+
           </div>
+
           <div className={styles.modalFooter}>
             <button type="button" className="btn btn--ghost" onClick={cerrarModal}>Cancelar</button>
             <button type="submit" className="btn btn--primary" disabled={guardando}>

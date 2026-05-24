@@ -26,7 +26,7 @@ const MUSCULOS = {
   knees:        "Rodillas",
   tibialis:     "Tibial",
   ankles:       "Tobillos",
-  hands:        "Manos",
+  hands:        "Manos/Muñecas",
   feet:         "Pies",
   neck:         "Cuello",
 };
@@ -1159,7 +1159,7 @@ function RenderBodyParts({ parts, seleccionados, onToggle, coloresFatiga = {} })
 // ─── Vista Frontal Male ───────────────────────────────────
 function FrontalMale({genero='male', seleccionados, onToggle, bodyFront, scale = 1, border = "#dfdfdf", coloresFatiga = {} }) {
   return (
-    <svg viewBox="0 0 724 1448" height={400 * scale} width={200 * scale} aria-label="cuerpo-frontal">
+    <svg viewBox={genero === 'male' ? "50 80 634 1300":"-50 0 724 1448"} height={400 * scale} width={200 * scale} aria-label="cuerpo-frontal">
       {border !== "none" && (
         genero === 'male' 
           ?<g strokeWidth={1.5} fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -1188,7 +1188,7 @@ function FrontalMale({genero='male', seleccionados, onToggle, bodyFront, scale =
 // ─── Vista Trasera Male ───────────────────────────────────
 function TraseraMale({ genero='male', seleccionados, onToggle, bodyBack, scale = 1, border = "#dfdfdf", coloresFatiga = {} }) {
   return (
-    <svg viewBox="724 0 724 1448" height={400 * scale} width={200 * scale} aria-label="cuerpo-trasero">
+    <svg viewBox={genero === 'male' ? "764 80 634 1300":"764 0 724 1448"} height={400 * scale} width={200 * scale} aria-label="cuerpo-trasero">
       {border !== "none" && (
         genero === 'male' 
           ?<g strokeWidth={1.5} fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -1227,7 +1227,7 @@ export default function BodyMap({
 }) {
   const toggle = useCallback(
     (slug) => {
-      const ignorar = ["hair", "head", "feet", "hands", "ankles"];
+      const ignorar = ["hair", "head"];
       if (ignorar.includes(slug)) return;
       if (seleccionados.includes(slug)) {
         onChange(seleccionados.filter((m) => m !== slug));
@@ -1254,7 +1254,7 @@ export default function BodyMap({
           />
         </div>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-          <span style={{ fontSize: 12, color: "#6b7280", fontWeight: 500 }}>Trasero</span>
+          <span style={{ fontSize: 12, color: "#6b7280", fontWeight: 500 }}>Espalda</span>
           <TraseraMale
             genero={genero}
             seleccionados={seleccionados}
@@ -1267,7 +1267,8 @@ export default function BodyMap({
         </div>
       </div>
 
-      {seleccionados.length > 0 ? (
+      {/*
+      seleccionados.length > 0 ? (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", maxWidth: 480 }}>
           {seleccionados.map((slug) => (
             <button
@@ -1292,7 +1293,9 @@ export default function BodyMap({
         <p style={{ textAlign: "center", fontSize: 13, color: "#9ca3af", margin: 0 }}>
           Tocá los músculos que sentís fatigados
         </p>
-      )}
+      )
+      */
+      }
     </div>
   );
 }

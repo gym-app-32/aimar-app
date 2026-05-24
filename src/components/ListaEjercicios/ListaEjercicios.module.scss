@@ -281,3 +281,160 @@
   padding-top: $spacing-lg;
   border-top: 1px solid rgba($white, 0.06);
 }
+
+// ─── Video embed ──────────────────────────────────────────
+.videoWrapper {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: $dark3;
+  border-bottom: 1px solid rgba($gold, 0.1);
+  overflow: hidden;
+}
+
+.videoIframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+// ─── Tags en card ─────────────────────────────────────────
+.tagGroup {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.tagGroupLabel {
+  font-family: $font-condensed;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $gray;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+}
+
+// ─── Modal helpers ────────────────────────────────────────
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.fieldHint {
+  font-family: $font-body;
+  font-size: 0.8rem;
+  color: $gray;
+  margin: 0;
+}
+
+// ─── BodyMap en modal ─────────────────────────────────────
+.bodyMapContainer {
+  display: flex;
+  justify-content: center;
+  padding: $spacing-md 0;
+  //background: $dark2;
+  //border: 1px solid rgba($white, 0.06);
+  border-radius: $radius-md;
+  overflow-x: auto;
+}
+
+// ─── Dropdown utilitarios ─────────────────────────────────
+.dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.dropdownTrigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-sm;
+  background: $dark2;
+  border: 1px solid rgba($white, 0.08);
+  border-radius: $radius-md;
+  padding: $spacing-sm $spacing-md;
+  color: $white;
+  font-family: $font-body;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color $transition-fast;
+
+  &:hover { border-color: rgba($gold, 0.3); }
+}
+
+.dropdownPlaceholder {
+  color: rgba($gray, 0.5);
+}
+
+.dropdownArrow {
+  font-size: 0.8rem;
+  color: $gray;
+  transition: transform $transition-fast;
+  flex-shrink: 0;
+}
+
+.dropdownArrowOpen {
+  transform: rotate(180deg);
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: $dark2;
+  border: 1px solid rgba($white, 0.1);
+  border-radius: $radius-md;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 50;
+  max-height: 220px;
+  overflow-y: auto;
+  padding: $spacing-xs;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-sm;
+  font-family: $font-body;
+  font-size: 0.9rem;
+  color: $gray-light;
+  cursor: pointer;
+  transition: background $transition-fast, color $transition-fast;
+
+  &:hover {
+    background: rgba($white, 0.05);
+    color: $white;
+  }
+
+  input[type='checkbox'] {
+    accent-color: $gold;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+}
+
+.dropdownEmpty {
+  font-family: $font-body;
+  font-size: 0.85rem;
+  color: $gray;
+  padding: $spacing-md;
+  text-align: center;
+  font-style: italic;
+}
+.musculosSeleccionados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+  padding-top: $spacing-sm;
+}
