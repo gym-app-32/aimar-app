@@ -1,0 +1,102 @@
+.alumnoCard {
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  margin-bottom: $spacing-xl;
+}
+
+.alumnoCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.alumnoInfo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.alumnoAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba($gold, 0.1);
+  border: 2px solid rgba($gold, 0.2);
+  color: $gold;
+  font-family: $font-display;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.alumnoNombre {
+  display: block;
+  font-family: $font-condensed;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: $white;
+  margin-bottom: $spacing-xs;
+}
+
+.rutinaInfo {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 1px solid rgba($white, 0.06);
+}
+
+.rutinaInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-md;
+  @include mobile { grid-template-columns: repeat(2, 1fr); }
+}
+
+.rutinaInfoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rutinaInfoLabel {
+  font-family: $font-condensed;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $gray;
+}
+
+.rutinaInfoValue {
+  font-family: $font-condensed;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $white;
+}
+
+.rutinaAcciones {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.sinRutina {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 1px solid rgba($white, 0.06);
+  flex-wrap: wrap;
+}
+
+.sinRutinaMsg {
+  font-family: $font-body;
+  font-size: 0.9rem;
+  color: $warning;
+}

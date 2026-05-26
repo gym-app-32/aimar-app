@@ -1,0 +1,102 @@
+.selectorSection {
+  margin-bottom: $spacing-xl;
+  max-width: 480px;
+}
+
+.selectorLabel {
+  display: block;
+  font-family: $font-condensed;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $gray;
+  margin-bottom: $spacing-xs;
+}
+
+.selectorWrapper {
+  position: relative;
+}
+
+.selectorInput {
+  width: 100%;
+  background: $dark2;
+  border: 1px solid rgba($white, 0.08);
+  border-radius: $radius-md;
+  padding: $spacing-sm $spacing-md;
+  color: $white;
+  font-family: $font-body;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color $transition-fast;
+
+  &::placeholder { color: rgba($gray, 0.5); }
+  &:focus { border-color: rgba($gold, 0.4); }
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: $dark2;
+  border: 1px solid rgba($gold, 0.2);
+  border-radius: $radius-md;
+  overflow: hidden;
+  z-index: 50;
+  box-shadow: 0 8px 24px rgba($black, 0.5);
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-sm $spacing-md;
+  cursor: pointer;
+  transition: background $transition-fast;
+  &:hover { background: rgba($gold, 0.06); }
+}
+
+.dropdownInactivo {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.dropdownAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba($gold, 0.1);
+  border: 1px solid rgba($gold, 0.2);
+  color: $gold;
+  font-family: $font-display;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dropdownNombre {
+  display: block;
+  font-family: $font-condensed;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $white;
+}
+
+.dropdownSub {
+  display: block;
+  font-size: 0.78rem;
+  color: $gray;
+  font-family: $font-body;
+}
+
+.dropdownEmpty {
+  padding: $spacing-md;
+  text-align: center;
+  font-family: $font-body;
+  font-size: 0.85rem;
+  color: $gray;
+  font-style: italic;
+}
