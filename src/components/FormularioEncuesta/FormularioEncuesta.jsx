@@ -14,11 +14,11 @@ const PREGUNTAS = [
   },
   {
     id: 'dolor_muscular',
-    label: 'Dolor muscular',
-    descripcion: '¿Tenés agujetas o molestias musculares?',
+    label: 'Molestia muscular',
+    descripcion: '¿Tenés o sentistes molestias o dolores musculares?',
     iconoBajo: '💪',
     iconoAlto: '🤕',
-    labelBajo: 'Sin dolor',
+    labelBajo: 'Sin molestia',
     labelAlto: 'Mucho dolor',
   },
   {
@@ -30,6 +30,16 @@ const PREGUNTAS = [
     labelBajo: 'Muy bien',
     labelAlto: 'Muy mal',
   },
+    {
+    id: 'calidad_alimentacion',
+    label: 'Calidad alimentacion',
+    descripcion: '¿Consideras que tu alimentacion previa, estubo acorde a tu entrenamiento de hoy?',
+    iconoBajo: '😴',
+    iconoAlto: '😩',
+    labelBajo: 'Superavit calorico',
+    labelAlto: 'Deficit calorico',
+  },
+ 
 ]
 
 const EMPTY_FORM = {

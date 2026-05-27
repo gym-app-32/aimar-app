@@ -56,21 +56,26 @@ export default function SelectorAlumnoRutina({listaAlumnos}) {
     setAlumnoSeleccionado(prev => ({ ...prev, rutina: null }))
     setConfirmEliminar(false)
   }
-  return (
+ return (
     <>
       <AlumnoSelector
         alumnos={alumnos}
         onSeleccionar={setAlumnoSeleccionado}
       />
 
-      {alumnoSeleccionado && (
-        <AlumnoCard
-          alumno={alumnoSeleccionado}
-          onCrearRutina={() => abrirBuilder('crear')}
-          onEditarRutina={() => abrirBuilder('editar')}
-          onEliminarRutina={() => setConfirmEliminar(true)}
-        />
-      )}
+      {alumnoSeleccionado
+        ? <AlumnoCard
+            alumno={alumnoSeleccionado}
+            onCrearRutina={() => abrirBuilder('crear')}
+            onEditarRutina={() => abrirBuilder('editar')}
+            onEliminarRutina={() => setConfirmEliminar(true)}
+          />
+        : <div className={`card ${styles.emptyState}`}>
+            <span className={styles.emptyIcon}>🔍</span>
+            <p className={styles.emptyTitle}>No hay alumno seleccionado</p>
+            <p className={styles.emptySubtitle}>Buscá un alumno para ver o gestionar su rutina.</p>
+          </div>
+      }
 
       <RutinaBuilder
         isOpen={builderOpen}
